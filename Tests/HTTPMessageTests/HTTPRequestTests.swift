@@ -36,6 +36,7 @@ struct HTTPRequests {
     static let invalidHeaderEnd = "\(startLine)User-Agent: Mozilla/5.0\n\n"
     static let invalidHeaderName = "\(startLine)See-🙈-Evil: No\n\n"
     static let unexpectedEnd = "\(startLine)Header: Value\r\n"
+    static let contentType = "\(startLine)Content-Type: application/x-www-form-urlencoded\r\n\r\nHello"
     static let contentLength = "\(startLine)Content-Length: 5\r\n\r\nHello"
     static let keepAliveFalse = "\(startLine)Connection: Close\r\n\r\n"
     static let keepAliveTrue = "\(startLine)Connection: Keep-Alive\r\nKeep-Alive: 300\r\n\r\n"
@@ -270,6 +271,18 @@ class HTTPRequestTests: XCTestCase {
         }
     }
 
+    func testContentType() throws {
+        do {
+            let request = try HTTPRequest(fromBytes: ASCII(HTTPRequests.contentType))
+            XCTAssertNotNil(request.contentType)
+            if let contentType = request.contentType {
+                XCTAssertEqual(contentType, .urlEncoded)
+            }
+        } catch let error as HTTPRequestError {
+            XCTFail("unexpected exception: \(error)")
+        }
+    }
+
     func testContentLenght() throws {
         do {
             let request = try HTTPRequest(fromBytes: ASCII(HTTPRequests.contentLength))
@@ -370,6 +383,7 @@ class HTTPRequestTests: XCTestCase {
             ("testInvalidHeaderEnd", testInvalidHeaderEnd),
             ("testHeaderName", testHeaderName),
             ("testUnexpectedEnd", testUnexpectedEnd),
+            ("testContentType", testContentType),
             ("testContentLenght", testContentLenght),
             ("testKeepAliveFalse", testKeepAliveFalse),
             ("testKeepAliveTrue", testKeepAliveTrue),
