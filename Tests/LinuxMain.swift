@@ -9,15 +9,15 @@
  */
 
 import XCTest
-@testable import HTTPServerTests
-@testable import HTTPMessageTests
+@testable import ServerTests
+@testable import HTTPTests
 
 XCTMain([
     // HTTPServer
-    testCase(HTTPServerTests.allTests),
+    testCase(ServerTests.allTests),
     // HTTPMessage
-    testCase(HTTPRequestTests.allTests),
-    testCase(HTTPResponseTests.allTests),
+    testCase(RequestTests.allTests),
+    testCase(ResponseTests.allTests),
     testCase(NginxTests.allTests),
     testCase(UtilsTests.allTests),
     testCase(BugTests.allTests),

@@ -9,29 +9,29 @@
  */
 
 import XCTest
-@testable import HTTPMessage
+@testable import HTTP
 
-class HTTPResponseTests: TestCase {
-    func testHTTPResponse() {
-        let response = HTTPResponse()
+class ResponseTests: TestCase {
+    func testResponse() {
+        let response = Response()
         assertNotNil(response)
     }
 
     func testType() {
-        let httpResponse: HTTPType = .response
-        assertEqual(httpResponse, .response)
+        let type: _Type = .response
+        assertEqual(type, .response)
     }
 
     func testOk() {
         let expected = "HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"
-        let response = HTTPResponse(status: .ok)
+        let response = Response(status: .ok)
         assertEqual(response.status, .ok)
         assertEqual(String(bytes: response.bytes), expected)
     }
 
     func testNotFound() {
         let expected = "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n"
-        let response = HTTPResponse(status: .notFound)
+        let response = Response(status: .notFound)
         assertEqual(response.status, .notFound)
         assertEqual(String(bytes: response.bytes), expected)
     }
@@ -40,21 +40,21 @@ class HTTPResponseTests: TestCase {
         let expected =
             "HTTP/1.1 301 Moved Permanently\r\n" +
             "Content-Length: 0\r\n\r\n"
-        let response = HTTPResponse(status: .moved)
+        let response = Response(status: .moved)
         assertEqual(response.status, .moved)
         assertEqual(String(bytes: response.bytes), expected)
     }
 
     func testBad() {
         let expected = "HTTP/1.1 400 Bad Request\r\nContent-Length: 0\r\n\r\n"
-        let response = HTTPResponse(status: .badRequest)
+        let response = Response(status: .badRequest)
         assertEqual(response.status, .badRequest)
         assertEqual(String(bytes: response.bytes), expected)
     }
 
     func testUnauthorized() {
         let expected = "HTTP/1.1 401 Unauthorized\r\nContent-Length: 0\r\n\r\n"
-        let response = HTTPResponse(status: .unauthorized)
+        let response = Response(status: .unauthorized)
         assertEqual(response.status, .unauthorized)
         assertEqual(String(bytes: response.bytes), expected)
     }
@@ -63,13 +63,13 @@ class HTTPResponseTests: TestCase {
         let expected =
             "HTTP/1.1 500 Internal Server Error\r\n" +
             "Content-Length: 0\r\n\r\n"
-        let response = HTTPResponse(status: .internalServerError)
+        let response = Response(status: .internalServerError)
         assertEqual(response.status, .internalServerError)
         assertEqual(String(bytes: response.bytes), expected)
     }
 
-    func testHttpVersion() {
-        let response = HTTPResponse(version: .oneOne)
+    func testVersion() {
+        let response = Response(version: .oneOne)
         assertEqual(response.version, .oneOne)
     }
 
@@ -77,7 +77,7 @@ class HTTPResponseTests: TestCase {
         let expected =
             "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n" +
             "Content-Length: 0\r\n\r\n"
-        var response = HTTPResponse()
+        var response = Response()
         response.contentType = .text
         assertEqual(response.contentType, .text)
         assertEqual(response.contentLength, 0)
@@ -85,7 +85,7 @@ class HTTPResponseTests: TestCase {
     }
 
     func testStringResponse() {
-        let response = HTTPResponse(string: "Hello")
+        let response = Response(string: "Hello")
         guard let body = response.body else {
             fail("body shouldn't be nil")
             return
@@ -100,7 +100,7 @@ class HTTPResponseTests: TestCase {
     }
 
     func testHtmlResponse() {
-        let response = HTTPResponse(html: "<html></html>")
+        let response = Response(html: "<html></html>")
         guard let body = response.body else {
             fail("body shouldn't be nil")
             return
@@ -116,7 +116,7 @@ class HTTPResponseTests: TestCase {
 
     func testBytesResponse() {
         let data: [UInt8] = [1,2,3]
-        let response = HTTPResponse(bytes: data)
+        let response = Response(bytes: data)
         guard let body = response.body else {
             fail("body shouldn't be nil")
             return
@@ -131,7 +131,7 @@ class HTTPResponseTests: TestCase {
     }
 
     func testJsonResponse() {
-        let response = HTTPResponse(json: ASCII("{'message': 'Hello, World!'}"))
+        let response = Response(json: ASCII("{'message': 'Hello, World!'}"))
         guard let body = response.body else {
             fail("body shouldn't be nil")
             return
@@ -147,13 +147,13 @@ class HTTPResponseTests: TestCase {
 
     func testResponseHasContentLenght() {
         let expected = "HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"
-        let response = HTTPResponse(status: .ok)
+        let response = Response(status: .ok)
         assertEqual(response.status, .ok)
         assertEqual(String(bytes: response.bytes), expected)
     }
 
     static var allTests = [
-        ("testHTTPResponse", testHTTPResponse),
+        ("testResponse", testResponse),
         ("testType", testType),
         ("testOk", testOk),
         ("testMoved", testMoved),
@@ -161,7 +161,7 @@ class HTTPResponseTests: TestCase {
         ("testUnauthorized", testUnauthorized),
         ("testNotFound", testNotFound),
         ("testInternalServerError", testInternalServerError),
-        ("testHttpVersion", testHttpVersion),
+        ("testVersion", testVersion),
         ("testContentType", testContentType),
         ("testStringResponse", testStringResponse),
         ("testHtmlResponse", testHtmlResponse),

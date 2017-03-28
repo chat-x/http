@@ -9,17 +9,14 @@
  */
 
 import XCTest
-@testable import HTTPServer
+@testable import Server
 
-class HTTPServerTests: XCTestCase {
-
+class HTTPServerTests: TestCase {
     func testServer() {
 
     }
 
-    static var allTests : [(String, (HTTPServerTests) -> () throws -> Void)] {
-        return [
-            ("testServer", testServer),
-        ]
-    }
+    static var allTests = [
+        ("testServer", testServer),
+    ]
 }

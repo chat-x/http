@@ -11,9 +11,9 @@
 import PackageDescription
 
 let package = Package(
-    name: "HTTPServer",
+    name: "HTTP",
     targets: [
-        Target(name: "HTTPServer", dependencies: ["HTTPMessage"])
+        Target(name: "Server", dependencies: ["HTTP"]),
     ],
     dependencies: [
         .Package(url: "https://github.com/tris-foundation/log.git", majorVersion: 0),

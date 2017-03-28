@@ -9,7 +9,7 @@
  */
 
 import XCTest
-@testable import HTTPMessage
+@testable import HTTP
 
 class UtilsTests: TestCase {
 
