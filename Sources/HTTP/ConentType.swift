@@ -8,17 +8,11 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-import XCTest
-@testable import HTTPTests
-@testable import ServerTests
+import Foundation
 
-XCTMain([
-    // HTTP
-    testCase(RequestTests.allTests),
-    testCase(ResponseTests.allTests),
-    testCase(NginxTests.allTests),
-    testCase(UtilsTests.allTests),
-    testCase(BugTests.allTests),
-    // Server
-    testCase(ServerTests.allTests),
-])
+extension Request {
+    public enum ContentType: String {
+        case urlEncoded = "application/x-www-form-urlencoded"
+        case json = "application/json"
+    }
+}

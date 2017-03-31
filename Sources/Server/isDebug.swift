@@ -8,17 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-import XCTest
-@testable import HTTPTests
-@testable import ServerTests
-
-XCTMain([
-    // HTTP
-    testCase(RequestTests.allTests),
-    testCase(ResponseTests.allTests),
-    testCase(NginxTests.allTests),
-    testCase(UtilsTests.allTests),
-    testCase(BugTests.allTests),
-    // Server
-    testCase(ServerTests.allTests),
-])
+var isDebugBuild: Bool {
+    @inline(__always) get {
+        return _isDebugAssertConfiguration()
+    }
+}

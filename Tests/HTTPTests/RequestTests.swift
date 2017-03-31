@@ -56,56 +56,56 @@ class RequestTests: TestCase {
     }
 
     func testFromBytes() throws {
-        let request = try Request(fromBytes: ASCII(Requests.simpleGet))
+        let request = try Request(from: ASCII(Requests.simpleGet))
         assertNotNil(request)
     }
 
     func testDelete() throws {
-        let request = try Request(fromBytes: ASCII(Requests.simpleDelete))
+        let request = try Request(from: ASCII(Requests.simpleDelete))
         assertNotNil(request)
-        assertEqual(request.type, RequestType.delete)
+        assertEqual(request.type, Request.Kind.delete)
     }
 
     func testGet() throws {
-        let request = try Request(fromBytes: ASCII(Requests.simpleGet))
+        let request = try Request(from: ASCII(Requests.simpleGet))
         assertNotNil(request)
-        assertEqual(request.type, RequestType.get)
+        assertEqual(request.type, Request.Kind.get)
     }
 
     func testHead() throws {
-        let request = try Request(fromBytes: ASCII(Requests.simpleHead))
+        let request = try Request(from: ASCII(Requests.simpleHead))
         assertNotNil(request)
-        assertEqual(request.type, RequestType.head)
+        assertEqual(request.type, Request.Kind.head)
     }
 
     func testPost() throws {
-        let request = try Request(fromBytes: ASCII(Requests.simplePost))
+        let request = try Request(from: ASCII(Requests.simplePost))
         assertNotNil(request)
-        assertEqual(request.type, RequestType.post)
+        assertEqual(request.type, Request.Kind.post)
     }
 
     func testPut() throws {
-        let request = try Request(fromBytes: ASCII(Requests.simplePut))
+        let request = try Request(from: ASCII(Requests.simplePut))
         assertNotNil(request)
-        assertEqual(request.type, RequestType.put)
+        assertEqual(request.type, Request.Kind.put)
     }
 
     func testVersion() throws {
-        let request = try Request(fromBytes: ASCII(Requests.simpleGet))
+        let request = try Request(from: ASCII(Requests.simpleGet))
         assertNotNil(request)
         assertEqual(request.version, Version.oneOne)
 
     }
 
     func testUrl() throws {
-        let request = try Request(fromBytes: ASCII(Requests.simpleGet))
+        let request = try Request(from: ASCII(Requests.simpleGet))
         assertNotNil(request)
         assertNotNil(request.url)
-        assertEqual(request.urlBytes, ASCII("/test"))
+        assertEqual(request.url.path, "/test")
     }
 
     func testUrlString() throws {
-        let request = try Request(fromBytes: ASCII(Requests.simpleGet))
+        let request = try Request(from: ASCII(Requests.simpleGet))
         assertNotNil(request)
         assertNotNil(request.url)
         assertEqual(request.url, "/test")
@@ -113,25 +113,25 @@ class RequestTests: TestCase {
 
     func testInvalidRequest() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.simpleOnlyMethod))
+            _ = try Request(from: ASCII(Requests.simpleOnlyMethod))
             fail("this method should throw")
         } catch let error as RequestError {
-            assertEqual(error, .invalidRequest)
+            assertEqual(error, .unexpectedEnd)
         }
     }
 
     func testInvalidRequest2() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.simpleOnlyMethod2))
+            _ = try Request(from: ASCII(Requests.simpleOnlyMethod2))
             fail("this method should throw")
         } catch let error as RequestError {
-            assertEqual(error, .invalidRequest)
+            assertEqual(error, .unexpectedEnd)
         }
     }
 
     func testInvalidMethod() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.simpleInvalidMethod))
+            _ = try Request(from: ASCII(Requests.simpleInvalidMethod))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .invalidMethod)
@@ -140,7 +140,7 @@ class RequestTests: TestCase {
 
     func testInvalidVersion() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.simpleInvalidVersion))
+            _ = try Request(from: ASCII(Requests.simpleInvalidVersion))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .invalidVersion)
@@ -149,7 +149,7 @@ class RequestTests: TestCase {
 
     func testInvalidVersion2() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.simpleInvalidVersion2))
+            _ = try Request(from: ASCII(Requests.simpleInvalidVersion2))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .invalidRequest)
@@ -158,7 +158,7 @@ class RequestTests: TestCase {
 
     func testInvalidVersion3() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.simpleInvalidVersion3))
+            _ = try Request(from: ASCII(Requests.simpleInvalidVersion3))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .unexpectedEnd)
@@ -167,7 +167,7 @@ class RequestTests: TestCase {
 
     func testInvalidVersion4() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.simpleInvalidVersion4))
+            _ = try Request(from: ASCII(Requests.simpleInvalidVersion4))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .invalidVersion)
@@ -176,7 +176,7 @@ class RequestTests: TestCase {
 
     func testInvalidEnd() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.simpleInvalidEnd))
+            _ = try Request(from: ASCII(Requests.simpleInvalidEnd))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .unexpectedEnd)
@@ -184,7 +184,7 @@ class RequestTests: TestCase {
     }
 
     func testHostHeader() throws {
-        let request = try Request(fromBytes: ASCII(Requests.hostHeader))
+        let request = try Request(from: ASCII(Requests.hostHeader))
         assertNotNil(request.host)
         if let host = request.host {
             assertEqual(host, "0.0.0.0=5000")
@@ -192,7 +192,7 @@ class RequestTests: TestCase {
     }
 
     func testUserAgentHeader() throws {
-        let request = try Request(fromBytes: ASCII(Requests.userAgentHeader))
+        let request = try Request(from: ASCII(Requests.userAgentHeader))
         assertNotNil(request.userAgent)
         if let userAgent = request.userAgent {
             assertEqual(userAgent, "Mozilla/5.0")
@@ -200,7 +200,7 @@ class RequestTests: TestCase {
     }
 
     func testTwoHeaders() throws {
-        let request = try Request(fromBytes: ASCII(Requests.twoHeaders))
+        let request = try Request(from: ASCII(Requests.twoHeaders))
         assertNotNil(request.host)
         assertNotNil(request.userAgent)
         if let userAgent = request.userAgent, let host = request.host {
@@ -210,7 +210,7 @@ class RequestTests: TestCase {
     }
 
     func testTwoHeadersOptionalSpaces() throws {
-        let request = try Request(fromBytes: ASCII(Requests.twoHeadersOptionalSpaces))
+        let request = try Request(from: ASCII(Requests.twoHeadersOptionalSpaces))
         assertNotNil(request.host)
         assertNotNil(request.userAgent)
         if let userAgent = request.userAgent, let host = request.host {
@@ -221,16 +221,16 @@ class RequestTests: TestCase {
 
     func testInvalidHeaderColon() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.invalidHeaderColon))
+            _ = try Request(from: ASCII(Requests.invalidHeaderColon))
             fail("this method should throw")
         } catch let error as RequestError {
-            assertEqual(error, .invalidHeaderName)
+            assertEqual(error, .unexpectedEnd)
         }
     }
 
     func testInvalidHeaderName() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.invalidHeaderName))
+            _ = try Request(from: ASCII(Requests.invalidHeaderName))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .invalidHeaderName)
@@ -239,7 +239,7 @@ class RequestTests: TestCase {
 
     func testInvalidHeaderEnd() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.invalidHeaderEnd))
+            _ = try Request(from: ASCII(Requests.invalidHeaderEnd))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .unexpectedEnd)
@@ -254,7 +254,7 @@ class RequestTests: TestCase {
 
     func testUnexpectedEnd() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.unexpectedEnd))
+            _ = try Request(from: ASCII(Requests.unexpectedEnd))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .unexpectedEnd)
@@ -263,7 +263,7 @@ class RequestTests: TestCase {
 
     func testContentType() throws {
         do {
-            let request = try Request(fromBytes: ASCII(Requests.contentType))
+            let request = try Request(from: ASCII(Requests.contentType))
             assertNotNil(request.contentType)
             if let contentType = request.contentType {
                 assertEqual(contentType, .urlEncoded)
@@ -275,7 +275,7 @@ class RequestTests: TestCase {
 
     func testContentLenght() throws {
         do {
-            let request = try Request(fromBytes: ASCII(Requests.contentLength))
+            let request = try Request(from: ASCII(Requests.contentLength))
             assertNotNil(request.contentLength)
             if let contentLength = request.contentLength {
                 assertEqual(contentLength, 5)
@@ -286,29 +286,29 @@ class RequestTests: TestCase {
     }
 
     func testKeepAliveFalse() throws {
-        let request = try Request(fromBytes: ASCII(Requests.keepAliveFalse))
+        let request = try Request(from: ASCII(Requests.keepAliveFalse))
         assertFalse(request.shouldKeepAlive)
     }
 
     func testKeepAliveTrue() throws {
-        let request = try Request(fromBytes: ASCII(Requests.keepAliveTrue))
+        let request = try Request(from: ASCII(Requests.keepAliveTrue))
         assertTrue(request.shouldKeepAlive)
         assertEqual(request.keepAlive, 300)
     }
 
     func testTransferEncodingChunked() throws {
-        let request = try Request(fromBytes: ASCII(Requests.transferEncodingChunked))
+        let request = try Request(from: ASCII(Requests.transferEncodingChunked))
         assertEqual(request.transferEncoding?.lowercased(), "chunked")
     }
 
     func testChunkedBody() throws {
-        let request = try Request(fromBytes: ASCII(Requests.chunkedBody))
+        let request = try Request(from: ASCII(Requests.chunkedBody))
         assertEqual(request.body, "Hello")
     }
 
     func testChunkedBodyInvalidSizeSeparator() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.chunkedBodyInvalidSizeSeparator))
+            _ = try Request(from: ASCII(Requests.chunkedBodyInvalidSizeSeparator))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .invalidRequest)
@@ -317,7 +317,7 @@ class RequestTests: TestCase {
 
     func testChunkedBodyNoSizeSeparator() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.chunkedBodyNoSizeSeparator))
+            _ = try Request(from: ASCII(Requests.chunkedBodyNoSizeSeparator))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .invalidRequest)
@@ -326,7 +326,7 @@ class RequestTests: TestCase {
 
     func testChunkedInvalidBody() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.chunkedInvalidBody))
+            _ = try Request(from: ASCII(Requests.chunkedInvalidBody))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .unexpectedEnd)
@@ -335,7 +335,7 @@ class RequestTests: TestCase {
 
     func testChunkedJunkAfterBody() throws {
         do {
-            _ = try Request(fromBytes: ASCII(Requests.chunkedJunkAfterBody))
+            _ = try Request(from: ASCII(Requests.chunkedJunkAfterBody))
             fail("this method should throw")
         } catch let error as RequestError {
             assertEqual(error, .unexpectedEnd)

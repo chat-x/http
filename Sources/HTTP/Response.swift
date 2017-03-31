@@ -8,35 +8,20 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-public enum ResponseStatus: String {
-    case ok
-    case moved
-    case badRequest
-    case unauthorized
-    case notFound
-    case internalServerError
-}
-
-public enum ResponseContentType {
-    case text
-    case html
-    case stream
-    case json
-}
 
 public struct Response {
-    public var status: ResponseStatus = .ok
+    public var status: Status = .ok
     public var version: Version = .oneOne
-    public var contentType: ResponseContentType?
-    public var body: [UInt8]? = nil
+    public var contentType: ContentType?
+    public var rawBody: [UInt8]? = nil
     public var contentLength: Int {
-        return body?.count ?? 0
+        return rawBody?.count ?? 0
     }
 
     public init() {
     }
 
-    public init(status: ResponseStatus) {
+    public init(status: Status) {
         self.status = status
     }
 
@@ -46,24 +31,35 @@ public struct Response {
 
     public init(string: String) {
         contentType = .text
-        body = [UInt8](string.utf8)
+        rawBody = [UInt8](string.utf8)
     }
 
     public init(html: String) {
         contentType = .html
-        body = [UInt8](html.utf8)
+        rawBody = [UInt8](html.utf8)
     }
 
     public init(bytes: [UInt8]) {
         contentType = .stream
-        body = bytes
+        rawBody = bytes
     }
 
     public init(json: [UInt8]) {
         contentType = .json
-        body = json
+        rawBody = json
     }
+}
 
+extension Response {
+    public var body: String? {
+        guard let rawBody = rawBody else {
+            return nil
+        }
+        return String(cString: rawBody + [0])
+    }
+}
+
+extension Response {
     public var bytes: [UInt8] {
         var bytes: [UInt8] = []
 
@@ -76,14 +72,14 @@ public struct Response {
 
         // Headers
         if let contentType = contentType {
-            bytes.append(contentsOf: HeaderNameMapping.contentType)
+            bytes.append(contentsOf: StandartHeaders.contentType)
             bytes.append(Character.colon)
             bytes.append(Character.whitespace)
             bytes.append(contentsOf: contentType.bytes)
             bytes.append(contentsOf: Constants.lineEnd)
         }
 
-        bytes.append(contentsOf: HeaderNameMapping.contentLength)
+        bytes.append(contentsOf: StandartHeaders.contentLength)
         bytes.append(Character.colon)
         bytes.append(Character.whitespace)
         bytes.append(contentsOf: ASCII(String(contentLength)))
@@ -93,8 +89,8 @@ public struct Response {
         bytes.append(contentsOf: Constants.lineEnd)
 
         // Body
-        if let body = body {
-            bytes.append(contentsOf: body)
+        if let rawBody = rawBody {
+            bytes.append(contentsOf: rawBody)
         }
 
         return bytes

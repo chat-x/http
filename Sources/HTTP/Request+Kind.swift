@@ -8,10 +8,21 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-extension RequestType {
-    init(slice: ArraySlice<UInt8>) throws {
-        for (type, bytes) in RequestTypeMapping.values {
-            if slice.elementsEqual(bytes) {
+extension Request {
+    public enum Kind {
+        case get
+        case head
+        case post
+        case put
+        case delete
+        case options
+    }
+}
+
+extension Request.Kind {
+    init(from buffer: UnsafeRawBufferPointer) throws {
+        for (type, bytes) in RequestKindBytes.values {
+            if buffer.elementsEqual(bytes) {
                 self = type
                 return
             }
@@ -20,8 +31,8 @@ extension RequestType {
     }
 }
 
-fileprivate struct RequestTypeMapping {
-    static let values: [(RequestType, ASCII)] = [
+fileprivate struct RequestKindBytes {
+    static let values: [(Request.Kind, ASCII)] = [
         (.get, ASCII("GET")),
         (.head, ASCII("HEAD")),
         (.post, ASCII("POST")),

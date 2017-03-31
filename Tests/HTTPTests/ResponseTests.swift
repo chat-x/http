@@ -86,11 +86,13 @@ class ResponseTests: TestCase {
 
     func testStringResponse() {
         let response = Response(string: "Hello")
-        guard let body = response.body else {
-            fail("body shouldn't be nil")
-            return
+        guard let rawBody = response.rawBody,
+            let body = response.body else {
+                fail("body shouldn't be nil")
+                return
         }
-        assertEqual(body, ASCII("Hello"))
+        assertEqual(body, "Hello")
+        assertEqual(rawBody, ASCII("Hello"))
         assertEqual(response.contentType, .text)
         assertEqual(response.contentLength, ASCII("Hello").count)
         let expected =
@@ -101,11 +103,13 @@ class ResponseTests: TestCase {
 
     func testHtmlResponse() {
         let response = Response(html: "<html></html>")
-        guard let body = response.body else {
-            fail("body shouldn't be nil")
-            return
+        guard let rawBody = response.rawBody,
+            let body = response.body else {
+                fail("body shouldn't be nil")
+                return
         }
-        assertEqual(body, ASCII("<html></html>"))
+        assertEqual(body, "<html></html>")
+        assertEqual(rawBody, ASCII("<html></html>"))
         assertEqual(response.contentType, .html)
         assertEqual(response.contentLength, 13)
         let expected =
@@ -117,11 +121,11 @@ class ResponseTests: TestCase {
     func testBytesResponse() {
         let data: [UInt8] = [1,2,3]
         let response = Response(bytes: data)
-        guard let body = response.body else {
+        guard let rawBody = response.rawBody else {
             fail("body shouldn't be nil")
             return
         }
-        assertEqual(body, data)
+        assertEqual(rawBody, data)
         assertEqual(response.contentType, .stream)
         assertEqual(response.contentLength, 3)
         let expected = ASCII(
@@ -132,11 +136,13 @@ class ResponseTests: TestCase {
 
     func testJsonResponse() {
         let response = Response(json: ASCII("{'message': 'Hello, World!'}"))
-        guard let body = response.body else {
-            fail("body shouldn't be nil")
-            return
+        guard let rawBody = response.rawBody,
+            let body = response.body else {
+                fail("body shouldn't be nil")
+                return
         }
-        assertEqual(body, ASCII("{'message': 'Hello, World!'}"))
+        assertEqual(body, "{'message': 'Hello, World!'}")
+        assertEqual(rawBody, ASCII("{'message': 'Hello, World!'}"))
         assertEqual(response.contentType, .json)
         assertEqual(response.contentLength, 28)
         let expected =
