@@ -16,9 +16,10 @@ XCTMain([
     // HTTP
     testCase(RequestTests.allTests),
     testCase(ResponseTests.allTests),
+    testCase(EncodeResponseTests.allTests),
+    testCase(DecodeRequestTests.allTests),
     testCase(NginxTests.allTests),
     testCase(UtilsTests.allTests),
-    testCase(BugTests.allTests),
     // Server
     testCase(ServerTests.allTests),
 ])
