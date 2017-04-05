@@ -8,11 +8,14 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-import Foundation
-
-extension Request {
-    public enum ContentType: String {
-        case urlEncoded = "application/x-www-form-urlencoded"
-        case json = "application/json"
-    }
+enum HTTPError: Error {
+    case invalidRequest
+    case invalidResponse
+    case invalidURL
+    case invalidMethod
+    case invalidStatus
+    case invalidVersion
+    case invalidHeaderName
+    case unsupportedContentType
+    case unexpectedEnd
 }

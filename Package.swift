@@ -13,7 +13,9 @@ import PackageDescription
 let package = Package(
     name: "HTTP",
     targets: [
+        Target(name: "HTTP"),
         Target(name: "Server", dependencies: ["HTTP"]),
+        Target(name: "Client", dependencies: ["HTTP"]),
     ],
     dependencies: [
         .Package(url: "https://github.com/tris-foundation/log.git", majorVersion: 0),

@@ -9,7 +9,7 @@
  */
 
 extension Response {
-    public enum Status: String {
+    public enum Status {
         case ok
         case moved
         case badRequest
@@ -20,7 +20,27 @@ extension Response {
 }
 
 extension Response.Status {
-    private struct StatusCodeMapping {
+    public init(from bytes: UnsafeRawBufferPointer) throws {
+        if bytes.elementsEqual(StatusCodeMapping.ok) {
+            self = .ok
+        } else if bytes.elementsEqual(StatusCodeMapping.moved) {
+            self = .moved
+        } else if bytes.elementsEqual(StatusCodeMapping.badRequest) {
+            self = .badRequest
+        } else if bytes.elementsEqual(StatusCodeMapping.unauthorized) {
+            self = .unauthorized
+        } else if bytes.elementsEqual(StatusCodeMapping.notFound) {
+            self = .notFound
+        } else if bytes.elementsEqual(StatusCodeMapping.internalServerError) {
+            self = .internalServerError
+        } else {
+            throw HTTPError.invalidStatus
+        }
+    }
+}
+
+extension Response.Status {
+    fileprivate struct StatusCodeMapping {
         static let ok = ASCII("200 OK")
         static let moved = ASCII("301 Moved Permanently")
         static let badRequest = ASCII("400 Bad Request")
