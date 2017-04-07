@@ -12,9 +12,9 @@ import XCTest
 @testable import HTTPTests
 @testable import ServerTests
 @testable import ClientTests
+@testable import FunctionalTests
 
 XCTMain([
-    // HTTP
     testCase(RequestTests.allTests),
     testCase(ResponseTests.allTests),
     testCase(EncodeRequestTests.allTests),
@@ -23,8 +23,8 @@ XCTMain([
     testCase(DecodeResponseTests.allTests),
     testCase(NginxTests.allTests),
     testCase(UtilsTests.allTests),
-    // Server
+
     testCase(ServerTests.allTests),
-    // Client
     testCase(ClientTests.allTests),
+    testCase(FunctionalTests.allTests),
 ])

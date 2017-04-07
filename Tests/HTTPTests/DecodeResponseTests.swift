@@ -97,6 +97,62 @@ class DecodeResponseTests: TestCase {
         }
     }
 
+    func testConnection() {
+        do {
+            let bytes = ASCII(
+                "HTTP/1.1 200 OK\r\n" +
+                "Content-Length: 0\r\n" +
+                "Connection: close\r\n" +
+                "\r\n")
+            let response = try Response(from: bytes)
+            assertEqual(response.connection, "close")
+        } catch {
+            fail(String(describing: error))
+        }
+    }
+
+    func testContentEncoding() {
+        do {
+            let bytes = ASCII(
+                "HTTP/1.1 200 OK\r\n" +
+                "Content-Length: 0\r\n" +
+                "Content-Encoding: gzip,deflate\r\n" +
+                "\r\n")
+            let response = try Response(from: bytes)
+            assertEqual(response.contentEncoding, "gzip,deflate")
+        } catch {
+            fail(String(describing: error))
+        }
+    }
+
+    func testTransferEncoding() {
+        do {
+            let bytes = ASCII(
+                "HTTP/1.1 200 OK\r\n" +
+                "Content-Length: 0\r\n" +
+                "Transfer-Encoding: chunked\r\n" +
+                "\r\n")
+            let response = try Response(from: bytes)
+            assertEqual(response.transferEncoding, "chunked")
+        } catch {
+            fail(String(describing: error))
+        }
+    }
+
+    func testCustomHeader() {
+        do {
+            let bytes = ASCII(
+                "HTTP/1.1 200 OK\r\n" +
+                "Content-Length: 0\r\n" +
+                "User: guest\r\n" +
+                "\r\n")
+            let response = try Response(from: bytes)
+            assertEqual(response.customHeaders["User"], "guest")
+        } catch {
+            fail(String(describing: error))
+        }
+    }
+
     func testStringResponse() {
         do {
             let bytes = ASCII(
@@ -207,6 +263,10 @@ class DecodeResponseTests: TestCase {
         ("testUnauthorized", testUnauthorized),
         ("testInternalServerError", testInternalServerError),
         ("testContentType", testContentType),
+        ("testConnection", testConnection),
+        ("testContentEncoding", testContentEncoding),
+        ("testTransferEncoding", testTransferEncoding),
+        ("testCustomHeader", testCustomHeader),
         ("testStringResponse", testStringResponse),
         ("testHtmlResponse", testHtmlResponse),
         ("testBytesResponse", testBytesResponse),

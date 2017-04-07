@@ -73,7 +73,7 @@ public class Server {
                 }
                 let request = try Request(from: bytes)
                 if isDebugBuild {
-                    Log.debug(">> \(request.url)")
+                    Log.debug(">> \(request.url.path)")
                 }
 
                 let response = provideResponse(for: request)

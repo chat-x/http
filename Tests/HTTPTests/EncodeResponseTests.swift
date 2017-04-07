@@ -160,6 +160,46 @@ class EncodeResponseTests: TestCase {
         assertEqual(String(bytes: response.bytes), expected)
     }
 
+    func testConnection() {
+        let expected = "HTTP/1.1 200 OK\r\n" +
+            "Content-Length: 0\r\n" +
+            "Connection: close\r\n" +
+            "\r\n"
+        var response = Response(status: .ok)
+        response.connection = "close"
+        assertEqual(String(bytes: response.bytes), expected)
+    }
+
+    func testContentEncoding() {
+        let expected = "HTTP/1.1 200 OK\r\n" +
+            "Content-Length: 0\r\n" +
+            "Content-Encoding: gzip,deflate\r\n" +
+            "\r\n"
+        var response = Response(status: .ok)
+        response.contentEncoding = "gzip,deflate"
+        assertEqual(String(bytes: response.bytes), expected)
+    }
+
+    func testTransferEncoding() {
+        let expected = "HTTP/1.1 200 OK\r\n" +
+            "Content-Length: 0\r\n" +
+            "Transfer-Encoding: chunked\r\n" +
+            "\r\n"
+        var response = Response(status: .ok)
+        response.transferEncoding = "chunked"
+        assertEqual(String(bytes: response.bytes), expected)
+    }
+
+    func testCustomHeader() {
+        let expected = "HTTP/1.1 200 OK\r\n" +
+            "Content-Length: 0\r\n" +
+            "User: guest\r\n" +
+            "\r\n"
+        var response = Response(status: .ok)
+        response.customHeaders["User"] = "guest"
+        assertEqual(String(bytes: response.bytes), expected)
+    }
+
 
     static var allTests = [
         ("testOk", testOk),
@@ -173,5 +213,9 @@ class EncodeResponseTests: TestCase {
         ("testHtmlResponse", testHtmlResponse),
         ("testBytesResponse", testBytesResponse),
         ("testResponseHasContentLenght", testResponseHasContentLenght),
+        ("testConnection", testConnection),
+        ("testContentEncoding", testContentEncoding),
+        ("testTransferEncoding", testTransferEncoding),
+        ("testCustomHeader", testCustomHeader),
     ]
 }
