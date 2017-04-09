@@ -13,15 +13,17 @@ Obviously, our work on server foundation (fibers, reflection, tls, etc.) took a 
 
 ## Memo
 
+#### Server
+
 ```swift
 // route return types
-return HTTPResponse(string: String)
-return HTTPResponse(html: String)
-return HTTPResponse(bytes: [UInt8])
-return HTTPResponse(json: [UInt8])
-return HTTPResponse(status: HTTPResponseStatus)
+return Response(string: String)
+return Response(html: String)
+return Response(bytes: [UInt8])
+return Response(json: [UInt8])
+return Response(status: Status)
 
-enum HTTPResponseStatus: String {
+enum Status {
     case ok
     case notFound
     case badRequest
@@ -29,47 +31,47 @@ enum HTTPResponseStatus: String {
     case internalServerError
 }
 
-return String // - return HTTPResponse(string: String)
+return String // - return Response(string: String)
 
-return Any | [String : Any] // - return HTTPResponse(json: serializeToJson(..))
+return Any | [String : Any] // - return Response(json: serializeToJson(..))
 
 
 // main routers
-func route(method: HTTPRequestType, url: String, handler: (Void) -> Any)
-func route(method: HTTPRequestType, url: String, handler: (HTTPRequest) -> Any)
-func route<A>(method: HTTPRequestType, url: String, handler: (A) -> Any)
-func route<A>(method: HTTPRequestType, url: String, handler: (HTTPRequest, A) -> Any)
+func route(method: RequestType, url: String, handler: (Void) -> Any)
+func route(method: RequestType, url: String, handler: (Request) -> Any)
+func route<A>(method: RequestType, url: String, handler: (A) -> Any)
+func route<A>(method: RequestType, url: String, handler: (Request, A) -> Any)
 
 // convenience routers
 func route(get url: String, handler: (Void) -> Any)
-func route(get url: String, handler: (HTTPRequest) -> Any)
+func route(get url: String, handler: (Request) -> Any)
 func route<A>(get url: String, handler: (A) -> Any)
-func route<A>(get url: String, handler: (HTTPRequest, A) -> Any)
+func route<A>(get url: String, handler: (Request, A) -> Any)
 
 func route(head url: String, handler: (Void) -> Any)
-func route(head url: String, handler: (HTTPRequest) -> Any)
+func route(head url: String, handler: (Request) -> Any)
 func route<A>(head url: String, handler: (A) -> Any)
-func route<A>(head url: String, handler: (HTTPRequest, A) -> Any)
+func route<A>(head url: String, handler: (Request, A) -> Any)
 
 func route(post url: String, handler: (Void) -> Any)
-func route(post url: String, handler: (HTTPRequest) -> Any)
+func route(post url: String, handler: (Request) -> Any)
 func route<A>(post url: String, handler: (A) -> Any)
-func route<A>(post url: String, handler: (HTTPRequest, A) -> Any)
+func route<A>(post url: String, handler: (Request, A) -> Any)
 
 func route(put url: String, handler: (Void) -> Any)
-func route(put url: String, handler: (HTTPRequest) -> Any)
+func route(put url: String, handler: (Request) -> Any)
 func route<A>(put url: String, handler: (A) -> Any)
-func route<A>(put url: String, handler: (HTTPRequest, A) -> Any)
+func route<A>(put url: String, handler: (Request, A) -> Any)
 
 func route(delete url: String, handler: (Void) -> Any)
-func route(delete url: String, handler: (HTTPRequest) -> Any)
+func route(delete url: String, handler: (Request) -> Any)
 func route<A>(delete url: String, handler: (A) -> Any)
-func route<A>(delete url: String, handler: (HTTPRequest, A) -> Any)
+func route<A>(delete url: String, handler: (Request, A) -> Any)
 
 func route(options url: String, handler: (Void) -> Any)
-func route(options url: String, handler: (HTTPRequest) -> Any)
+func route(options url: String, handler: (Request) -> Any)
 func route<A>(options url: String, handler: (A) -> Any)
-func route<A>(options url: String, handler: (HTTPRequest, A) -> Any)
+func route<A>(options url: String, handler: (Request, A) -> Any)
 ```
 
 ## Usage
@@ -151,7 +153,7 @@ server.route(get: "/request") { request in
 
 // 5. Wildcard
 
-server.route(get: "/*") { (request: HTTPRequest) in
+server.route(get: "/*") { (request: Request) in
     return "wildcard: \(request.url)"
 }
 
