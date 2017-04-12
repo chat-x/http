@@ -25,6 +25,9 @@ XCTMain([
     testCase(UtilsTests.allTests),
 
     testCase(ServerTests.allTests),
+    testCase(ThrowableRouteTests.allTests),
+
     testCase(ClientTests.allTests),
+
     testCase(FunctionalTests.allTests),
 ])
