@@ -76,7 +76,7 @@ extension Server {
         handler: @escaping (Model) throws -> Any
     ) {
         createRoute(method: method, url: url) { _, values in
-            guard let model = Blueprint(ofType: Model.self)
+            guard let model = Blueprint(of: Model.self)
                 .construct(using: values) else {
                     return Response(status: .badRequest)
             }
@@ -91,7 +91,7 @@ extension Server {
         handler: @escaping (Request, Model) throws -> Any
     ) {
         createRoute(method: method, url: url) { request, values in
-            guard let model = Blueprint(ofType: Model.self)
+            guard let model = Blueprint(of: Model.self)
                 .construct(using: values) else {
                     return Response(status: .badRequest)
             }
