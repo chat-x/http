@@ -1,9 +1,9 @@
-# HTTP Server
+# HTTP
 
-Incredibly fast http-server for your app backend. Request session & (middleware | filters) are coming.
-Primarily designed for cooperative multitasking, but also has a fallback to [dispatch](https://github.com/tris-foundation/async-dispatch) if you can't use fibers for some reason.
-Currently limited to us-ascii routes due to fastest router algorithm sufficient for most cases. Unicode router is coming.
-Obviously, our work on server foundation (fibers, reflection, tls, etc.) took a lot of time, so http-server is very simple for now but already has some killer features and we have a lot coming. Stay tuned.
+Incredibly fast http modules primarily designed for cooperative multitasking,<br>
+but also has a fallback to [dispatch](https://github.com/tris-foundation/async-dispatch) system if you can't use fibers for some reason.<br>
+Currently limited to us-ascii routes. Unicode router & session & (middleware | filters) are coming.<br>
+
 
 ## Package.swift
 
@@ -14,7 +14,6 @@ Obviously, our work on server foundation (fibers, reflection, tls, etc.) took a 
 ## Memo
 
 #### Server
-
 ```swift
 // route return types
 return Response(string: String)
@@ -74,26 +73,40 @@ func route<A>(options url: String, handler: (A) -> Any)
 func route<A>(options url: String, handler: (Request, A) -> Any)
 ```
 
+#### Client
+```swift
+init(async: Async) throws
+func connect(to url: URL) throws
+func close() throws
+
+func makeRequest(_ request: Request) throws -> Response
+
+func get(_ url: String) throws -> Response
+func head(_ url: String) throws -> Response
+func post(_ url: String) throws -> Response
+func put(_ url: String) throws -> Response
+func delete(_ url: String) throws -> Response
+func options(_ url: String) throws -> Response
+
+func post(_ url: String, json object: Any) throws -> Response
+```
+
 ## Usage
 
 You can find this code and more in [examples](https://github.com/tris-foundation/examples).
 
+#### Server
+
 ```swift
 // 0. Create server
-
-// AsyncDispatch - preemptive multitasking, spawns Dispatch task for each connection
-// AsyncFiber - cooperative multitasking, runs new fiber for each connection
-
 let server = try Server(host: "0.0.0.0", port: 8080, async: AsyncFiber())
 
 // 1. Simple route
-
 server.route(get: "/hello") {
     return "hey there!"
 }
 
 // 2. Map url param to primitive types
-
 server.route(get: "/hello/:name") { (name: String) in
     return "hey \(name)!"
 }
@@ -102,60 +115,77 @@ server.route(get: "/robot/:id") { (id: Int) in
     return "Hello. My name is Robo\(id). I'm here to.. BSOD"
 }
 
-// 3. Reflection
+// Reflection
 
-// 3.1. map url params to custom model
-
+// 3.1. get method
 struct Page {
     let name: String
     let skip: Int
 }
-
-// you can also mix url and query params:
+// you can mix values from url and query:
 // example: /page/news?skip=2
 server.route(get: "/page/:name") { (page: Page) in
-    return "page \(page.name), skip \(page.skip)"
+    return page
 }
 
 // 3.2. post data
-
 struct TodoUpdate {
     let name: String
     let done: Bool
 }
-
-// post query example: name=commitChanges&done=true
+// urlencoded example: name=sleep+sometimes&done=false
+// json example: {"name": "sleep sometimes", "done": false}
 server.route(post: "/todo") { (todo: TodoUpdate) in
-    return "todo \(todo.name) state \(todo.done)"
+    return todo
 }
-
+// you can also mix values from url and post body:
 // example: /todo/commitChanges
 // post query: done=true
 server.route(post: "/todo/:name") { (todo: TodoUpdate) in
-    return "todo mix \(todo.name) state \(todo.done)"
+    return todo
 }
-
 // 3.3. serialize model into json
-
 server.route(get: "/todo/as/json") {
     return TodoUpdate(name: "serialized", done: true)
 }
 
-// 4. Use request data & return json dictionary
-
+// 4. Use request & return handcoded json
 server.route(get: "/request") { request in
     return [
-        "url": request.url,
-        "host": request.host,
-        "user-agent": request.userAgent
+        "method": String(describing: request.method),
+        "url": request.url.path,
     ]
 }
 
 // 5. Wildcard
-
 server.route(get: "/*") { (request: Request) in
-    return "wildcard: \(request.url)"
+    return "wildcard: \(request.url.path)"
 }
 
 try server.start()
+```
+
+#### Client
+
+```swift
+let client = try Client(async: AsyncFiber())
+try client.connect(to: "http://0.0.0.0:8080")
+
+try client.get("/hello")
+try client.get("/hello/username")
+try client.get("/robot/8")
+try client.get("/page/news?skip=2")
+
+try client.post("/todo", json: [
+    "name": "sleep sometimes",
+    "done": false
+])
+
+try client.post("/todo/post", json: [
+    "done": true
+])
+
+try client.get("/todo/as/json")
+try client.get("/request")
+try client.get("/whatdoesmarcelluswallacelooklike")
 ```
