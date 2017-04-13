@@ -51,7 +51,6 @@ public class Server {
                 }
             }
         }
-        async.loop.run()
     }
 
     func handleError (_ error: Error) {
