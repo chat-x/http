@@ -49,7 +49,7 @@ class ClientTests: TestCase {
 
                 let client = try Client(async: async)
                 try client.connect(to: URL("http://127.0.0.1:5001/"))
-                let response = try client.send(request)
+                let response = try client.makeRequest(request)
 
                 assertEqual(response.status, .ok)
                 assertNil(response.body)
@@ -59,7 +59,7 @@ class ClientTests: TestCase {
                 fail(String(describing: error))
             }
         }
-        
+
         async.loop.run()
     }
 

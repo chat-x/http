@@ -53,6 +53,23 @@ class FunctionalTests: TestCase {
         async.loop.run()
     }
 
+    func testRequest() {
+        setup(
+            port: 6000,
+            serverCode: { server in
+                server.route(get: "/") {
+                    return Response(status: .ok)
+                }
+            },
+            clientCode: { client in
+                let request = Request(method: .get, url: "/")
+                let response = try client.makeRequest(request)
+                assertEqual(response.status, .ok)
+                assertNil(response.body)
+            }
+        )
+    }
+
     func testGet() {
         setup(
             port: 6001,
@@ -162,8 +179,8 @@ class FunctionalTests: TestCase {
                 }
             },
             clientCode: { client in
-                let data = [UInt8]("{\"message\":\"Hello, Server!\"}".utf8)
-                let response = try client.post("/", json: data)
+                let message = ["message": "Hello, Server!"]
+                let response = try client.post("/", json: message)
                 assertEqual(response.status, .ok)
                 assertEqual(response.body, "{\"message\":\"Hello, Client!\"}")
             }
@@ -172,6 +189,7 @@ class FunctionalTests: TestCase {
 
 
     static var allTests = [
+        ("testRequest", testRequest),
         ("testGet", testGet),
         ("testHead", testHead),
         ("testPost", testPost),
