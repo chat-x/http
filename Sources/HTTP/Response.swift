@@ -8,6 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
+import class Foundation.JSONSerialization
+
 public struct Response {
     public var status: Status = .ok
     public var version: Version = .oneOne
@@ -58,10 +60,12 @@ public struct Response {
         contentLength = bytes.count
     }
 
-    public init(json: [UInt8]) {
+    public init(json object: Any) throws {
+        let bytes = [UInt8](try JSONSerialization.data(withJSONObject: object))
+
         contentType = .json
-        rawBody = json
-        contentLength = json.count
+        rawBody = bytes
+        contentLength = bytes.count
     }
 }
 
