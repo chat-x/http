@@ -166,7 +166,7 @@ class FunctionalTests: TestCase {
         )
     }
 
-    func testPostJson() {
+    func testJson() {
         setup(
             port: 6007,
             serverCode: { server in
@@ -187,6 +187,27 @@ class FunctionalTests: TestCase {
         )
     }
 
+    func testFormEncoded() {
+        setup(
+            port: 6008,
+            serverCode: { server in
+                struct Model {
+                    var message: String
+                }
+                server.route(post: "/") { (model: Model) in
+                    assertEqual(model.message, "Hello, Server!")
+                    return Response(urlEncoded: ["message": "Hello, Client!"])
+                }
+            },
+            clientCode: { client in
+                let dictionary = ["message" : "Hello, Server!"]
+                let response = try client.post("/", urlEncoded: dictionary)
+                assertEqual(response.status, .ok)
+                assertEqual(response.body, "message=Hello,%20Client!")
+            }
+        )
+    }
+
 
     static var allTests = [
         ("testRequest", testRequest),
@@ -196,6 +217,7 @@ class FunctionalTests: TestCase {
         ("testPut", testPut),
         ("testDelete", testDelete),
         ("testOptions", testOptions),
-        ("testPostJson", testPostJson),
+        ("testJson", testJson),
+        ("testFormEncoded", testFormEncoded),
     ]
 }

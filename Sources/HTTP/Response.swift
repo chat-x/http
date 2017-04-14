@@ -31,7 +31,9 @@ public struct Response {
     public init() {
         self.contentLength = 0
     }
+}
 
+extension Response {
     public init(status: Status) {
         self.status = status
         self.contentLength = 0
@@ -64,6 +66,14 @@ public struct Response {
         let bytes = [UInt8](try JSONSerialization.data(withJSONObject: object))
 
         contentType = .json
+        rawBody = bytes
+        contentLength = bytes.count
+    }
+
+    public init(urlEncoded values: [String : String]) {
+        let bytes = [UInt8](URL.encode(values: values).utf8)
+
+        contentType = .urlEncoded
         rawBody = bytes
         contentLength = bytes.count
     }
