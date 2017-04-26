@@ -10,7 +10,7 @@
 
 import Log
 import Async
-import Socket
+import Network
 import Reflection
 import Foundation
 
