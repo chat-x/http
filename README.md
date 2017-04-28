@@ -8,7 +8,7 @@ Currently limited to us-ascii routes. Unicode router & session & (middleware | f
 ## Package.swift
 
 ```swift
-.Package(url: "https://github.com/tris-foundation/http-server.git", majorVersion: 0)
+.Package(url: "https://github.com/tris-foundation/http.git", majorVersion: 0)
 ```
 
 ## Memo
@@ -19,7 +19,7 @@ Currently limited to us-ascii routes. Unicode router & session & (middleware | f
 return Response(string: String)
 return Response(html: String)
 return Response(bytes: [UInt8])
-return Response(json: [UInt8])
+return Response(json: Any)
 return Response(status: Status)
 
 enum Status {
