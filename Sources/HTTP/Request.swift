@@ -27,7 +27,7 @@ public struct Request {
     public var contentLength: Int? = nil
     public var transferEncoding: String? = nil
 
-    public var customHeaders: [String : String] = [:]
+    public var headers: [String : String] = [:]
 
     public var rawBody: [UInt8]? = nil {
         didSet {
@@ -175,7 +175,7 @@ extension Request {
                 value: ASCII(transferEncoding))
         }
 
-        for (key, value) in customHeaders {
+        for (key, value) in headers {
             writeHeader(name: ASCII(key), value: ASCII(value))
         }
 
@@ -271,7 +271,7 @@ extension Request {
                     self.transferEncoding = headerValueString
                 default:
                     let headerNameString = String(buffer: headerNameBuffer)
-                    customHeaders[headerNameString] = headerValueString
+                    headers[headerNameString] = headerValueString
                 }
 
                 startIndex = endIndex.advanced(by: 2)
