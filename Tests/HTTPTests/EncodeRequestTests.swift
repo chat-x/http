@@ -66,7 +66,7 @@ class EncodeRequestTests: TestCase {
             "Accept-Encoding: gzip,deflate\r\n" +
             "\r\n"
         var request = Request()
-        request.acceptEncoding = "gzip,deflate"
+        request.acceptEncoding = [.gzip, .deflate]
         assertEqual(String(bytes: request.bytes), expected)
     }
 
