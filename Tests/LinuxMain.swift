@@ -21,6 +21,7 @@ XCTMain([
     testCase(EncodeResponseTests.allTests),
     testCase(DecodeRequestTests.allTests),
     testCase(DecodeResponseTests.allTests),
+    testCase(JSONTests.allTests),
     testCase(NginxTests.allTests),
     testCase(UtilsTests.allTests),
 
