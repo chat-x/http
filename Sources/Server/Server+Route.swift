@@ -10,6 +10,7 @@
 
 import Reflection
 import HTTP
+import JSON
 
 extension Server {
 
@@ -121,7 +122,7 @@ extension Server {
                         let query = String(cString: body + [0])
                         queryValues = QueryParser.parse(urlEncoded: query)
                     case .json:
-                        queryValues = QueryParser.parse(json: body)
+                        queryValues = JSON.decode(body)
                     default:
                         queryValues = nil
                     }

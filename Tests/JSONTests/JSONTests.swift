@@ -8,7 +8,7 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-@testable import HTTP
+@testable import JSON
 
 class JSONTests: TestCase {
     func testSerialize() {
@@ -17,7 +17,7 @@ class JSONTests: TestCase {
                 let name: String = "Tony"
                 let age: Int = 16
             }
-            let bytes = try JSON.serialize(Person())
+            let bytes = try JSON.encode(Person())
             let string = String(cString: bytes + [0])
             assertEqual(string, "{\"name\":\"Tony\",\"age\":16}")
         } catch {
@@ -28,7 +28,7 @@ class JSONTests: TestCase {
     func testSerializeArray() {
         do {
             let integers: [Int] = [1,2,3,4,5]
-            let bytes = try JSON.serialize(integers)
+            let bytes = try JSON.encode(integers)
             let string = String(cString: bytes + [0])
             assertEqual(string, "[1,2,3,4,5]")
         } catch {
@@ -41,7 +41,7 @@ class JSONTests: TestCase {
             struct Numbers {
                 let integers: [Int] = [1,2,3,4,5]
             }
-            let bytes = try JSON.serialize(Numbers())
+            let bytes = try JSON.encode(Numbers())
             let string = String(cString: bytes + [0])
             assertEqual(string, "{\"integers\":[1,2,3,4,5]}")
         } catch {
@@ -54,7 +54,7 @@ class JSONTests: TestCase {
             struct Model {
                 let dictionary: [String: Int] = ["number" : 2]
             }
-            let bytes = try JSON.serialize(Model())
+            let bytes = try JSON.encode(Model())
             let string = String(cString: bytes + [0])
             assertEqual(string, "{\"dictionary\":{\"number\":2}}")
         } catch {
@@ -72,7 +72,7 @@ class JSONTests: TestCase {
                 let person: Person = Person()
             }
 
-            let bytes = try JSON.serialize(Model())
+            let bytes = try JSON.encode(Model())
             let string = String(cString: bytes + [0])
             assertEqual(string, "{\"person\":{\"name\":\"Tony\",\"age\":16}}")
         } catch {

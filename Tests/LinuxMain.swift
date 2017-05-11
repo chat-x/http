@@ -13,6 +13,7 @@ import XCTest
 @testable import ServerTests
 @testable import ClientTests
 @testable import FunctionalTests
+@testable import JSONTests
 
 XCTMain([
     testCase(RequestTests.allTests),
@@ -21,7 +22,6 @@ XCTMain([
     testCase(EncodeResponseTests.allTests),
     testCase(DecodeRequestTests.allTests),
     testCase(DecodeResponseTests.allTests),
-    testCase(JSONTests.allTests),
     testCase(NginxTests.allTests),
     testCase(UtilsTests.allTests),
 
@@ -31,4 +31,6 @@ XCTMain([
     testCase(ClientTests.allTests),
 
     testCase(FunctionalTests.allTests),
+
+    testCase(JSONTests.allTests),
 ])
