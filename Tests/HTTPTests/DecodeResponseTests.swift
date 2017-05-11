@@ -105,7 +105,7 @@ class DecodeResponseTests: TestCase {
                 "Connection: close\r\n" +
                 "\r\n")
             let response = try Response(from: bytes)
-            assertEqual(response.connection, "close")
+            assertEqual(response.connection, .close)
         } catch {
             fail(String(describing: error))
         }
