@@ -98,7 +98,7 @@ class EncodeRequestTests: TestCase {
             "Connection: close\r\n" +
             "\r\n"
         var request = Request()
-        request.connection = "close"
+        request.connection = .close
         assertEqual(String(bytes: request.bytes), expected)
     }
 
