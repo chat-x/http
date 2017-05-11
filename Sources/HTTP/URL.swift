@@ -19,14 +19,14 @@ public struct URL {
     public var host: String?
     public var port: Int?
     public var path: String
-    public var query: String?
+    public var query: [String : String]
     public var scheme: Scheme?
 
     public init(
         host: String? = nil,
         port: Int? = nil,
         path: String,
-        query: String? = nil,
+        query: [String : String] = [:],
         scheme: Scheme? = nil
     ) {
         self.host = host
@@ -45,7 +45,11 @@ extension URL {
         self.host = url.host
         self.port = url.port
         self.path = url.path
-        self.query = url.query
+        if let query = url.query {
+            self.query = URL.decode(urlEncoded: query)
+        } else {
+            self.query = [:]
+        }
         if let scheme = url.scheme {
             self.scheme = Scheme(rawValue: scheme)
         }
@@ -60,15 +64,32 @@ extension URL {
             withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
         return encodedQuery
     }
+
+    public static func decode(urlEncoded query: String) -> [String : String] {
+        var values =  [String : String]()
+        let pairs = query.components(separatedBy: "&")
+        for pair in pairs {
+            if let index = pair.characters.index(of: "=") {
+                let name = pair.characters.prefix(upTo: index)
+                let value = pair.characters.suffix(from: pair.characters.index(after: index))
+                if let decodedName = String(name).removingPercentEncoding,
+                    let decodedValue = String(value).removingPercentEncoding {
+                    values[decodedName] = decodedValue
+                }
+            }
+        }
+        return values
+    }
 }
 
 extension URL {
     var bytes: [UInt8] {
         var bytes = [UInt8]()
         bytes.append(contentsOf: [UInt8](path.utf8))
-        if let query = query {
+        if query.count > 0 {
             bytes.append(Character.questionMark)
-            bytes.append(contentsOf: [UInt8](query.utf8))
+            // TODO: optimize
+            bytes.append(contentsOf: [UInt8](URL.encode(values: query).utf8))
         }
         return bytes
     }
@@ -78,9 +99,12 @@ extension URL {
     init(from buffer: UnsafeRawBufferPointer) {
         if let index = buffer.index(of: Character.questionMark) {
             self.path = String(buffer: buffer.prefix(upTo: index))
-            self.query = String(buffer: buffer.suffix(from: index + 1))
+            // TODO: optimize
+            self.query = URL.decode(
+                urlEncoded: String(buffer: buffer.suffix(from: index + 1)))
         } else {
             self.path = String(buffer: buffer)
+            self.query = [:]
         }
     }
 }
