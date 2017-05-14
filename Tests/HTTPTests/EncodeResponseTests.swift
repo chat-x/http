@@ -102,7 +102,7 @@ class EncodeResponseTests: TestCase {
             "Content-Encoding: gzip,deflate\r\n" +
             "\r\n"
         var response = Response(status: .ok)
-        response.contentEncoding = "gzip,deflate"
+        response.contentEncoding = [.gzip, .deflate]
         assertEqual(String(bytes: response.bytes), expected)
     }
 
