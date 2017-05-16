@@ -17,6 +17,10 @@ enum HTTPError: Error {
     case invalidVersion
     case invalidHeaderName
     case invalidHeaderValue
+    case invalidContentType
+    case invalidMediaType
+    case invalidBoundary
+    case unsupportedMediaType
     case unsupportedContentType
     case unsupportedAcceptCharset
     case unexpectedEnd

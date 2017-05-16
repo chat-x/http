@@ -16,6 +16,8 @@ struct Character {
     static let semicolon = ASCII(";").first!
     static let comma = ASCII(",").first!
     static let questionMark = ASCII("?").first!
+    static let slash = ASCII("/").first!
+    static let asterisk = ASCII("*").first!
 }
 
 struct Constants {
