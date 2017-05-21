@@ -18,9 +18,30 @@ let package = Package(
         Target(name: "Client", dependencies: ["HTTP"]),
     ],
     dependencies: [
-        .Package(url: "https://github.com/tris-foundation/log.git", majorVersion: 0),
-        .Package(url: "https://github.com/tris-foundation/async.git", majorVersion: 0),
-        .Package(url: "https://github.com/tris-foundation/network.git", majorVersion: 0),
-        .Package(url: "https://github.com/tris-foundation/reflection.git", majorVersion: 0),
+        .Package(
+            url: "https://github.com/tris-foundation/log.git",
+            majorVersion: 0,
+            minor: 3
+        ),
+        .Package(
+            url: "https://github.com/tris-foundation/async.git",
+            majorVersion: 0,
+            minor: 3
+        ),
+        .Package(
+            url: "https://github.com/tris-foundation/network.git",
+            majorVersion: 0,
+            minor: 3
+        ),
+        .Package(
+            url: "https://github.com/tris-foundation/reflection.git",
+            majorVersion: 0,
+            minor: 3
+        ),
+        .Package(
+            url: "https://github.com/tris-foundation/fiber.git",
+            majorVersion: 0,
+            minor: 3
+        ),
     ]
 )

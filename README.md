@@ -8,7 +8,7 @@ Currently limited to us-ascii routes. Unicode router & session & (middleware | f
 ## Package.swift
 
 ```swift
-.Package(url: "https://github.com/tris-foundation/http.git", majorVersion: 0)
+.Package(url: "https://github.com/tris-foundation/http.git", majorVersion: 0, minor: 3)
 ```
 
 ## Memo
