@@ -1,3 +1,4 @@
+// swift-tools-version:4.0
 /*
  * Copyright 2017 Tris Foundation and the project authors
  *
@@ -12,36 +13,55 @@ import PackageDescription
 
 let package = Package(
     name: "HTTP",
-    targets: [
-        Target(name: "HTTP", dependencies: ["JSON"]),
-        Target(name: "Server", dependencies: ["HTTP", "JSON"]),
-        Target(name: "Client", dependencies: ["HTTP"]),
+    products: [
+        .library(name: "HTTP", targets: ["HTTP"]),
+        .library(name: "Server", targets: ["Server"]),
+        .library(name: "Client", targets: ["Client"])
     ],
     dependencies: [
-        .Package(
+        .package(
             url: "https://github.com/tris-foundation/log.git",
-            majorVersion: 0,
-            minor: 3
+            from: "0.4.0"
         ),
-        .Package(
+        .package(
             url: "https://github.com/tris-foundation/async.git",
-            majorVersion: 0,
-            minor: 3
+            from: "0.4.0"
         ),
-        .Package(
+        .package(
             url: "https://github.com/tris-foundation/network.git",
-            majorVersion: 0,
-            minor: 3
+            from: "0.4.0"
         ),
-        .Package(
+        .package(
             url: "https://github.com/tris-foundation/reflection.git",
-            majorVersion: 0,
-            minor: 3
+            from: "0.4.0"
         ),
-        .Package(
+        .package(
             url: "https://github.com/tris-foundation/fiber.git",
-            majorVersion: 0,
-            minor: 3
+            from: "0.4.0"
         ),
+        .package(
+            url: "https://github.com/tris-foundation/test.git",
+            from: "0.4.0"
+        )
+    ],
+    targets: [
+        .target(name: "JSON"),
+        .target(name: "HTTP", dependencies: ["JSON"]),
+        .target(
+            name: "Server",
+            dependencies: ["Async", "Network", "HTTP", "Reflection", "Log"]
+        ),
+        .target(
+            name: "Client",
+            dependencies: ["Async", "Network", "HTTP", "Log"]
+        ),
+        .testTarget(name: "JSONTests", dependencies: ["JSON", "Test"]),
+        .testTarget(name: "HTTPTests", dependencies: ["HTTP", "Test"]),
+        .testTarget(name: "ServerTests", dependencies: ["Server", "Test"]),
+        .testTarget(name: "ClientTests", dependencies: ["Client", "Test"]),
+        .testTarget(
+            name: "FunctionalTests",
+            dependencies: ["Server", "Client", "Test"]
+        )
     ]
 )

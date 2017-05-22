@@ -8,7 +8,7 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-import XCTest
+import Test
 @testable import Server
 import Network
 

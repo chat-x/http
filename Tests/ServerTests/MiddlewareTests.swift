@@ -8,9 +8,9 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-import XCTest
-@testable import Server
+import Test
 import Network
+@testable import Server
 
 class MiddlewareTests: TestCase {
     func testMiddleware() {

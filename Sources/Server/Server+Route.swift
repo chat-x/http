@@ -54,7 +54,7 @@ extension Server {
         method: Request.Method,
         url: String,
         middleware: [Middleware.Type] = [],
-        handler: @escaping (Void) throws -> Any
+        handler: @escaping () throws -> Any
     ) {
         let handler: Server.RequestHandler = { _ in
             try Server.parseAnyResponse(try handler())
@@ -226,7 +226,7 @@ extension Server {
     public func route(
         get url: String,
         middleware: [Middleware.Type] = [],
-        handler: @escaping (Void) throws -> Any
+        handler: @escaping () throws -> Any
     ) {
         route(method: .get, url: url, middleware: middleware, handler: handler)
     }
@@ -275,7 +275,7 @@ extension Server {
     public func route(
         head url: String,
         middleware: [Middleware.Type] = [],
-        handler: @escaping (Void) throws -> Any
+        handler: @escaping () throws -> Any
     ) {
         route(method: .head, url: url, middleware: middleware, handler: handler)
     }
@@ -324,7 +324,7 @@ extension Server {
     public func route(
         post url: String,
         middleware: [Middleware.Type] = [],
-        handler: @escaping (Void) throws -> Any
+        handler: @escaping () throws -> Any
     ) {
         route(method: .post, url: url, middleware: middleware, handler: handler)
     }
@@ -373,7 +373,7 @@ extension Server {
     public func route(
         put url: String,
         middleware: [Middleware.Type] = [],
-        handler: @escaping (Void) throws -> Any
+        handler: @escaping () throws -> Any
     ) {
         route(method: .put, url: url, middleware: middleware, handler: handler)
     }
@@ -422,7 +422,7 @@ extension Server {
     public func route(
         delete url: String,
         middleware: [Middleware.Type] = [],
-        handler: @escaping (Void) throws -> Any
+        handler: @escaping () throws -> Any
     ) {
         route(
             method: .delete,
@@ -501,7 +501,7 @@ extension Server {
     public func route(
         options url: String,
         middleware: [Middleware.Type] = [],
-        handler: @escaping (Void) throws -> Any
+        handler: @escaping () throws -> Any
     ) {
         route(
             method: .options,
