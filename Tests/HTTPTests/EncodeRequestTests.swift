@@ -90,6 +90,17 @@ class EncodeRequestTests: TestCase {
         assertEqual(String(bytes: request.bytes), expected)
     }
 
+    func testAuthorization() {
+        let expected = "GET / HTTP/1.1\r\n" +
+            "Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\r\n" +
+            "\r\n"
+
+        var request = Request()
+        request.authorization = .basic(
+            credentials: "QWxhZGRpbjpvcGVuIHNlc2FtZQ==")
+        assertEqual(String(bytes: request.bytes), expected)
+    }
+
     func testKeepAlive() {
         let expected = "GET / HTTP/1.1\r\n" +
             "Keep-Alive: 300\r\n" +
@@ -176,6 +187,7 @@ class EncodeRequestTests: TestCase {
         ("testAcceptLanguage", testAcceptLanguage),
         ("testAcceptEncoding", testAcceptEncoding),
         ("testAcceptCharset", testAcceptCharset),
+        ("testAuthorization", testAuthorization),
         ("testKeepAlive", testKeepAlive),
         ("testConnection", testConnection),
         ("testContentType", testContentType),
