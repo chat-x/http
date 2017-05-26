@@ -19,8 +19,8 @@ class MiddlewareTests: TestCase {
 
         struct TestMiddleware: Middleware {
             public static func createMiddleware(
-                for handler: @escaping Server.RequestHandler
-            ) -> Server.RequestHandler {
+                for handler: @escaping RequestHandler
+            ) -> RequestHandler {
                 return { request in
                     var response = try handler(request)
                     response.status = .ok
@@ -86,8 +86,8 @@ class MiddlewareTests: TestCase {
 
         struct FirstMiddleware: Middleware {
             public static func createMiddleware(
-                for handler: @escaping Server.RequestHandler
-            ) -> Server.RequestHandler {
+                for handler: @escaping RequestHandler
+            ) -> RequestHandler {
                 return { request in
                     var response = try handler(request)
                     response.headers["Middleware"] = "first"
@@ -99,8 +99,8 @@ class MiddlewareTests: TestCase {
 
         struct SecondMiddleware: Middleware {
             public static func createMiddleware(
-                for handler: @escaping Server.RequestHandler
-            ) -> Server.RequestHandler {
+                for handler: @escaping RequestHandler
+            ) -> RequestHandler {
                 return { request in
                     var response = try handler(request)
                     response.headers["Middleware"] = "second"

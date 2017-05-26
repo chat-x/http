@@ -22,7 +22,7 @@ public enum ClientError: Error {
 public class Client {
     let async: Async
     let socket: Socket
-    
+
     var isConnected: Bool = false
 
     public init(async: Async) throws {
@@ -43,7 +43,7 @@ public class Client {
         if isConnected {
             try close()
         }
-        
+
         try socket.connect(to: host, port: UInt16(port))
         isConnected = true
     }
