@@ -92,7 +92,7 @@ class DecodeResponseTests: TestCase {
                 "Content-Length: 0\r\n" +
                 "\r\n")
             let response = try Response(from: bytes)
-            let expected = try! ContentType(mediaType: .text(.plain))
+            let expected = ContentType(mediaType: .text(.plain))
             assertEqual(response.contentType, expected)
         } catch {
             fail(String(describing: error))
@@ -166,7 +166,7 @@ class DecodeResponseTests: TestCase {
             let response = try Response(from: bytes)
             assertEqual(
                 response.contentType,
-                try! ContentType(mediaType: .text(.plain))
+                ContentType(mediaType: .text(.plain))
             )
             assertEqual(response.contentLength, 5)
             guard let rawBody = response.rawBody else {
@@ -191,7 +191,7 @@ class DecodeResponseTests: TestCase {
             let response = try Response(from: bytes)
             assertEqual(
                 response.contentType,
-                try! ContentType(mediaType: .text(.html))
+                ContentType(mediaType: .text(.html))
             )
             assertEqual(response.contentLength, 13)
             guard let rawBody = response.rawBody else {
@@ -215,7 +215,7 @@ class DecodeResponseTests: TestCase {
             let response = try Response(from: bytes)
             assertEqual(
                 response.contentType,
-                try! ContentType(mediaType: .application(.stream))
+                ContentType(mediaType: .application(.stream))
             )
             assertEqual(response.contentLength, 3)
             guard let rawBody = response.rawBody else {
@@ -239,7 +239,7 @@ class DecodeResponseTests: TestCase {
             let response = try Response(from: bytes)
             assertEqual(
                 response.contentType,
-                try! ContentType(mediaType: .application(.json))
+                ContentType(mediaType: .application(.json))
             )
             assertEqual(response.contentLength, 28)
             guard let rawBody = response.rawBody else {

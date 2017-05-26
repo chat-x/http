@@ -362,7 +362,7 @@ class DecodeRequestTests: TestCase {
             assertNotNil(request.contentType)
             assertEqual(
                 request.contentType,
-                try ContentType(mediaType: .application(.urlEncoded))
+                ContentType(mediaType: .application(.urlEncoded))
             )
         } catch {
             fail(String(describing: error))
@@ -380,7 +380,7 @@ class DecodeRequestTests: TestCase {
             assertNotNil(request.contentType)
             assertEqual(
                 request.contentType,
-                try ContentType(mediaType: .text(.plain), charset: .utf8)
+                ContentType(mediaType: .text(.plain), charset: .utf8)
             )
         } catch {
             fail(String(describing: error))
@@ -408,9 +408,9 @@ class DecodeRequestTests: TestCase {
             assertNotNil(request.contentType)
             assertEqual(
                 request.contentType,
-                try ContentType(
-                    mediaType: .multipart(.formData),
-                    boundary: Boundary("---"))
+                ContentType(
+                    multipart: .formData,
+                    boundary: try Boundary("---"))
             )
         } catch {
             fail(String(describing: error))
