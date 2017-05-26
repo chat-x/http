@@ -20,6 +20,7 @@ enum HTTPError: Error {
     case invalidContentType
     case invalidMediaType
     case invalidBoundary
+    case invalidCookie
     case unsupportedMediaType
     case unsupportedContentType
     case unsupportedAcceptCharset
