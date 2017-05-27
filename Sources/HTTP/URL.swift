@@ -109,9 +109,8 @@ extension URL.Query {
                     throw HTTPError.invalidURL
             }
             // FIXME: validate using url rules
-            guard let name = String(
-                validating: bytes[startIndex..<equalIndex],
-                allowedCharacters: .text)?
+            guard let name =
+                String(validating: bytes[startIndex..<equalIndex], as: .text)?
                 .removingPercentEncoding else {
                     throw HTTPError.invalidURL
             }
@@ -124,9 +123,8 @@ extension URL.Query {
             endIndex = bytes.index(of: Character.equal, offset: startIndex)
                 ?? bytes.endIndex
             // FIXME: validate using url rules
-            guard let value = String(
-                validating: bytes[startIndex..<endIndex],
-                allowedCharacters: .text)?
+            guard let value =
+                String(validating: bytes[startIndex..<endIndex], as: .text)?
                 .removingPercentEncoding else {
                     throw HTTPError.invalidURL
             }
@@ -153,9 +151,8 @@ extension URL {
     init(from buffer: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
         if let index = buffer.index(of: Character.questionMark) {
             // FIXME: validate using url rules
-            guard let path = String(
-                validating: buffer[..<index],
-                allowedCharacters: .text) else {
+            guard let path =
+                String(validating: buffer[..<index], as: .text) else {
                     throw HTTPError.invalidURL
             }
             self.path = path
@@ -163,9 +160,8 @@ extension URL {
             self.query = try Query(from: buffer[queryIndex...])
         } else {
             // FIXME: validate using url rules
-            guard let path =
-                String(validating: buffer, allowedCharacters: .text) else {
-                    throw HTTPError.invalidURL
+            guard let path = String(validating: buffer, as: .text) else {
+                throw HTTPError.invalidURL
             }
             self.path = path
             self.query = [:]
