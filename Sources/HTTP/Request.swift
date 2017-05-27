@@ -251,9 +251,11 @@ extension Request {
 
                 switch headerName {
                 case .host:
-                    self.host = String(buffer: headerValue)
+                    self.host = String(
+                        validating: headerValue, allowedCharacters: .text)
                 case .userAgent:
-                    self.userAgent = String(buffer: headerValue)
+                    self.userAgent = String(
+                        validating: headerValue, allowedCharacters: .text)
                 case .accept:
                     self.accept = try [Accept](from: headerValue)
                 case .acceptLanguage:
@@ -267,11 +269,11 @@ extension Request {
                 case .authorization:
                     self.authorization = try Authorization(from: headerValue)
                 case .keepAlive:
-                    self.keepAlive = Int(String(buffer: headerValue))
+                    self.keepAlive = Int(from: headerValue)
                 case .connection:
                     self.connection = try Connection(from: headerValue)
                 case .contentLength:
-                    self.contentLength = Int(String(buffer: headerValue))
+                    self.contentLength = Int(from: headerValue)
                 case .contentType:
                     self.contentType = try ContentType(from: headerValue)
                 case .transferEncoding:
@@ -281,7 +283,8 @@ extension Request {
                     self.cookies.append(
                         contentsOf: try [Cookie](from: headerValue))
                 default:
-                    headers[headerName] = String(buffer: headerValue)
+                    headers[headerName] = String(
+                        validating: headerValue, allowedCharacters: .text)
                 }
 
                 startIndex = endIndex.advanced(by: 2)
@@ -329,9 +332,9 @@ extension Request {
             }
 
             // TODO: optimize using hex table
-            let hexSize = String(buffer: bytes[startIndex..<endIndex])
-            guard let size = Int(hexSize, radix: 16) else {
-                throw HTTPError.invalidRequest
+            guard let size =
+                Int(from: bytes[startIndex..<endIndex], radix: 16) else {
+                    throw HTTPError.invalidRequest
             }
             guard size > 0 else {
                 startIndex = endIndex.advanced(by: 2)
