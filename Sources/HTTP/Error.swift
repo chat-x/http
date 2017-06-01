@@ -8,7 +8,7 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-enum HTTPError: Error {
+public enum HTTPError: Error {
     case invalidRequest
     case invalidResponse
     case invalidURL
