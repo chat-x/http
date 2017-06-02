@@ -20,6 +20,7 @@ struct Character {
     static let asterisk = UInt8(ascii: "*")
     static let equal = UInt8(ascii: "=")
     static let ampersand = UInt8(ascii: "&")
+    static let hash = UInt8(ascii: "#")
 }
 
 struct Constants {

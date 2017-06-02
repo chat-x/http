@@ -37,6 +37,22 @@ class URLTests: TestCase {
         assertEqual(try! URL("https://domain.com/").scheme, .https)
     }
 
+    func testFragment() {
+        let url = try! URL("http://domain.com/#fragment")
+        assertEqual(url.fragment, "fragment")
+    }
+
+    func testAbsoluteString() {
+        let url = try! URL("http://domain.com:8080/test")
+        assertEqual(url.absoluteString, "http://domain.com:8080/test")
+    }
+
+    func testDescription() {
+        let urlString = "http://domain.com:8080/test?query=true#fragment"
+        let url = try! URL(urlString)
+        assertEqual(url.description, urlString)
+    }
+
 
     static var allTests = [
         ("testPath", testPath),
@@ -44,5 +60,8 @@ class URLTests: TestCase {
         ("testHost", testHost),
         ("testPort", testPort),
         ("testScheme", testScheme),
+        ("testFragment", testFragment),
+        ("testAbsoluteString", testAbsoluteString),
+        ("testDescription", testDescription),
     ]
 }
