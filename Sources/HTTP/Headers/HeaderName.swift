@@ -28,6 +28,9 @@ extension HeaderName {
     static let acceptCharset = HeaderName("Accept-Charset")
     static let authorization = HeaderName("Authorization")
     static let cookie = HeaderName("Cookie")
+
+    // Response headers
+    static let setCookie = HeaderName("Set-Cookie")
 }
 
 public struct HeaderName: Hashable {

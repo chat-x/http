@@ -22,6 +22,8 @@ public struct Response {
 
     public var headers: [HeaderName : String] = [:]
 
+    public var setCookie: [SetCookie] = []
+
     public var rawBody: [UInt8]? = nil {
         didSet {
             contentLength = rawBody?.count
@@ -142,6 +144,10 @@ extension Response {
             writeHeader(.transferEncoding, encoder: transferEncoding.encode)
         }
 
+        for cookie in self.setCookie {
+            writeHeader(.setCookie, encoder: cookie.encode)
+        }
+
         for (key, value) in headers {
             writeHeader(key, value: value)
         }
@@ -223,6 +229,8 @@ extension Response {
                     case .transferEncoding:
                         self.transferEncoding =
                             try [TransferEncoding](from: headerValue)
+                    case .setCookie:
+                        self.setCookie.append(try SetCookie(from: headerValue))
                     default:
                         headers[headerName] =
                             String(validating: headerValue, as: .text)
