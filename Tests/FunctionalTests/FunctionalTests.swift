@@ -170,7 +170,7 @@ class FunctionalTests: TestCase {
 
     func testAll() {
         setup(
-            port: 6006,
+            port: 6007,
             serverCode: { server in
                 server.route(all: "/") {
                     return Response(status: .ok)
@@ -200,7 +200,7 @@ class FunctionalTests: TestCase {
 
     func testJson() {
         setup(
-            port: 6007,
+            port: 6008,
             serverCode: { server in
                 struct Model {
                     var message: String
@@ -221,7 +221,7 @@ class FunctionalTests: TestCase {
 
     func testFormEncoded() {
         setup(
-            port: 6008,
+            port: 6009,
             serverCode: { server in
                 struct Model {
                     var message: String
