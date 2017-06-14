@@ -15,8 +15,36 @@ import Reflection
 public typealias RequestHandler = (Request) throws -> Response
 
 struct Router {
+    struct MethodSet: OptionSet {
+        let rawValue: UInt8
+
+        static let get = MethodSet(rawValue: 1 << 0)
+        static let head = MethodSet(rawValue: 1 << 1)
+        static let post = MethodSet(rawValue: 1 << 2)
+        static let put = MethodSet(rawValue: 1 << 3)
+        static let delete = MethodSet(rawValue: 1 << 4)
+        static let options = MethodSet(rawValue: 1 << 5)
+
+        static let all: MethodSet = [
+            .get, .head, .post, .put, .delete, .options
+        ]
+
+        func contains(_ method: Request.Method) -> Bool {
+            let member: MethodSet
+            switch method {
+            case .get: member = .get
+            case .head: member = .head
+            case .post: member = .post
+            case .put: member = .put
+            case .delete: member = .delete
+            case .options: member = .options
+            }
+            return self.contains(member)
+        }
+    }
+
     struct Route {
-        let method: Request.Method
+        let methods: MethodSet
         let handler: RequestHandler
     }
 
@@ -25,7 +53,7 @@ struct Router {
     func handleRequest(_ request: Request) -> Response {
         let routes = routeMatcher.matches(route: request.url.path)
         guard let route = routes.first(where: { route in
-            route.method == request.method
+            route.methods.contains(request.method)
         }) else {
             return Response(status: .notFound)
         }
@@ -61,13 +89,13 @@ struct Router {
     }
 
     mutating func registerRoute(
-        method: Request.Method,
+        methods: MethodSet,
         url: String,
         middleware: [Middleware.Type] = [],
         handler: @escaping RequestHandler
     ) {
         let handler = chainMiddlewares(middleware, with: handler)
-        let route = Route(method: method, handler: handler)
+        let route = Route(methods: methods, handler: handler)
         routeMatcher.add(route: url, payload: route)
     }
 
@@ -75,7 +103,7 @@ struct Router {
 
     // void
     public mutating func route(
-        method: Request.Method,
+        methods: MethodSet,
         url: String,
         middleware: [Middleware.Type] = [],
         handler: @escaping () throws -> Any
@@ -84,7 +112,7 @@ struct Router {
             try Router.parseAnyResponse(try handler())
         }
         registerRoute(
-            method: method,
+            methods: methods,
             url: url,
             middleware: middleware,
             handler: handler
@@ -93,7 +121,7 @@ struct Router {
 
     // request
     public mutating func route(
-        method: Request.Method,
+        methods: MethodSet,
         url: String,
         middleware: [Middleware.Type] = [],
         handler: @escaping (Request) throws -> Any
@@ -102,7 +130,7 @@ struct Router {
             return try Router.parseAnyResponse(try handler(request))
         }
         registerRoute(
-            method: method,
+            methods: methods,
             url: url,
             middleware: middleware,
             handler: handler
@@ -113,7 +141,7 @@ struct Router {
 
     @inline(__always)
     func createReflectionWrapper(
-        method: Request.Method,
+        methods: MethodSet,
         url: String,
         handler: @escaping (Request, [String : Any]) throws -> Any
     ) -> RequestHandler {
@@ -124,7 +152,7 @@ struct Router {
 
             let queryValues: [String: Any]?
 
-            if method == .get {
+            if request.method == .get {
                 queryValues = request.url.query.values
             } else if let body = request.rawBody,
                 let contentType = request.contentType {
@@ -151,12 +179,12 @@ struct Router {
 
     // primitive type: String | Bool | Int | Double.
     public mutating func route<Model: Primitive>(
-        method: Request.Method,
+        methods: MethodSet,
         url: String,
         middleware: [Middleware.Type] = [],
         handler: @escaping (Model) throws -> Any
     ) {
-        let handler = createReflectionWrapper(method: method, url: url) {
+        let handler = createReflectionWrapper(methods: methods, url: url) {
             _, values in
             // TODO: handle single value properly
             guard let value = values.first?.value as? String,
@@ -166,7 +194,7 @@ struct Router {
             return try handler(param)
         }
         registerRoute(
-            method: method,
+            methods: methods,
             url: url,
             middleware: middleware,
             handler: handler
@@ -175,12 +203,12 @@ struct Router {
 
     // pass request + primitive type: String | Bool | Int | Double.
     public mutating func route<Model: Primitive>(
-        method: Request.Method,
+        methods: MethodSet,
         url: String,
         middleware: [Middleware.Type] = [],
         handler: @escaping (Request, Model) throws -> Any
     ) {
-        let handler = createReflectionWrapper(method: method, url: url) {
+        let handler = createReflectionWrapper(methods: methods, url: url) {
             request, values in
             // TODO: handle single value properly
             guard let value = values.first?.value as? String,
@@ -190,7 +218,7 @@ struct Router {
             return try handler(request, param)
         }
         registerRoute(
-            method: method,
+            methods: methods,
             url: url,
             middleware: middleware,
             handler: handler
@@ -199,12 +227,12 @@ struct Router {
 
     // foreign struct
     public mutating func route<Model>(
-        method: Request.Method,
+        methods: MethodSet,
         url: String,
         middleware: [Middleware.Type] = [],
         handler: @escaping (Model) throws -> Any
     ) {
-        let handler = createReflectionWrapper(method: method, url: url) {
+        let handler = createReflectionWrapper(methods: methods, url: url) {
             _, values in
             guard let model = Blueprint(of: Model.self)
                 .construct(using: values) else {
@@ -213,7 +241,7 @@ struct Router {
             return try handler(model)
         }
         registerRoute(
-            method: method,
+            methods: methods,
             url: url,
             middleware: middleware,
             handler: handler
@@ -222,12 +250,12 @@ struct Router {
 
     // reflection: request data + POD value type
     public mutating func route<Model>(
-        method: Request.Method,
+        methods: MethodSet,
         url: String,
         middleware: [Middleware.Type] = [],
         handler: @escaping (Request, Model) throws -> Any
     ) {
-        let handler = createReflectionWrapper(method: method, url: url) {
+        let handler = createReflectionWrapper(methods: methods, url: url) {
             request, values in
             guard let model = Blueprint(of: Model.self)
                 .construct(using: values) else {
@@ -236,7 +264,7 @@ struct Router {
             return try handler(request, model)
         }
         registerRoute(
-            method: method,
+            methods: methods,
             url: url,
             middleware: middleware,
             handler: handler

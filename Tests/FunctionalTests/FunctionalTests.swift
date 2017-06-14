@@ -168,6 +168,36 @@ class FunctionalTests: TestCase {
         )
     }
 
+    func testAll() {
+        setup(
+            port: 6006,
+            serverCode: { server in
+                server.route(all: "/") {
+                    return Response(status: .ok)
+                }
+            },
+            clientCode: { client in
+                let getResponse = try client.get("/")
+                assertEqual(getResponse.status, .ok)
+
+                let headResponse = try client.head("/")
+                assertEqual(headResponse.status, .ok)
+
+                let postResponse = try client.post("/")
+                assertEqual(postResponse.status, .ok)
+
+                let putResponse = try client.put("/")
+                assertEqual(putResponse.status, .ok)
+
+                let deleteResponse = try client.delete("/")
+                assertEqual(deleteResponse.status, .ok)
+
+                let optionsResponse = try client.post("/")
+                assertEqual(optionsResponse.status, .ok)
+            }
+        )
+    }
+
     func testJson() {
         setup(
             port: 6007,
@@ -219,6 +249,7 @@ class FunctionalTests: TestCase {
         ("testPut", testPut),
         ("testDelete", testDelete),
         ("testOptions", testOptions),
+        ("testAll", testAll),
         ("testJson", testJson),
         ("testFormEncoded", testFormEncoded),
     ]
