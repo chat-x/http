@@ -40,7 +40,7 @@ public class Server {
     }
 
     deinit {
-        try? socket.close(silent: true)
+        try? socket.close()
     }
 
     public func start() throws {
