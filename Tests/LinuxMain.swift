@@ -13,9 +13,10 @@ import XCTest
 @testable import ServerTests
 @testable import ClientTests
 @testable import FunctionalTests
-@testable import JSONTests
+@testable import KeyValueCodableTests
 
 XCTMain([
+    // HTTPTests
     testCase(RequestTests.allTests),
     testCase(ResponseTests.allTests),
     testCase(EncodeRequestTests.allTests),
@@ -24,13 +25,16 @@ XCTMain([
     testCase(DecodeResponseTests.allTests),
     testCase(NginxTests.allTests),
     testCase(UtilsTests.allTests),
-
+    // ServerTests
+    testCase(MiddlewareTests.allTests),
+    testCase(RouterTests.allTests),
     testCase(ServerTests.allTests),
     testCase(ThrowableRouteTests.allTests),
-
+    // ClientTests
     testCase(ClientTests.allTests),
-
-    testCase(FunctionalTests.allTests),
-
-    testCase(JSONTests.allTests),
+    // KeyValueCodableTests
+    testCase(KeyValueDecoderTests.allTests),
+    testCase(KeyValueEncoderTests.allTests),
+    // FunctionalTests
+    testCase(FunctionalTests.allTests)
 ])

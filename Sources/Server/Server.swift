@@ -11,7 +11,6 @@
 import Log
 import Async
 import Network
-import Reflection
 import Foundation
 
 @_exported import HTTP

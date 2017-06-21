@@ -8,7 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-import class Foundation.JSONSerialization
+import JSON
+import KeyValueCodable
 
 public struct Request {
     public var method: Method
@@ -62,19 +63,22 @@ extension Request {
 }
 
 extension Request {
-    public init(method: Method, url: URL, json object: Any) throws {
-        let bytes = [UInt8](try JSONSerialization.data(withJSONObject: object))
+    public init<T: Encodable>(method: Method, url: URL, json object: T) throws {
+        let json = try JSON.encode(object)
+        let bytes = [UInt8](json.utf8)
         self.init(method: method, url: url)
         self.contentType = ContentType(mediaType: .application(.json))
         self.rawBody = bytes
         self.contentLength = bytes.count
     }
 
-    public init(
+    public init<T: Encodable>(
         method: Method,
         url: URL,
-        urlEncoded query: URL.Query
+        urlEncoded object: T
     ) throws {
+        let values = try KeyValueEncoder().encode(object)
+        let query = URL.Query(values)
         var urlEncodedBytes = [UInt8]()
         query.encode(to: &urlEncodedBytes)
 
