@@ -89,7 +89,7 @@ class RouterTests: TestCase {
     func testGetURLMatch() {
         var router = Router()
 
-        struct Page: URLDecodable {
+        struct Page: Decodable {
             let name: String
             let number: Int
         }
@@ -108,7 +108,7 @@ class RouterTests: TestCase {
     func testPostURLMatch() {
         var router = Router()
 
-        struct Page: URLDecodable {
+        struct Page: Decodable {
             let name: String
             let number: Int
         }
@@ -176,7 +176,7 @@ class RouterTests: TestCase {
     func testGetURLMatchModel() {
         var router = Router()
 
-        struct Page: URLDecodable {
+        struct Page: Decodable {
             let name: String
             let number: Int
         }
@@ -202,7 +202,7 @@ class RouterTests: TestCase {
     func testPostURLMatchModel() {
         var router = Router()
 
-        struct Page: URLDecodable {
+        struct Page: Decodable {
             let name: String
             let number: Int
         }
@@ -239,7 +239,7 @@ class RouterTests: TestCase {
     func testGetRequestURLMatch() {
         var router = Router()
 
-        struct Page: URLDecodable {
+        struct Page: Decodable {
             let name: String
             let number: Int
         }
@@ -261,7 +261,7 @@ class RouterTests: TestCase {
     func testPostRequestURLMatch() {
         var router = Router()
 
-        struct Page: URLDecodable {
+        struct Page: Decodable {
             let name: String
             let number: Int
         }
@@ -338,7 +338,7 @@ class RouterTests: TestCase {
     func testGetRequestURLMatchModel() {
         var router = Router()
 
-        struct Page: URLDecodable {
+        struct Page: Decodable {
             let name: String
             let number: Int
         }
@@ -368,7 +368,7 @@ class RouterTests: TestCase {
     func testPostRequestURLMatchModel() {
         var router = Router()
 
-        struct Page: URLDecodable {
+        struct Page: Decodable {
             let name: String
             let number: Int
         }

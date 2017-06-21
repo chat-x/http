@@ -12,8 +12,6 @@ import Log
 import JSON
 import KeyValueCodable
 
-public protocol URLDecodable: Decodable {}
-
 public typealias RequestHandler = (Request) throws -> Response
 
 struct Router {
@@ -155,7 +153,7 @@ struct Router {
         methods: MethodSet,
         url: String,
         handler: @escaping (Request, URLMatch?, Model?) throws -> Any
-    ) -> RequestHandler where URLMatch: URLDecodable, Model: Decodable {
+    ) -> RequestHandler where URLMatch: Decodable, Model: Decodable {
         let urlMatcher = URLParamMatcher(url)
         let keyValueDecoder = KeyValueDecoder()
         let jsonDecoder = JSONDecoder()
@@ -236,67 +234,29 @@ struct Router {
         middleware: [Middleware.Type] = [],
         handler: @escaping (Model) throws -> Any
     ) {
-        let handler: RequestHandler = { request in
-            let model = try Router.decodeModel(Model.self, from: request)
-            return try Router.parseAnyResponse(try handler(model))
-        }
-        registerRoute(
-            methods: methods,
-            url: url,
-            middleware: middleware,
-            handler: handler
-        )
-    }
-
-    public mutating func route<URLMatch: URLDecodable>(
-        methods: MethodSet,
-        url: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (URLMatch) throws -> Any
-    ) {
         let keyValueDecoder = KeyValueDecoder()
         let urlMatcher = URLParamMatcher(url)
 
-        guard urlMatcher.params.count > 0 else {
-            fatalError("invalid url mask, more than 0 arguments was expected")
+        let requestHandler: RequestHandler
+
+        if urlMatcher.params.count > 0 {
+            requestHandler = { request in
+                let values = urlMatcher.match(from: request.url.path)
+                let match = try keyValueDecoder.decode(Model.self, from: values)
+                return try Router.parseAnyResponse(try handler(match))
+            }
+        } else {
+            requestHandler = { request in
+                let model = try Router.decodeModel(Model.self, from: request)
+                return try Router.parseAnyResponse(try handler(model))
+            }
         }
 
-        let handler: RequestHandler = { request in
-            let values = urlMatcher.match(from: request.url.path)
-            let match = try keyValueDecoder.decode(URLMatch.self, from: values)
-            return try Router.parseAnyResponse(try handler(match))
-        }
         registerRoute(
             methods: methods,
             url: url,
             middleware: middleware,
-            handler: handler
-        )
-    }
-
-    public mutating func route<URLMatch: URLDecodable>(
-        methods: MethodSet,
-        url: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, URLMatch) throws -> Any
-    ) {
-        let keyValueDecoder = KeyValueDecoder()
-        let urlMatcher = URLParamMatcher(url)
-
-        guard urlMatcher.params.count > 0 else {
-            fatalError("invalid url mask, more than 0 arguments was expected")
-        }
-
-        let handler: RequestHandler = { request in
-            let values = urlMatcher.match(from: request.url.path)
-            let match = try keyValueDecoder.decode(URLMatch.self, from: values)
-            return try Router.parseAnyResponse(try handler(request, match))
-        }
-        registerRoute(
-            methods: methods,
-            url: url,
-            middleware: middleware,
-            handler: handler
+            handler: requestHandler
         )
     }
 
@@ -306,19 +266,33 @@ struct Router {
         middleware: [Middleware.Type] = [],
         handler: @escaping (Request, Model) throws -> Any
     ) {
-        let handler: RequestHandler = { request in
-            let model = try Router.decodeModel(Model.self, from: request)
-            return try Router.parseAnyResponse(try handler(request, model))
+        let keyValueDecoder = KeyValueDecoder()
+        let urlMatcher = URLParamMatcher(url)
+
+        let requestHandler: RequestHandler
+
+        if urlMatcher.params.count > 0 {
+            requestHandler = { request in
+                let values = urlMatcher.match(from: request.url.path)
+                let match = try keyValueDecoder.decode(Model.self, from: values)
+                return try Router.parseAnyResponse(try handler(request, match))
+            }
+        } else {
+            requestHandler = { request in
+                let model = try Router.decodeModel(Model.self, from: request)
+                return try Router.parseAnyResponse(try handler(request, model))
+            }
         }
+
         registerRoute(
             methods: methods,
             url: url,
             middleware: middleware,
-            handler: handler
+            handler: requestHandler
         )
     }
 
-    public mutating func route<URLMatch: URLDecodable, Model: Decodable>(
+    public mutating func route<URLMatch: Decodable, Model: Decodable>(
         methods: MethodSet,
         url: String,
         middleware: [Middleware.Type] = [],
@@ -331,7 +305,7 @@ struct Router {
             fatalError("invalid url mask, more than 0 arguments was expected")
         }
 
-        let handler: RequestHandler = { request in
+        let requestHandler: RequestHandler = { request in
             let values = urlMatcher.match(from: request.url.path)
             let match = try keyValueDecoder.decode(URLMatch.self, from: values)
             let model = try Router.decodeModel(Model.self, from: request)
@@ -342,11 +316,11 @@ struct Router {
             methods: methods,
             url: url,
             middleware: middleware,
-            handler: handler
+            handler: requestHandler
         )
     }
 
-    public mutating func route<URLMatch: URLDecodable, Model: Decodable>(
+    public mutating func route<URLMatch: Decodable, Model: Decodable>(
         methods: MethodSet,
         url: String,
         middleware: [Middleware.Type] = [],
