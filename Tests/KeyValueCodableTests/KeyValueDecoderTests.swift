@@ -12,7 +12,7 @@ import Test
 @testable import KeyValueCodable
 
 class KeyValueDecoderTests: TestCase {
-    func testDecoder() {
+    func testKeyedDecoder() {
         let values = ["first":"one","second":"two"]
         struct Model: Decodable {
             let first: String
@@ -27,7 +27,19 @@ class KeyValueDecoderTests: TestCase {
         }
     }
 
+    func testSingleValueDecoder() {
+        let value = ["integer":"42"]
+        do {
+            let integer = try KeyValueDecoder().decode(Int.self, from: value)
+            assertEqual(integer, 42)
+        } catch {
+            print(String(describing: error))
+        }
+    }
+
+
     static var allTests = [
-        ("testDecoder", testDecoder)
+        ("testKeyedDecoder", testKeyedDecoder),
+        ("testSingleValueDecoder", testSingleValueDecoder)
     ]
 }
