@@ -16,11 +16,11 @@ Currently limited to us-ascii routes. Unicode router & session & (middleware | f
 #### Server
 ```swift
 // route return types
+return Response(status: Status)
 return Response(string: String)
 return Response(html: String)
 return Response(bytes: [UInt8])
-return Response(json: Any)
-return Response(status: Status)
+return Response(json: Encodable)
 
 enum Status {
     case ok
@@ -30,9 +30,9 @@ enum Status {
     case internalServerError
 }
 
-return String // - return Response(string: String)
-
-return Any | [String : Any] // - return Response(json: serializeToJson(..))
+return // the same as Response(status: .ok)
+return String // the same as Response(string: String)
+return Encodable // the same as Response(json: Encodable)
 
 
 // main routers
@@ -71,6 +71,11 @@ func route(options url: String, handler: (Void) -> Any)
 func route(options url: String, handler: (Request) -> Any)
 func route<A>(options url: String, handler: (A) -> Any)
 func route<A>(options url: String, handler: (Request, A) -> Any)
+
+func route(all url: String, handler: (Void) -> Any)
+func route(all url: String, handler: (Request) -> Any)
+func route<A>(all url: String, handler: (A) -> Any)
+func route<A>(all url: String, handler: (Request, A) -> Any)
 ```
 
 #### Client
@@ -88,7 +93,7 @@ func put(_ url: String) throws -> Response
 func delete(_ url: String) throws -> Response
 func options(_ url: String) throws -> Response
 
-func post(_ url: String, json object: Any) throws -> Response
+func post(_ url: String, json object: Encodable) throws -> Response
 ```
 
 ## Usage
