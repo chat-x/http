@@ -28,11 +28,11 @@ let package = Package(
             from: "0.4.0"
         ),
         .package(
-            url: "https://github.com/tris-foundation/memory.git",
+            url: "https://github.com/tris-foundation/stream.git",
             from: "0.4.0"
         ),
         .package(
-            url: "https://github.com/tris-foundation/stream.git",
+            url: "https://github.com/tris-foundation/memory.git",
             from: "0.4.0"
         ),
         .package(
