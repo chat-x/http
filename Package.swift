@@ -21,36 +21,25 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/tris-foundation/log.git",
-            from: "0.4.0"
-        ),
+            from: "0.4.0"),
         .package(
             url: "https://github.com/tris-foundation/async.git",
-            from: "0.4.0"
-        ),
-        .package(
-            url: "https://github.com/tris-foundation/stream.git",
-            from: "0.4.0"
-        ),
+            from: "0.4.0"),
         .package(
             url: "https://github.com/tris-foundation/memory.git",
-            from: "0.4.0"
-        ),
+            from: "0.4.0"),
         .package(
             url: "https://github.com/tris-foundation/network.git",
-            from: "0.4.0"
-        ),
+            from: "0.4.0"),
         .package(
             url: "https://github.com/tris-foundation/json.git",
-            from: "0.4.0"
-        ),
+            from: "0.4.0"),
         .package(
             url: "https://github.com/tris-foundation/fiber.git",
-            from: "0.4.0"
-        ),
+            from: "0.4.0"),
         .package(
             url: "https://github.com/tris-foundation/test.git",
-            from: "0.4.0"
-        )
+            from: "0.4.0")
     ],
     targets: [
         .target(name: "KeyValueCodable"),
@@ -72,11 +61,9 @@ let package = Package(
         .testTarget(name: "ClientTests", dependencies: ["Client", "Test"]),
         .testTarget(
             name: "FunctionalTests",
-            dependencies: ["Server", "Client", "Test"]
-        ),
+            dependencies: ["Server", "Client", "Test"]),
         .testTarget(
             name: "KeyValueCodableTests",
-            dependencies: ["KeyValueCodable", "Test"]
-        )
+            dependencies: ["KeyValueCodable", "Test"])
     ]
 )
