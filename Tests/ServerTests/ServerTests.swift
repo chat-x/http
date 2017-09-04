@@ -13,14 +13,19 @@ import Test
 import Network
 
 class ServerTests: TestCase {
+    override func setUp() {
+        if async == nil {
+            TestAsync().registerGlobal()
+        }
+    }
+
     func testServer() {
         let condition = AtomicCondition()
-        let async = TestAsync()
 
         async.task {
             do {
                 let server =
-                    try Server(host: "127.0.0.1", port: 4001, async: async)
+                    try Server(host: "127.0.0.1", port: 4001)
 
                 server.route(get: "/test") {
                     return Response(status: .ok)
@@ -30,7 +35,7 @@ class ServerTests: TestCase {
                 try server.start()
             } catch {
                 fail(String(describing: error))
-                async.breakLoop()
+                (async.loop as! TestAsyncLoop).stop()
             }
         }
 
@@ -42,7 +47,7 @@ class ServerTests: TestCase {
                 let expected = "HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"
                 var buffer = [UInt8](repeating: 0, count: 100)
 
-                let socket = try Socket(awaiter: async.awaiter)
+                let socket = try Socket()
                 try socket.connect(to: "127.0.0.1", port: 4001)
                 _ = try socket.send(bytes: [UInt8](request.utf8))
                 _ = try socket.receive(to: &buffer)
@@ -50,10 +55,10 @@ class ServerTests: TestCase {
 
                 assertEqual(response, expected)
 
-                async.breakLoop()
+                (async.loop as! TestAsyncLoop).stop()
             } catch {
                 fail(String(describing: error))
-                async.breakLoop()
+                (async.loop as! TestAsyncLoop).stop()
             }
         }
 
@@ -64,8 +69,7 @@ class ServerTests: TestCase {
         do {
             let server = try Server(
                 host: "0.0.0.0",
-                port: 4002,
-                async: TestAsync())
+                port: 4002)
 
             server.bufferSize = 16 * 1024
             assertEqual(server.bufferSize, 16 * 1024)
