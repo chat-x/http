@@ -71,6 +71,8 @@ public class Server {
                     break
                 }
             }
+        } catch let error as HTTPError where error == .unexpectedEnd {
+            /* connection closed */
         } catch {
             handleError(error)
         }
