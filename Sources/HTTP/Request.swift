@@ -59,6 +59,12 @@ extension Request {
         self.method = method
         self.url = url
         self.version = .oneOne
+        if var host = url.host {
+            if let port = url.port {
+                host.append(":\(port)")
+            }
+            self.host = host
+        }
     }
 }
 
