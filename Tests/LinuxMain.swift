@@ -23,6 +23,7 @@ XCTMain([
     testCase(EncodeResponseTests.allTests),
     testCase(DecodeRequestTests.allTests),
     testCase(DecodeResponseTests.allTests),
+    testCase(HeaderNameTests.allTests),
     testCase(NginxTests.allTests),
     testCase(UtilsTests.allTests),
     // ServerTests
