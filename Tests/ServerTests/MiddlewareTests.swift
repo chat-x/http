@@ -10,17 +10,19 @@
 
 import Test
 import Network
+import Dispatch
+import Foundation
+import AsyncDispatch
+
 @testable import Server
 
 class MiddlewareTests: TestCase {
     override func setUp() {
-        if async == nil {
-            TestAsync().registerGlobal()
-        }
+        AsyncDispatch().registerGlobal()
     }
 
     func testMiddleware() {
-        let condition = AtomicCondition()
+        let semaphore = DispatchSemaphore(value: 0)
 
         struct TestMiddleware: Middleware {
             public static func createMiddleware(
@@ -37,8 +39,7 @@ class MiddlewareTests: TestCase {
 
         async.task {
             do {
-                let server =
-                    try Server(host: "127.0.0.1", port: 4201)
+                let server = try Server(host: "127.0.0.1", port: 4201)
 
                 server.route(
                     get: "/middleware",
@@ -47,15 +48,15 @@ class MiddlewareTests: TestCase {
                     return Response(status: .internalServerError)
                 }
 
-                condition.signal()
+                semaphore.signal()
                 try server.start()
             } catch {
                 fail(String(describing: error))
-                (async.loop as! TestAsyncLoop).stop()
+                async.loop.terminate()
             }
         }
 
-        condition.wait()
+        semaphore.wait()
 
         async.task {
             do {
@@ -75,10 +76,10 @@ class MiddlewareTests: TestCase {
 
                 assertEqual(response, expected)
 
-                (async.loop as! TestAsyncLoop).stop()
+                async.loop.terminate()
             } catch {
                 fail(String(describing: error))
-                (async.loop as! TestAsyncLoop).stop()
+                async.loop.terminate()
             }
         }
 
@@ -86,7 +87,7 @@ class MiddlewareTests: TestCase {
     }
 
     func testMiddlewareOrder() {
-        let condition = AtomicCondition()
+        let semaphore = DispatchSemaphore(value: 0)
 
         struct FirstMiddleware: Middleware {
             public static func createMiddleware(
@@ -126,15 +127,15 @@ class MiddlewareTests: TestCase {
                     return Response(status: .ok)
                 }
 
-                condition.signal()
+                semaphore.signal()
                 try server.start()
             } catch {
                 fail(String(describing: error))
-                (async.loop as! TestAsyncLoop).stop()
+                async.loop.terminate()
             }
         }
 
-        condition.wait()
+        semaphore.wait()
 
         async.task {
             do {
@@ -159,16 +160,14 @@ class MiddlewareTests: TestCase {
                     return $0.hasPrefix("Middleware")
                 })
 
-                print(lines)
-
                 assertEqual(firstMiddleware, "FirstMiddleware: true")
                 assertEqual(secondMiddleware, "SecondMiddleware: true")
                 assertEqual(middleware, "Middleware: first")
 
-                (async.loop as! TestAsyncLoop).stop()
+                async.loop.terminate()
             } catch {
                 fail(String(describing: error))
-                (async.loop as! TestAsyncLoop).stop()
+                async.loop.terminate()
             }
         }
 
