@@ -56,7 +56,7 @@ class FunctionalTests: TestCase {
                 fail(String(describing: error))
             }
         }
-        
+    
         async.loop.run()
     }
 
