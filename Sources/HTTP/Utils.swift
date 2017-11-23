@@ -186,7 +186,7 @@ extension RandomAccessSlice where Element == UInt8, Base.Index == Int {
 extension RandomAccessSlice where Element == UInt8, Base.Index == Int {
     @inline(__always)
     func trimmingLeftSpace() -> RandomAccessSlice<Base> {
-        if startIndex < endIndex && self[startIndex] == Character.whitespace {
+        if startIndex < endIndex && self[startIndex] == .whitespace {
             return self.dropFirst()
         }
         return self
@@ -194,7 +194,7 @@ extension RandomAccessSlice where Element == UInt8, Base.Index == Int {
 
     @inline(__always)
     func trimmingRightSpace() -> RandomAccessSlice<Base> {
-        if startIndex < endIndex && self[endIndex-1] == Character.whitespace {
+        if startIndex < endIndex && self[endIndex-1] == .whitespace {
             return self.dropLast()
         }
         return self

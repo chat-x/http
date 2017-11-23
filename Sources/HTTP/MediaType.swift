@@ -45,7 +45,7 @@ extension MediaType {
     }
 
     init(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
-        guard let slashIndex = bytes.index(of: Character.slash) else {
+        guard let slashIndex = bytes.index(of: .slash) else {
             throw HTTPError.invalidMediaType
         }
 
@@ -75,7 +75,7 @@ extension MediaType {
 
         case Bytes.any.lowercasedHashValue:
             guard subtype.count == 1 &&
-                subtype.first == Character.asterisk else {
+                subtype.first == .asterisk else {
                     throw HTTPError.unsupportedMediaType
             }
             self = .any
@@ -89,32 +89,32 @@ extension MediaType {
         switch self {
         case .application(let subtype):
             buffer.append(contentsOf: Bytes.application)
-            buffer.append(Character.slash)
+            buffer.append(.slash)
             subtype.encode(to: &buffer)
         case .audio(let subtype):
             buffer.append(contentsOf: Bytes.audio)
-            buffer.append(Character.slash)
+            buffer.append(.slash)
             subtype.encode(to: &buffer)
         case .image(let subtype):
             buffer.append(contentsOf: Bytes.image)
-            buffer.append(Character.slash)
+            buffer.append(.slash)
             subtype.encode(to: &buffer)
         case .multipart(let subtype):
             buffer.append(contentsOf: Bytes.multipart)
-            buffer.append(Character.slash)
+            buffer.append(.slash)
             subtype.encode(to: &buffer)
         case .text(let subtype):
             buffer.append(contentsOf: Bytes.text)
-            buffer.append(Character.slash)
+            buffer.append(.slash)
             subtype.encode(to: &buffer)
         case .video(let subtype):
             buffer.append(contentsOf: Bytes.video)
-            buffer.append(Character.slash)
+            buffer.append(.slash)
             subtype.encode(to: &buffer)
         case .any:
-            buffer.append(Character.asterisk)
-            buffer.append(Character.slash)
-            buffer.append(Character.asterisk)
+            buffer.append(.asterisk)
+            buffer.append(.slash)
+            buffer.append(.asterisk)
         }
     }
 }

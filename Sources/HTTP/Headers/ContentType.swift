@@ -45,7 +45,7 @@ extension ContentType {
     }
 
     init(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
-        let semicolonIndex = bytes.index(of: Character.semicolon)
+        let semicolonIndex = bytes.index(of: .semicolon)
 
         self.mediaType = semicolonIndex == nil
             ? try MediaType(from: bytes)
