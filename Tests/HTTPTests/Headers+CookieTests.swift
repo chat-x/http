@@ -11,7 +11,7 @@
 import Test
 @testable import HTTP
 
-class CookieTests: TestCase {
+class HeadersCookieTests: TestCase {
     func testCookie() {
         let expected = Cookie(name: "username", value: "tony")
 

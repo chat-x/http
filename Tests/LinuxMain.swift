@@ -17,14 +17,18 @@ import XCTest
 
 XCTMain([
     // HTTPTests
-    testCase(RequestTests.allTests),
-    testCase(ResponseTests.allTests),
-    testCase(EncodeRequestTests.allTests),
-    testCase(EncodeResponseTests.allTests),
     testCase(DecodeRequestTests.allTests),
     testCase(DecodeResponseTests.allTests),
+    testCase(EncodeRequestTests.allTests),
+    testCase(EncodeResponseTests.allTests),
     testCase(HeaderNameTests.allTests),
+    testCase(HeadersAuthorizationTests.allTests),
+    testCase(HeadersCookieTests.allTests),
+    testCase(HeadersSetCookieTests.allTests),
     testCase(NginxTests.allTests),
+    testCase(RequestTests.allTests),
+    testCase(ResponseTests.allTests),
+    testCase(URLTests.allTests),
     testCase(UtilsTests.allTests),
     // ServerTests
     testCase(MiddlewareTests.allTests),
