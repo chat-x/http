@@ -26,6 +26,7 @@ XCTMain([
     testCase(HeadersCookieTests.allTests),
     testCase(HeadersSetCookieTests.allTests),
     testCase(NginxTests.allTests),
+    testCase(PunycodeTests.allTests),
     testCase(RequestTests.allTests),
     testCase(ResponseTests.allTests),
     testCase(URLTests.allTests),
