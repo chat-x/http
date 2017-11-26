@@ -18,6 +18,10 @@ public struct URL {
 
     public struct Query {
         public var values: [String : String]
+
+        public init(values: [String : String]) {
+            self.values = values
+        }
     }
 
     public var scheme: Scheme?
@@ -52,10 +56,6 @@ extension URL {
 
 
 extension URL.Query {
-    public init(_ values: [String : String]) {
-        self.values = values
-    }
-
     public subscript(_ name: String) -> String? {
         get {
             return values[name]
