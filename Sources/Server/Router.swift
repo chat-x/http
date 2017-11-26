@@ -155,7 +155,7 @@ struct Router {
     ) throws -> T {
         switch request.method {
         case .get:
-            let values = request.url.query.values
+            let values = request.url.query?.values ?? [:]
             return try KeyValueDecoder().decode(type, from: values)
 
         case _ where request.rawBody != nil && request.contentType != nil:
