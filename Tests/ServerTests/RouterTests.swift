@@ -405,6 +405,20 @@ class RouterTests: TestCase {
         }
     }
 
+    func testUnicodeRoute() {
+        var router = Router()
+
+        router.route(methods: [.get], url: "/новости") { (request: Request) in
+            assertEqual(request.url, "/новости")
+            assertEqual(request.method, .get)
+            return Response(status: .ok)
+        }
+
+        let request = Request(method: .get, url: "/новости")
+        let response = router.handleRequest(request)
+        assertEqual(response.status, .ok)
+    }
+
 
     static var allTests = [
         ("testGetVoid", testGetVoid),
@@ -424,5 +438,6 @@ class RouterTests: TestCase {
         ("testPostRequestModel", testPostRequestModel),
         ("testGetRequestURLMatchModel", testGetRequestURLMatchModel),
         ("testPostRequestURLMatchModel", testPostRequestURLMatchModel),
+        ("testUnicodeRoute", testUnicodeRoute),
     ]
 }
