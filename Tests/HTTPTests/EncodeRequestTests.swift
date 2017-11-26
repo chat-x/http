@@ -45,6 +45,21 @@ class EncodeRequestTests: TestCase {
         assertEqual(Encoder.encode(request), expected)
     }
 
+    func testUrlQueryPost() {
+        let expected = "POST /test HTTP/1.1\r\n" +
+            "Content-Type: application/x-www-form-urlencoded\r\n" +
+            "Content-Length: 9\r\n" +
+            "\r\n" +
+            "key=value"
+        let request = Request(
+            method: .post,
+            url: URL(
+                path: "/test",
+                query: ["key" : "value"],
+                fragment: "fragment"))
+        assertEqual(Encoder.encode(request), expected)
+    }
+
     func testHost() {
         let expected = "GET / HTTP/1.1\r\n" +
             "Host: 0.0.0.0:5000\r\n" +
@@ -239,6 +254,7 @@ class EncodeRequestTests: TestCase {
         ("testRequest", testRequest),
         ("testUrl", testUrl),
         ("testUrlQueryGet", testUrlQueryGet),
+        ("testUrlQueryPost", testUrlQueryPost),
         ("testHost", testHost),
         ("testUserAgent", testUserAgent),
         ("testAccept", testAccept),
