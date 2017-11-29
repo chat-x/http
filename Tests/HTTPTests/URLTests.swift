@@ -26,13 +26,13 @@ class URLTests: TestCase {
     }
 
     func testHost() {
-        assertEqual(try! URL("http://domain.com").host, "domain.com")
-        assertEqual(try! URL("domain.com").host, "domain.com")
-    }
+        let host = URL.Host(address: "domain.com", port: nil)
+        assertEqual(try! URL("http://domain.com").host, host)
+        assertEqual(try! URL("domain.com").host, host)
 
-    func testPort() {
-        assertEqual(try! URL("http://domain.com:8080").port, 8080)
-        assertEqual(try! URL("http://domain.com:8080/").port, 8080)
+        let hostWithPort = URL.Host(address: "domain.com", port: 8080)
+        assertEqual(try! URL("http://domain.com:8080").host, hostWithPort)
+        assertEqual(try! URL("http://domain.com:8080/").host, hostWithPort)
     }
 
     func testScheme() {
@@ -94,7 +94,6 @@ class URLTests: TestCase {
         ("testPath", testPath),
         ("testQuery", testQuery),
         ("testHost", testHost),
-        ("testPort", testPort),
         ("testScheme", testScheme),
         ("testFragment", testFragment),
         ("testAbsoluteString", testAbsoluteString),
