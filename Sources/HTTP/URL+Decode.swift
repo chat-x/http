@@ -234,8 +234,9 @@ extension URL {
         if let index = buffer.index(of: .hash) {
             // FIXME: validate using url rules
             guard let fragment =
-                String(validating: buffer[(index+1)...], as: .text) else {
-                    throw HTTPError.invalidURL
+                String(validating: buffer[(index+1)...], as: .text)?
+                    .removingPercentEncoding else {
+                        throw HTTPError.invalidURL
             }
             self.fragment = fragment
             endIndex = index
@@ -252,8 +253,8 @@ extension URL {
         }
 
         // FIXME: validate using url rules
-        guard let path =
-            String(validating: buffer[..<endIndex], as: .text) else {
+        guard let path = String(validating: buffer[..<endIndex], as: .text)?
+            .removingPercentEncoding else {
                 throw HTTPError.invalidURL
         }
         self.path = path
