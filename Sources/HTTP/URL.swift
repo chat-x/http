@@ -44,7 +44,7 @@ public struct URL {
         scheme: Scheme? = nil,
         host: Host? = nil,
         path: String,
-        query: Query = [:],
+        query: Query? = nil,
         fragment: String? = nil
     ) {
         self.host = host
