@@ -77,7 +77,7 @@ class ClientTests: TestCase {
     }
 
     func testDeflate() {
-        let data = Data(base64Encoded: "80jNycnXUSjPL8pJUQQA")!
+        let data = Data(base64Encoded: "80jNycnXUQjPL8pJUQQA")!
 
         let semaphore = DispatchSemaphore(value: 0)
 
@@ -122,7 +122,7 @@ class ClientTests: TestCase {
                 let response = try client.makeRequest(request)
 
                 assertEqual(response.status, .ok)
-                assertEqual(response.body, "Hello, world!")
+                assertEqual(response.body, "Hello, World!")
 
                 async.loop.terminate()
             } catch {
