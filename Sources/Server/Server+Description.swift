@@ -10,6 +10,11 @@
 
 extension Server: CustomStringConvertible {
     public var description: String {
-        return "server at http://\(host):\(port)"
+        let address: String
+        switch socket.selfAddress {
+        case .some(let selfAddress): address = "http://\(selfAddress)"
+        case .none: address = "unknown"
+        }
+        return "server at \(address)"
     }
 }

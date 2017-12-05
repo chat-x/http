@@ -65,7 +65,7 @@ class ServerTests: TestCase {
         async.loop.run()
     }
 
-    func testServerBufferSize() {
+    func testBufferSize() {
         do {
             let server = try Server(
                 host: "0.0.0.0",
@@ -78,9 +78,22 @@ class ServerTests: TestCase {
         }
     }
 
+    func testDescription() {
+        do {
+            let server = try Server(
+                host: "127.0.0.1",
+                port: 4004)
+
+            assertEqual(server.description, "server at http://127.0.0.1:4004")
+        } catch {
+            fail(String(describing: error))
+        }
+    }
+
 
     static var allTests = [
         ("testServer", testServer),
-        ("testServerBufferSize", testServerBufferSize),
+        ("testBufferSize", testBufferSize),
+        ("testDescription", testDescription),
     ]
 }
