@@ -217,7 +217,7 @@ class EncodeRequestTests: TestCase {
             "\r\n" +
             "{\"message\":\"Hello, World!\"}"
         let values = ["message": "Hello, World!"]
-        let request = try! Request(method: .post, url: "/", json: values)
+        let request = try! Request(method: .post, url: "/", body: values)
         assertEqual(Encoder.encode(request), expected)
     }
 
@@ -231,7 +231,11 @@ class EncodeRequestTests: TestCase {
         struct Query: Encodable {
             let message = "Hello, World!"
         }
-        let request = try! Request(method: .post, url: "/", urlEncoded: Query())
+        let request = try! Request(
+            method: .post,
+            url: "/",
+            body: Query(),
+            contentType: .urlEncoded)
         assertEqual(Encoder.encode(request), expected)
     }
 
