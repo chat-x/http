@@ -38,6 +38,9 @@ let package = Package(
             url: "https://github.com/tris-foundation/fiber.git",
             from: "0.4.0"),
         .package(
+            url: "https://github.com/tris-foundation/compression.git",
+            from: "0.4.0"),
+        .package(
             url: "https://github.com/tris-foundation/test.git",
             from: "0.4.0")
     ],
@@ -54,7 +57,7 @@ let package = Package(
         ),
         .target(
             name: "Client",
-            dependencies: ["Log", "Async", "Network", "HTTP"]
+            dependencies: ["Log", "Async", "Network", "HTTP", "Compression"]
         ),
         .testTarget(name: "HTTPTests", dependencies: ["HTTP", "Test"]),
         .testTarget(
