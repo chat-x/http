@@ -51,8 +51,8 @@ class ThrowableRouteTests: TestCase {
 
         async.task {
             do {
-                let client = try Client()
-                try client.connect(to: URL("http://127.0.0.1:\(port)/"))
+                let client = try Client(host: "127.0.0.1", port: Int(port))
+                try client.connect()
 
                 try clientCode(client)
 
@@ -92,7 +92,7 @@ class ThrowableRouteTests: TestCase {
                 }
             },
             clientCode: { client in
-                let response = try client.get("/")
+                let response = try client.get(path: "/")
                 assertEqual(response.status, .internalServerError)
             }
         )
@@ -108,7 +108,7 @@ class ThrowableRouteTests: TestCase {
                 }
             },
             clientCode: { client in
-                let response = try client.head("/")
+                let response = try client.head(path: "/")
                 assertEqual(response.status, .internalServerError)
             }
         )
@@ -124,7 +124,7 @@ class ThrowableRouteTests: TestCase {
                 }
             },
             clientCode: { client in
-                let response = try client.post("/")
+                let response = try client.post(path: "/")
                 assertEqual(response.status, .internalServerError)
             }
         )
@@ -140,7 +140,7 @@ class ThrowableRouteTests: TestCase {
                 }
             },
             clientCode: { client in
-                let response = try client.put("/")
+                let response = try client.put(path: "/")
                 assertEqual(response.status, .internalServerError)
             }
         )
@@ -156,7 +156,7 @@ class ThrowableRouteTests: TestCase {
                 }
             },
             clientCode: { client in
-                let response = try client.delete("/")
+                let response = try client.delete(path: "/")
                 assertEqual(response.status, .internalServerError)
             }
         )
@@ -172,7 +172,7 @@ class ThrowableRouteTests: TestCase {
                 }
             },
             clientCode: { client in
-                let response = try client.options("/")
+                let response = try client.options(path: "/")
                 assertEqual(response.status, .internalServerError)
             }
         )
