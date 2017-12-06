@@ -20,7 +20,7 @@ class FunctionalTests: TestCase {
     }
 
     func setup(
-        port: UInt16,
+        port: Int,
         serverCode: @escaping (Server) throws -> Void,
         clientCode: @escaping (Client) throws -> Void
     ) {
