@@ -25,7 +25,7 @@ extension Cookie: Equatable {
 }
 
 extension Array where Element == Cookie {
-    init(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
+    init(from bytes: UnsafeRawBufferPointer.SubSequence) throws {
         var cookies = [Cookie]()
         var startIndex = bytes.startIndex
         var endIndex = startIndex
@@ -65,7 +65,7 @@ extension Array where Element == Cookie {
 }
 
 extension Cookie {
-    init(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
+    init(from bytes: UnsafeRawBufferPointer.SubSequence) throws {
         guard let equal = bytes.index(of: .equal) else {
             throw HTTPError.invalidCookie
         }

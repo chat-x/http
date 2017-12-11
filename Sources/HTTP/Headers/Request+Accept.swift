@@ -31,7 +31,7 @@ extension Request.Accept: Equatable {
 extension Array where Element == Request.Accept {
     public typealias Accept = Request.Accept
 
-    init(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
+    init(from bytes: UnsafeRawBufferPointer.SubSequence) throws {
         var startIndex = bytes.startIndex
         var endIndex = startIndex
         var values = [Accept]()
@@ -64,7 +64,7 @@ extension Request.Accept {
         static let qEqual = ASCII("q=")
     }
 
-    init(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
+    init(from bytes: UnsafeRawBufferPointer.SubSequence) throws {
         if let semicolon = bytes.index(of: .semicolon) {
             self.mediaType = try MediaType(from: bytes[..<semicolon])
 

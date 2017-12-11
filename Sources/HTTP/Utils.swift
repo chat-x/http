@@ -103,7 +103,7 @@ extension String {
 // MARK: Numeric parsers
 
 extension Int {
-    init?(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) {
+    init?(from bytes: UnsafeRawBufferPointer.SubSequence) {
         var result = 0
         let zero = 48
         let nine = 57
@@ -117,7 +117,7 @@ extension Int {
         self = result
     }
 
-    init?(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>, radix: Int) {
+    init?(from bytes: UnsafeRawBufferPointer.SubSequence, radix: Int) {
         let zero = 48
         let nine = 57
         let a = 97
@@ -135,7 +135,7 @@ extension Int {
 }
 
 extension Double {
-    init?(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) {
+    init?(from bytes: UnsafeRawBufferPointer.SubSequence) {
         let dot = 46
         let zero = 48
         let nine = 57

@@ -29,7 +29,7 @@ extension Response.Status {
         static let internalServerError = ASCII("500 Internal Server Error")
     }
 
-    public init(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
+    public init(from bytes: UnsafeRawBufferPointer.SubSequence) throws {
         switch bytes.lowercasedHashValue {
         case Bytes.ok.lowercasedHashValue: self = .ok
         case Bytes.moved.lowercasedHashValue: self = .moved

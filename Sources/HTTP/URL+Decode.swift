@@ -226,7 +226,7 @@ extension URL.Query {
 // Fast decode
 
 extension URL {
-    init(escaped buffer: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
+    init(escaped buffer: UnsafeRawBufferPointer.SubSequence) throws {
         self.scheme = nil
         self.host = nil
 
@@ -263,7 +263,7 @@ extension URL {
 
 extension URL.Host {
     static func parsePort(
-        _ bytes: RandomAccessSlice<UnsafeRawBufferPointer>
+        _ bytes: UnsafeRawBufferPointer.SubSequence
     ) -> Int? {
         var port = 0
         for byte in bytes {
@@ -279,7 +279,7 @@ extension URL.Host {
         return port
     }
 
-    init?(escaped bytes: RandomAccessSlice<UnsafeRawBufferPointer>) {
+    init?(escaped bytes: UnsafeRawBufferPointer.SubSequence) {
         var addressEndIndex = bytes.endIndex
         if let colonIndex = bytes.index(of: .colon) {
             addressEndIndex = colonIndex
@@ -303,7 +303,7 @@ extension URL.Query {
         try self.init(escaped: buffer[...])
     }
 
-    init(escaped bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
+    init(escaped bytes: UnsafeRawBufferPointer.SubSequence) throws {
         var values =  [String : String]()
 
         var startIndex = bytes.startIndex

@@ -39,7 +39,7 @@ extension Request.AcceptCharset: Equatable {
 extension Array where Element == Request.AcceptCharset {
     public typealias AcceptCharset = Request.AcceptCharset
 
-    init(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
+    init(from bytes: UnsafeRawBufferPointer.SubSequence) throws {
         var startIndex = bytes.startIndex
         var endIndex = startIndex
         var values = [AcceptCharset]()
@@ -72,7 +72,7 @@ extension Request.AcceptCharset {
         static let qEqual = ASCII("q=")
     }
 
-    init(from bytes: RandomAccessSlice<UnsafeRawBufferPointer>) throws {
+    init(from bytes: UnsafeRawBufferPointer.SubSequence) throws {
         if let semicolon = bytes.index(of: .semicolon) {
             self.charset = try Charset(from: bytes[..<semicolon])
 
