@@ -21,25 +21,25 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/tris-foundation/log.git",
-            from: "0.4.0"),
+            .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/async.git",
-            from: "0.4.0"),
+            .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/memory.git",
-            from: "0.4.0"),
+            .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/network.git",
-            from: "0.4.0"),
+            .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/json.git",
-            from: "0.4.0"),
+            .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/compression.git",
-            from: "0.4.0"),
+            .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/test.git",
-            from: "0.4.0")
+            .branch("master"))
     ],
     targets: [
         .target(name: "KeyValueCodable"),
