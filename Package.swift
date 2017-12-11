@@ -35,9 +35,6 @@ let package = Package(
             url: "https://github.com/tris-foundation/json.git",
             from: "0.4.0"),
         .package(
-            url: "https://github.com/tris-foundation/fiber.git",
-            from: "0.4.0"),
-        .package(
             url: "https://github.com/tris-foundation/compression.git",
             from: "0.4.0"),
         .package(
