@@ -74,7 +74,7 @@ extension String {
             capacity: count,
             initialSize: count,
             elementWidth: 1)
-        storage.start.copyBytes(from: bytes.baseAddress!, count: count)
+        storage.start.copyMemory(from: bytes.baseAddress!, byteCount: count)
         self = String(_storage: storage)
     }
 
