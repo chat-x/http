@@ -27,6 +27,14 @@ class ClientTests: TestCase {
         assertEqual(client.host, URL.Host(address: "127.0.0.1", port: 80))
     }
 
+    func testURLInitializer() {
+        guard let client = Client(url: "http://127.0.0.1") else {
+            fail()
+            return
+        }
+        assertEqual(client.host, URL.Host(address: "127.0.0.1", port: nil))
+    }
+
     func testRequest() {
         let semaphore = DispatchSemaphore(value: 0)
 
@@ -142,6 +150,7 @@ class ClientTests: TestCase {
 
     static var allTests = [
         ("testInitializer", testInitializer),
+        ("testURLInitializer", testURLInitializer),
         ("testRequest", testRequest),
         ("testDeflate", testDeflate),
     ]
