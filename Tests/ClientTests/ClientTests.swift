@@ -21,8 +21,13 @@ class ClientTests: TestCase {
     override func setUp() {
         AsyncDispatch().registerGlobal()
     }
+    
+    func testInitializer() {
+        let client = Client(host: "127.0.0.1", port: 80)
+        assertEqual(client.host, URL.Host(address: "127.0.0.1", port: 80))
+    }
 
-    func testClient() {
+    func testRequest() {
         let semaphore = DispatchSemaphore(value: 0)
 
         async.task {
@@ -136,7 +141,8 @@ class ClientTests: TestCase {
 
 
     static var allTests = [
-        ("testClient", testClient),
+        ("testInitializer", testInitializer),
+        ("testRequest", testRequest),
         ("testDeflate", testDeflate),
     ]
 }
