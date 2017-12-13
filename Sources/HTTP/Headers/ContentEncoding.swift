@@ -49,6 +49,7 @@ extension Array where Element == ContentEncoding {
         for i in startIndex..<endIndex {
             if i != startIndex {
                 buffer.append(.comma)
+                buffer.append(.whitespace)
             }
             self[i].encode(to: &buffer)
         }
