@@ -26,7 +26,7 @@ let package = Package(
             url: "https://github.com/tris-foundation/async.git",
             .branch("master")),
         .package(
-            url: "https://github.com/tris-foundation/memory.git",
+            url: "https://github.com/tris-foundation/stream.git",
             .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/network.git",
@@ -46,9 +46,7 @@ let package = Package(
             name: "KeyValueCodable"),
         .target(
             name: "HTTP",
-            dependencies: [
-                "MemoryStream", "Buffer", "JSON", "KeyValueCodable"
-            ]),
+            dependencies: ["Stream", "JSON", "KeyValueCodable"]),
         .target(
             name: "Server",
             dependencies: ["Log", "Async", "Network", "HTTP"]),
