@@ -47,9 +47,8 @@ extension UInt8: ExpressibleByStringLiteral {
 // MARK: String initializer from byte sequence (without null terminator)
 
 extension String {
-    init?<T: RandomAccessCollection>(
-        ascii bytes: T
-    ) where T.Element == UInt8, T.Index == Int {
+    init?<T: RandomAccessCollection>(ascii bytes: T)
+        where T.Element == UInt8, T.Index == Int {
         self.init(validating: bytes, as: .ascii)
     }
 
@@ -69,7 +68,8 @@ extension String {
 // MARK: Numeric parsers
 
 extension Int {
-    init?(from bytes: UnsafeRawBufferPointer.SubSequence) {
+    init?<T: RandomAccessCollection>(from bytes: T)
+        where T.Element == UInt8, T.Index == Int {
         var result = 0
         let zero = 48
         let nine = 57
@@ -83,7 +83,8 @@ extension Int {
         self = result
     }
 
-    init?(from bytes: UnsafeRawBufferPointer.SubSequence, radix: Int) {
+    init?<T: RandomAccessCollection>(from bytes: T, radix: Int)
+        where T.Element == UInt8, T.Index == Int {
         let zero = 48
         let nine = 57
         let a = 97
@@ -101,7 +102,8 @@ extension Int {
 }
 
 extension Double {
-    init?(from bytes: UnsafeRawBufferPointer.SubSequence) {
+    init?<T: RandomAccessCollection>(from bytes: T)
+        where T.Element == UInt8, T.Index == Int {
         let dot = 46
         let zero = 48
         let nine = 57
