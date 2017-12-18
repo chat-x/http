@@ -109,34 +109,37 @@ try server.start()
 #### Client
 
 ```swift
-let client = try Client()
-try client.connect(to: "http://0.0.0.0:8080")
+let client = try Client(url: "http://0.0.0.0:8080")
 
-try client.get("/hello")
-try client.get("/привет")
-try client.get("/request")
-try client.get("/page/news")
-try client.get("/user/8")
-try client.get("/todos")
+try client.get(path: "/hello")
+try client.get(path: "/привет")
+try client.get(path: "/request")
+try client.get(path: "/page/news")
+try client.get(path: "/user/8")
+try client.get(path: "/todos")
 
 struct Todo: Encodable {
     let name: String
     let done: Bool
+
+    init(type: String) {
+        self.name = "sleep sometimes (transfer-encoding: \(type))"
+        self.done = false
+    }
 }
 
-try client.post("/todo", json: Todo(
-    name: "sleep sometimes (from json)",
-    done: false))
+try client.post(path: "/todo", object: Todo(type: "json"))
 
-try client.post("/todo", urlEncoded: Todo(
-    name: "sleep sometimes (from urlencoded)",
-    done: false))
+try client.post(
+    path: "/todo", 
+    urlEncoded: Todo(type: "url encoded"),
+    contentType: .urlEncoded)
 
 struct Event: Encodable {
     let name: String
 }
 
-try client.post("/date/May/8", json: Event(name: "Dance"))
+try client.post(path: "/date/May/8", object: Event(name: "Dance"))
 
-try client.get("/whatdoesmarcelluswallacelooklike")
+try client.get(path: "/whatdoesmarcelluswallacelooklike")
 ```
