@@ -9,6 +9,7 @@
  */
 
 import Stream
+import Network
 
 extension Response {
     public init(from bytes: [UInt8]) throws {
@@ -16,6 +17,7 @@ extension Response {
         try self.init(from: stream)
     }
 
+    @_specialize(exported: true, where T == NetworkStream)
     public init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
         do {
             let version = try stream.read(until: .whitespace)
