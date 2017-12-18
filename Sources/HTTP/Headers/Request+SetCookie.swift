@@ -69,8 +69,9 @@ extension Response.SetCookie {
     init<T: RandomAccessCollection>(from bytes: T) throws
         where T.Element == UInt8, T.Index == Int {
         var startIndex = bytes.startIndex
-        var endIndex = bytes.index(of: .semicolon, offset: startIndex)
-            ?? bytes.endIndex
+        var endIndex =
+            bytes[startIndex...].index(of: .semicolon) ??
+            bytes.endIndex
 
         self.cookie = try Cookie(from: bytes[startIndex..<endIndex])
         startIndex = endIndex + 1
@@ -79,7 +80,7 @@ extension Response.SetCookie {
 
         while endIndex < bytes.endIndex {
             endIndex =
-                bytes.index(of: .semicolon, offset: startIndex) ??
+                bytes[startIndex...].index(of: .semicolon) ??
                 bytes.endIndex
 
             // should be separated by a semi-colon and a space ('; ')
@@ -88,7 +89,7 @@ extension Response.SetCookie {
             }
             startIndex += 1
 
-            if let equalIndex = bytes.index(of: .equal, offset: startIndex) {
+            if let equalIndex = bytes[startIndex...].index(of: .equal) {
                 // attribute name=value
                 let valueStartIndex = equalIndex + 1
                 guard valueStartIndex < endIndex else {
