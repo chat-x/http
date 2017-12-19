@@ -709,7 +709,7 @@ extension Language {
         case Bytes.any.lowercasedHashValue:   self = .any
         default:
             guard let language = String(validating: bytes, as: .token) else {
-                throw HTTPError.invalidLanguage
+                throw HTTPError.invalidLanguageHeader
             }
             self = .custom(language)
         }
