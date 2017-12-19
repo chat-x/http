@@ -179,6 +179,23 @@ extension URL {
 }
 
 extension URL.Query {
+    public init(string: String) throws {
+        var values =  [String : String]()
+        for pair in string.components(separatedBy: "&") {
+            if let index = pair.index(of: "=") {
+                let valueIndex = pair.index(after: index)
+                guard valueIndex < pair.endIndex else {
+                    throw URL.Error.invalidQuery
+                }
+                let name = try URL.removePercentEncoding(pair[..<index])
+                let value = try URL.removePercentEncoding(pair[valueIndex...])
+                values[name] = value
+            }
+        }
+        self.values = values
+    }
+
+    // Used for decoding formEncoded body. TODO: use stream
     public init<T: RandomAccessCollection>(from bytes: T) throws
         where T.Element == UInt8, T.Index == Int
     {
@@ -191,22 +208,6 @@ extension URL.Query {
                     throw URL.Error.invalidQuery
                 }
                 let value = try String(removingPercentEncoding: pair[index...])
-                values[name] = value
-            }
-        }
-        self.values = values
-    }
-
-    public init(string: String) throws {
-        var values =  [String : String]()
-        for pair in string.components(separatedBy: "&") {
-            if let index = pair.index(of: "=") {
-                let valueIndex = pair.index(after: index)
-                guard valueIndex < pair.endIndex else {
-                    throw URL.Error.invalidQuery
-                }
-                let name = try URL.removePercentEncoding(pair[..<index])
-                let value = try URL.removePercentEncoding(pair[valueIndex...])
                 values[name] = value
             }
         }
