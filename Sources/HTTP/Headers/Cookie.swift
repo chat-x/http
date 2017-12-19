@@ -8,6 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
+import Stream
+
 public struct Cookie {
     let name: String
     let value: String
@@ -25,8 +27,10 @@ extension Cookie: Equatable {
 }
 
 extension Array where Element == Cookie {
-    init<T: RandomAccessCollection>(from bytes: T) throws
-        where T.Element == UInt8, T.Index == Int {
+    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+        // FIXME: validate
+        let bytes = try stream.read(until: .cr)
+
         var cookies = [Cookie]()
         var startIndex = bytes.startIndex
         var endIndex = startIndex

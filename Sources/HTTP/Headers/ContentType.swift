@@ -8,6 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
+import Stream
+
 public struct ContentType {
     public var mediaType: MediaType
     public var charset: Charset?
@@ -44,8 +46,10 @@ extension ContentType {
         static let charset = ASCII("charset=")
     }
 
-    init<T: RandomAccessCollection>(from bytes: T) throws
-        where T.Element == UInt8, T.Index == Int {
+    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+        // FIXME: validate
+        let bytes = try stream.read(until: .cr)
+
         let semicolonIndex = bytes.index(of: .semicolon)
 
         self.mediaType = semicolonIndex == nil

@@ -126,7 +126,7 @@ class DecodeRequestTests: TestCase {
     func testInvalidVersion2() {
         let bytes = ASCII("GET /test HTTP/1.1WUT\r\n\r\n")
         assertThrowsError(try Request(from: bytes)) { error in
-            assertEqual(error as? HTTPError, .invalidVersion)
+            assertEqual(error as? HTTPError, .invalidRequest)
         }
     }
 
@@ -211,6 +211,41 @@ class DecodeRequestTests: TestCase {
             assertNotNil(request.userAgent)
             if let userAgent = request.userAgent {
                 assertEqual(userAgent, "Mozilla/5.0")
+            }
+        } catch {
+            fail(String(describing: error))
+        }
+    }
+
+    func testAcceptLanguageHeader() {
+        do {
+            let bytes = ASCII(
+                "GET / HTTP/1.1\r\n" +
+                "Accept-Language: en-US,en;q=0.5\r\n" +
+                "\r\n")
+            let request = try Request(from: bytes)
+            assertNotNil(request.acceptLanguage)
+            if let acceptLanguage = request.acceptLanguage {
+                assertEqual(acceptLanguage, [
+                    Request.AcceptLanguage(.enUS, priority: 1.0),
+                    Request.AcceptLanguage(.en, priority: 0.5)
+                ])
+            }
+        } catch {
+            fail(String(describing: error))
+        }
+    }
+
+    func testAcceptEncodingHeader() {
+        do {
+            let bytes = ASCII(
+                "GET / HTTP/1.1\r\n" +
+                "Accept-Encoding: gzip, deflate\r\n" +
+                "\r\n")
+            let request = try Request(from: bytes)
+            assertNotNil(request.acceptEncoding)
+            if let acceptEncoding = request.acceptEncoding {
+                assertEqual(acceptEncoding, [.gzip, .deflate])
             }
         } catch {
             fail(String(describing: error))
@@ -646,6 +681,8 @@ class DecodeRequestTests: TestCase {
         ("testHostDomainHeader", testHostDomainHeader),
         ("testHostEncodedHeader", testHostEncodedHeader),
         ("testUserAgentHeader", testUserAgentHeader),
+        ("testAcceptLanguageHeader",testAcceptLanguageHeader),
+        ("testAcceptEncodingHeader",testAcceptEncodingHeader),
         ("testAcceptCharset",testAcceptCharset),
         ("testAcceptCharsetSpaceSeparator", testAcceptCharsetSpaceSeparator),
         ("testAuthorization", testAuthorization),

@@ -8,6 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
+import Stream
+
 public enum ContentEncoding {
     case gzip
     case deflate
@@ -26,8 +28,10 @@ extension ContentEncoding: Equatable {
 }
 
 extension Array where Element == ContentEncoding {
-    init<T: RandomAccessCollection>(from bytes: T) throws
-        where T.Element == UInt8, T.Index == Int {
+    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+        // FIXME: validate
+        let bytes = try stream.read(until: .cr)
+
         var startIndex = bytes.startIndex
         var endIndex = startIndex
         var values = [ContentEncoding]()

@@ -8,6 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
+import Stream
+
 extension Request {
     public enum Method {
         case get
@@ -20,8 +22,8 @@ extension Request {
 }
 
 extension Request.Method {
-    init<T: RandomAccessCollection>(from bytes: T) throws
-        where T.Element == UInt8, T.Index == Int {
+    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+        let bytes = try stream.read(until: .whitespace)
         for (type, method) in RequestMethodBytes.values {
             if bytes.elementsEqual(method) {
                 self = type

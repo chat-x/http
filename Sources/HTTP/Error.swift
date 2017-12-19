@@ -17,6 +17,8 @@ public enum HTTPError: Error {
     case invalidVersion
     case invalidHeaderName
     case invalidHeaderValue
+    case invalidHost
+    case invalidPort
     case invalidContentType
     case invalidContentEncoding
     case invalidMediaType

@@ -8,6 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
+import Stream
+
 extension HeaderName {
     // General headers
     static let connection = HeaderName("Connection")
@@ -35,8 +37,10 @@ extension HeaderName {
 
 public struct HeaderName: Hashable {
     let bytes: [UInt8]
-    init<T: RandomAccessCollection>(from bytes: T) throws
-        where T.Element == UInt8, T.Index == Int {
+    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+        // FIXME: validate
+        let bytes = try stream.read(until: .colon)
+
         for byte in bytes {
             guard ASCIICharacterSet.token.contains(byte) else {
                 throw HTTPError.invalidHeaderName

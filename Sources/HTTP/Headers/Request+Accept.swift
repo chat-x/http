@@ -8,6 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
+import Stream
+
 extension Request {
     public struct Accept {
         public let mediaType: MediaType
@@ -31,8 +33,10 @@ extension Request.Accept: Equatable {
 extension Array where Element == Request.Accept {
     public typealias Accept = Request.Accept
 
-    init<T: RandomAccessCollection>(from bytes: T) throws
-        where T.Element == UInt8, T.Index == Int {
+    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+        // FIXME: validate
+        let bytes = try stream.read(until: .cr)
+
         var startIndex = bytes.startIndex
         var endIndex = startIndex
         var values = [Accept]()
