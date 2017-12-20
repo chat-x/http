@@ -24,6 +24,7 @@ public class Client {
     let host: URL.Host
     var stream: NetworkStream?
     var inputStream: BufferedInputStream<NetworkStream>?
+    var outputStream: BufferedOutputStream<NetworkStream>?
 
     public var bufferSize = 4096
 
@@ -62,6 +63,8 @@ public class Client {
         self.stream = NetworkStream(socket: socket)
         self.inputStream = BufferedInputStream(
             baseStream: stream!, capacity: bufferSize)
+        self.outputStream = BufferedOutputStream(
+            baseStream: stream!, capacity: bufferSize)
     }
 
     public func disconnect() {
@@ -80,7 +83,8 @@ public class Client {
 
         var response: Response
         do {
-            try request.encode(to: &stream!)
+            try request.encode(to: outputStream!)
+            try outputStream!.flush()
             response = try Response(from: inputStream!)
         } catch {
             disconnect()
