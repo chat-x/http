@@ -9,8 +9,10 @@
  */
 
 import Stream
+import Network
 
 extension Response {
+    @_specialize(exported: true, where T == NetworkStream)
     public func encode<T: OutputStream>(
         to stream: BufferedOutputStream<T>
     ) throws {
