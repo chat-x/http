@@ -22,7 +22,10 @@ extension Response {
 
         // Headers
         @inline(__always)
-        func writeHeader(_ name: HeaderName, encoder: (BufferedOutputStream<T>) throws -> Void) throws {
+        func writeHeader(
+            _ name: HeaderName,
+            encoder: (BufferedOutputStream<T>
+        ) throws -> Void) throws {
             try stream.write(name.bytes)
             try stream.write(.colon)
             try stream.write(.whitespace)
@@ -32,11 +35,9 @@ extension Response {
 
         @inline(__always)
         func writeHeader(_ name: HeaderName, value: String) throws {
-            try stream.write(name.bytes)
-            try stream.write(.colon)
-            try stream.write(.whitespace)
-            try stream.write(value)
-            try stream.write(Constants.lineEnd)
+            try writeHeader(name) { stream in
+                try stream.write(value)
+            }
         }
 
         if let contentType = self.contentType {

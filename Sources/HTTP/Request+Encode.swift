@@ -39,11 +39,9 @@ extension Request {
 
         @inline(__always)
         func writeHeader(_ name: HeaderName, value: String) throws {
-            try stream.write(name.bytes)
-            try stream.write(.colon)
-            try stream.write(.whitespace)
-            try stream.write(value)
-            try stream.write(Constants.lineEnd)
+            try writeHeader(name) { stream in
+                try stream.write(value)
+            }
         }
 
         if let host = self.host {

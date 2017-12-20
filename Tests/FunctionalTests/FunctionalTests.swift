@@ -28,8 +28,7 @@ class FunctionalTests: TestCase {
 
         async.task {
             do {
-                let server =
-                    try Server(host: "127.0.0.1", port: port)
+                let server = try Server(host: "127.0.0.1", port: port)
 
                 try serverCode(server)
 
@@ -45,7 +44,7 @@ class FunctionalTests: TestCase {
 
         async.task {
             do {
-                let client = Client(host: "127.0.0.1", port: Int(port))
+                let client = Client(host: "127.0.0.1", port: port)
                 try client.connect()
 
                 try clientCode(client)
