@@ -54,12 +54,12 @@ extension Int {
         guard bytes.count > 0 else {
             return nil
         }
-        var port = 0
+        var value = 0
         for byte in bytes {
-            port *= 10
-            port += Int(byte - .zero)
+            value *= 10
+            value += Int(byte - .zero)
         }
-        self = port
+        self = value
     }
 }
 
@@ -87,21 +87,23 @@ extension Double {
         guard let integer = try Int(from: stream) else {
             return nil
         }
-        var fractional = 0
-        if try stream.consume(.dot) {
-            guard let fract = try Int(from: stream) else {
-                return nil
+
+        self = Double(integer)
+
+        do {
+            guard try stream.consume(.dot) else {
+                return
             }
-            fractional = fract
-        }
-        let del: Int
-        switch fractional % 10 {
-        case 0:
-            del = fractional * 10
-        default:
-            del = (fractional / 10 + 1) * 10
-        }
-        self = Double(integer) + Double(fractional) / Double(del)
+            let bytes = try stream.read(while: { $0 >= .zero && $0 <= .nine })
+            guard bytes.count > 0 else {
+                return
+            }
+            var factor = 0.1
+            for byte in bytes {
+                self += Double(byte - .zero) * factor
+                factor *= 0.1
+            }
+        } catch {}
     }
 }
 
