@@ -83,31 +83,16 @@ extension Int {
 }
 
 extension Double {
-    init?<T: RandomAccessCollection>(from bytes: T)
-        where T.Element == UInt8, T.Index == Int {
-        let dot = 46
-        let zero = 48
-        let nine = 57
-        var integer: Int = 0
-        var fractional: Int = 0
-        var isFractional = false
-        for byte in bytes {
-            guard (byte >= zero && byte <= nine)
-                || (byte == dot && !isFractional) else {
-                    return nil
+    init?<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+        guard let integer = try Int(from: stream) else {
+            return nil
+        }
+        var fractional = 0
+        if try stream.consume(.dot) {
+            guard let fract = try Int(from: stream) else {
+                return nil
             }
-            if byte == dot {
-                isFractional = true
-                continue
-            }
-            switch isFractional {
-            case false:
-                integer *= 10
-                integer += Int(byte) - zero
-            case true:
-                fractional *= 10
-                fractional += Int(byte) - zero
-            }
+            fractional = fract
         }
         let del: Int
         switch fractional % 10 {
