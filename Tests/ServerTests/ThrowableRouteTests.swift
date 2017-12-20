@@ -34,17 +34,16 @@ class ThrowableRouteTests: TestCase {
 
         async.task {
             do {
-                let server =
-                    try Server(host: "127.0.0.1", port: port)
+                let server = try Server(host: "127.0.0.1", port: port)
 
                 try serverCode(server)
 
                 semaphore.signal()
                 try server.start()
             } catch {
-                async.loop.terminate()
                 fail(String(describing: error))
             }
+            async.loop.terminate()
         }
 
         semaphore.wait()
@@ -55,13 +54,12 @@ class ThrowableRouteTests: TestCase {
                 try client.connect()
 
                 try clientCode(client)
-
-                async.loop.terminate()
             } catch {
                 fail(String(describing: error))
             }
+            async.loop.terminate()
         }
-    
+
         async.loop.run()
     }
 
