@@ -8,6 +8,8 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
+import Platform
+
 // MARK: Hash
 
 extension Sequence where Iterator.Element == UInt8 {
