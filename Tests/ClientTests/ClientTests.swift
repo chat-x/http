@@ -120,7 +120,7 @@ class ClientTests: TestCase {
 
                 // Client Headers
 
-                var buffer = [UInt8](repeating: 0, count: 100)
+                var buffer = [UInt8](repeating: 0, count: 1024)
                 let count = try client.receive(to: &buffer)
                 let request = try Request(from: [UInt8](buffer[..<count]))
                 assertEqual(request.acceptEncoding ?? [], [.gzip, .deflate])
