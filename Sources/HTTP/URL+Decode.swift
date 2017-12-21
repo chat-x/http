@@ -218,7 +218,7 @@ extension URL.Query {
 // Decode from Stream
 
 extension URL {
-    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+    init<T: UnsafeStreamReader>(from stream: T) throws {
         var buffer = try stream.read(allowedBytes: .path)
         self.path = try String(removingPercentEncoding: buffer)
 
@@ -241,7 +241,7 @@ extension URL {
 }
 
 extension URL.Host {
-    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+    init<T: UnsafeStreamReader>(from stream: T) throws {
         let bytes = try stream.read(allowedBytes: .domain)
         guard bytes.count > 0 else {
             throw HTTPError.invalidHost
@@ -264,7 +264,7 @@ extension URL.Host {
 }
 
 extension URL.Query {
-    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+    init<T: UnsafeStreamReader>(from stream: T) throws {
         var values =  [String : String]()
 
         while true {

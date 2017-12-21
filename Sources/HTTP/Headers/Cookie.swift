@@ -27,7 +27,7 @@ extension Cookie: Equatable {
 }
 
 extension Array where Element == Cookie {
-    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+    init<T: UnsafeStreamReader>(from stream: T) throws {
         var cookies = [Cookie]()
         while true {
             guard let cookie = try Cookie(from: stream) else {
@@ -42,7 +42,7 @@ extension Array where Element == Cookie {
         self = cookies
     }
 
-    func encode<T: OutputStream>(to stream: BufferedOutputStream<T>) throws {
+    func encode<T: UnsafeStreamWriter>(to stream: T) throws {
         for i in 0..<count {
             try self[i].encode(to: stream)
             if i + 1 < count {
@@ -54,7 +54,7 @@ extension Array where Element == Cookie {
 }
 
 extension Cookie {
-    init?<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+    init?<T: UnsafeStreamReader>(from stream: T) throws {
         var buffer = try stream.read(allowedBytes: .cookie)
         guard buffer.count > 0 else {
             return nil
@@ -69,7 +69,7 @@ extension Cookie {
         self.value = String(decoding: buffer, as: UTF8.self)
     }
 
-    func encode<T: OutputStream>(to stream: BufferedOutputStream<T>) throws {
+    func encode<T: UnsafeStreamWriter>(to stream: T) throws {
         try stream.write(name)
         try stream.write(.equal)
         try stream.write(value)

@@ -41,8 +41,7 @@ final class AllowedBytes {
     }
 }
 
-extension BufferedInputStream {
-    @inline(__always)
+extension UnsafeStreamReader {
     func read(allowedBytes: AllowedBytes) throws -> UnsafeRawBufferPointer {
         let buffer = allowedBytes.buffer
         return try read(while: { buffer[Int($0)] })

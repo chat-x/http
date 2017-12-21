@@ -46,7 +46,7 @@ extension ContentType {
         static let charset = ASCII("charset=")
     }
 
-    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+    init<T: UnsafeStreamReader>(from stream: T) throws {
         self.mediaType = try MediaType(from: stream)
 
         switch self.mediaType {
@@ -76,7 +76,7 @@ extension ContentType {
         }
     }
 
-    func encode<T: OutputStream>(to stream: BufferedOutputStream<T>) throws {
+    func encode<T: UnsafeStreamWriter>(to stream: T) throws {
         try mediaType.encode(to: stream)
         if let charset = charset {
             try charset.encode(to: stream)
@@ -110,7 +110,7 @@ extension Boundary {
         static let boundary = ASCII("boundary=")
     }
 
-    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+    init<T: UnsafeStreamReader>(from stream: T) throws {
         guard try stream.consume(sequence: Bytes.boundary) else {
             throw HTTPError.invalidBoundary
         }

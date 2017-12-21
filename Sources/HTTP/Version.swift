@@ -20,7 +20,7 @@ extension Version {
         static let oneOne = ASCII("1.1")
     }
 
-    init<T: InputStream>(from stream: BufferedInputStream<T>) throws {
+    init<T: UnsafeStreamReader>(from stream: T) throws {
         let prefix = try stream.read(count: Bytes.httpSlash.count)
         guard prefix.elementsEqual(Bytes.httpSlash) else {
             throw HTTPError.invalidVersion
@@ -32,7 +32,7 @@ extension Version {
         self = .oneOne
     }
 
-    func encode<T: OutputStream>(to stream: BufferedOutputStream<T>) throws {
+    func encode<T: UnsafeStreamWriter>(to stream: T) throws {
         try stream.write(Bytes.httpSlash)
         switch self {
         case .oneOne: try stream.write(Bytes.oneOne)

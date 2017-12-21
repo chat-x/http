@@ -10,7 +10,7 @@
 
 import Stream
 
-extension BufferedInputStream {
+extension UnsafeStreamReader {
     func consume(sequence: [UInt8]) throws -> Bool {
         guard let buffer = try peek(count: sequence.count) else {
             throw StreamError.insufficientData
@@ -23,7 +23,7 @@ extension BufferedInputStream {
     }
 }
 
-extension BufferedOutputStream {
+extension UnsafeStreamWriter {
     @inline(__always)
     func write(_ string: String) throws {
         let bytes = [UInt8](string.utf8)
