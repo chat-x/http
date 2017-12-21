@@ -99,7 +99,7 @@ extension Request {
             request.rawBody = try URLFormEncoded.encode(body)
 
         default:
-            throw HTTPError.unsupportedContentType
+            throw ParseError.unsupportedContentType
         }
 
         self = request

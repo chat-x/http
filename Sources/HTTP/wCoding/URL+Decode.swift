@@ -9,7 +9,6 @@
  */
 
 import Stream
-import struct Foundation.URL
 
 extension URL.Scheme {
     static let httpBytes = [UInt8]("http".utf8)
@@ -244,7 +243,7 @@ extension URL.Host {
     init<T: UnsafeStreamReader>(from stream: T) throws {
         let bytes = try stream.read(allowedBytes: .domain)
         guard bytes.count > 0 else {
-            throw HTTPError.invalidHost
+            throw ParseError.invalidHost
         }
         if Punycode.isEncoded(domain: bytes) {
             self.address = Punycode.decode(domain: bytes)
@@ -257,7 +256,7 @@ extension URL.Host {
             return
         }
         guard let port = try Int(from: stream) else {
-            throw HTTPError.invalidPort
+            throw ParseError.invalidPort
         }
         self.port = port
     }
@@ -272,7 +271,7 @@ extension URL.Query {
             let name = try String(removingPercentEncoding: buffer)
 
             guard try stream.consume(.equal) else {
-                throw HTTPError.invalidURL
+                throw ParseError.invalidURL
             }
 
             buffer = try stream.read(allowedBytes: .queryPart)

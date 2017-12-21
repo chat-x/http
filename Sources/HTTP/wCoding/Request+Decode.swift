@@ -22,12 +22,12 @@ extension Request {
         do {
             self.method = try Request.Method(from: stream)
             guard try stream.consume(.whitespace) else {
-                throw HTTPError.invalidStartLine
+                throw ParseError.invalidStartLine
             }
 
             self.url = try URL(from: stream)
             guard try stream.consume(.whitespace) else {
-                throw HTTPError.invalidStartLine
+                throw ParseError.invalidStartLine
             }
 
             self.version = try Version(from: stream)
@@ -36,7 +36,7 @@ extension Request {
             func readLineEnd() throws {
                 guard try stream.consume(.cr),
                     try stream.consume(.lf) else {
-                        throw HTTPError.invalidRequest
+                        throw ParseError.invalidRequest
                 }
             }
 
@@ -44,7 +44,7 @@ extension Request {
 
             while true {
                 guard let nextLine = try stream.peek(count: 2) else {
-                    throw HTTPError.unexpectedEnd
+                    throw ParseError.unexpectedEnd
                 }
                 if nextLine.elementsEqual(Constants.lineEnd) {
                     try stream.consume(count: 2)
@@ -54,7 +54,7 @@ extension Request {
                 let name = try HeaderName(from: stream)
 
                 guard try stream.consume(.colon) else {
-                    throw HTTPError.invalidHeaderName
+                    throw ParseError.invalidHeaderName
                 }
                 try stream.consume(while: { $0 == .whitespace })
 
@@ -128,7 +128,7 @@ extension Request {
 
                 // TODO: optimize using hex table
                 guard let size = Int(from: sizeBytes, radix: 16) else {
-                    throw HTTPError.invalidRequest
+                    throw ParseError.invalidRequest
                 }
                 guard size > 0 else {
                     break
@@ -146,7 +146,7 @@ extension Request {
                 _ = try? stream.consume(sequence: Constants.lineEnd)
             }
         } catch let error as StreamError where error == .insufficientData {
-            throw HTTPError.unexpectedEnd
+            throw ParseError.unexpectedEnd
         }
     }
 }

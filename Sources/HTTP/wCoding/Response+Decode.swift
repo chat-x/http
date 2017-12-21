@@ -22,7 +22,7 @@ extension Response {
         do {
             self.version = try Version(from: stream)
             guard try stream.consume(.whitespace) else {
-                throw HTTPError.invalidStartLine
+                throw ParseError.invalidStartLine
             }
 
             let status = try stream.read(until: .cr)
@@ -32,7 +32,7 @@ extension Response {
             func readLineEnd() throws {
                 guard try stream.consume(.cr),
                     try stream.consume(.lf) else {
-                        throw HTTPError.invalidRequest
+                        throw ParseError.invalidRequest
                 }
             }
 
@@ -40,7 +40,7 @@ extension Response {
 
             while true {
                 guard let nextLine = try stream.peek(count: 2) else {
-                    throw HTTPError.unexpectedEnd
+                    throw ParseError.unexpectedEnd
                 }
                 if nextLine.elementsEqual(Constants.lineEnd) {
                     try stream.consume(count: 2)
@@ -51,7 +51,7 @@ extension Response {
 
                 let colon = try stream.read(count: 1)
                 guard colon[0] == .colon else {
-                    throw HTTPError.invalidRequest
+                    throw ParseError.invalidRequest
                 }
                 try stream.consume(while: { $0 == .whitespace })
 
@@ -103,7 +103,7 @@ extension Response {
 
                 // TODO: optimize using hex table
                 guard let size = Int(from: sizeBytes, radix: 16) else {
-                    throw HTTPError.invalidRequest
+                    throw ParseError.invalidRequest
                 }
                 guard size > 0 else {
                     break
@@ -121,7 +121,7 @@ extension Response {
                 _ = try? stream.consume(sequence: Constants.lineEnd)
             }
         } catch let error as StreamError where error == .insufficientData {
-            throw HTTPError.unexpectedEnd
+            throw ParseError.unexpectedEnd
         }
     }
 }

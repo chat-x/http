@@ -1,0 +1,55 @@
+/*
+ * Copyright 2017 Tris Foundation and the project authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License
+ *
+ * See LICENSE.txt in the project root for license information
+ * See CONTRIBUTORS.txt for the list of the project authors
+ */
+
+import Stream
+
+extension Request.Method {
+    init<T: UnsafeStreamReader>(from stream: T) throws {
+        let bytes = try stream.read(allowedBytes: .token)
+        for (type, method) in RequestMethodBytes.values {
+            if bytes.elementsEqual(method) {
+                self = type
+                return
+            }
+        }
+        throw ParseError.invalidMethod
+    }
+
+    func encode<T: UnsafeStreamWriter>(to stream: T) throws {
+        let bytes: [UInt8]
+        switch self {
+        case .get: bytes = RequestMethodBytes.get
+        case .head: bytes = RequestMethodBytes.head
+        case .post: bytes = RequestMethodBytes.post
+        case .put: bytes = RequestMethodBytes.put
+        case .delete: bytes = RequestMethodBytes.delete
+        case .options: bytes = RequestMethodBytes.options
+        }
+        try stream.write(bytes)
+    }
+}
+
+fileprivate struct RequestMethodBytes {
+    static let get = ASCII("GET")
+    static let head = ASCII("HEAD")
+    static let post = ASCII("POST")
+    static let put = ASCII("PUT")
+    static let delete = ASCII("DELETE")
+    static let options = ASCII("OPTIONS")
+
+    static let values: [(Request.Method, ASCII)] = [
+        (.get, get),
+        (.head, head),
+        (.post, post),
+        (.put, put),
+        (.delete, delete),
+        (.options, options),
+    ]
+}

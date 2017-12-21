@@ -8,18 +8,14 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-public struct Cookie {
-    let name: String
-    let value: String
+import Stream
 
-    public init(name: String, value: String) {
-        self.name = name
-        self.value = value
-    }
-}
-
-extension Cookie: Equatable {
-    public static func ==(lhs: Cookie, rhs: Cookie) -> Bool {
-        return lhs.name == rhs.name && lhs.value == rhs.value
+extension HeaderName {
+    init<T: UnsafeStreamReader>(from stream: T) throws {
+        let bytes = try stream.read(allowedBytes: .token)
+        guard bytes.count > 0 else {
+            throw ParseError.invalidHeaderName
+        }
+        self.init([UInt8](bytes))
     }
 }

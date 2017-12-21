@@ -8,7 +8,7 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-public enum HTTPError: Error {
+public enum ParseError: Error {
     case invalidRequest
     case invalidResponse
     case invalidStartLine
