@@ -17,14 +17,9 @@ public struct Request {
     public var version: Version
 
     public var host: URL.Host? {
-        get {
-            return url.host
-        }
-        set {
-            url.host = newValue
-        }
+        get { return url.host }
+        set { url.host = newValue }
     }
-
     public var userAgent: String? = nil
     public var accept: [Accept]? = nil
     public var acceptLanguage: [AcceptLanguage]? = nil
@@ -50,10 +45,7 @@ public struct Request {
 
 extension Request {
     public var shouldKeepAlive: Bool {
-        if self.connection == .close {
-            return false
-        }
-        return true
+        return self.connection != .close
     }
 
     public var body: String? {
@@ -62,7 +54,9 @@ extension Request {
         }
         return String(bytes: rawBody, encoding: .utf8)
     }
+}
 
+extension Request {
     public init(method: Method = .get, url: URL = URL(path: "/")) {
         self.method = method
         self.url = url

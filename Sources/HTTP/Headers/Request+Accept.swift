@@ -21,8 +21,7 @@ extension Request {
 }
 
 extension Request.Accept: Equatable {
-    public typealias Accept = Request.Accept
-    public static func ==(lhs: Accept, rhs: Accept) -> Bool {
+    public static func ==(lhs: Request.Accept, rhs: Request.Accept) -> Bool {
         return lhs.mediaType == rhs.mediaType &&
             lhs.priority == rhs.priority
     }
