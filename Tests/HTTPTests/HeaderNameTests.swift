@@ -29,4 +29,3 @@ class HeaderNameTests: TestCase {
         ("testHeaderNameDescription", testHeaderNameDescription)
     ]
 }
-

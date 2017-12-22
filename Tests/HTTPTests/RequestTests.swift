@@ -13,7 +13,7 @@ import Test
 
 class RequestTests: TestCase {
     func testRequest() {
-        let request = Request(method: .get, url: try! URL("/"))
+        let request = Request(method: .get, url: "/")
         assertEqual(request.method, .get)
         assertEqual(request.url.path, "/")
     }
@@ -25,7 +25,7 @@ class RequestTests: TestCase {
     }
 
     func testDefaultMethod() {
-        let request = Request(url: try! URL("/"))
+        let request = Request(url: "/")
         assertEqual(request.method, .get)
         assertEqual(request.url.path, "/")
     }

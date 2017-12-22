@@ -17,7 +17,7 @@ import AsyncDispatch
 extension String: Error {}
 
 func makeMistake() throws {
-    throw "mistake"
+    throw "expected failure"
 }
 
 class ThrowableRouteTests: TestCase {

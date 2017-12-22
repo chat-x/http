@@ -9,6 +9,7 @@
  */
 
 import Test
+import Stream
 @testable import HTTP
 
 class DecodeRequestTests: TestCase {
@@ -17,8 +18,8 @@ class DecodeRequestTests: TestCase {
 
     func testGet() {
         do {
-            let bytes = ASCII("GET /test HTTP/1.1\r\n\r\n")
-            let request = try Request(from: bytes)
+            let stream = InputByteStream("GET /test HTTP/1.1\r\n\r\n")
+            let request = try Request(from: stream)
             assertNotNil(request)
             assertEqual(request.method, Request.Method.get)
         } catch {
@@ -28,8 +29,8 @@ class DecodeRequestTests: TestCase {
 
     func testHead() {
         do {
-            let bytes = ASCII("HEAD /test HTTP/1.1\r\n\r\n")
-            let request = try Request(from: bytes)
+            let stream = InputByteStream("HEAD /test HTTP/1.1\r\n\r\n")
+            let request = try Request(from: stream)
             assertNotNil(request)
             assertEqual(request.method, Request.Method.head)
         } catch {
@@ -39,8 +40,8 @@ class DecodeRequestTests: TestCase {
 
     func testPost() {
         do {
-            let bytes = ASCII("POST /test HTTP/1.1\r\n\r\n")
-            let request = try Request(from: bytes)
+            let stream = InputByteStream("POST /test HTTP/1.1\r\n\r\n")
+            let request = try Request(from: stream)
             assertNotNil(request)
             assertEqual(request.method, Request.Method.post)
         } catch {
@@ -50,8 +51,8 @@ class DecodeRequestTests: TestCase {
 
     func testPut() {
         do {
-            let bytes = ASCII("PUT /test HTTP/1.1\r\n\r\n")
-            let request = try Request(from: bytes)
+            let stream = InputByteStream("PUT /test HTTP/1.1\r\n\r\n")
+            let request = try Request(from: stream)
             assertNotNil(request)
             assertEqual(request.method, Request.Method.put)
         } catch {
@@ -61,8 +62,8 @@ class DecodeRequestTests: TestCase {
 
     func testDelete() {
         do {
-            let bytes = ASCII("DELETE /test HTTP/1.1\r\n\r\n")
-            let request = try Request(from: bytes)
+            let stream = InputByteStream("DELETE /test HTTP/1.1\r\n\r\n")
+            let request = try Request(from: stream)
             assertNotNil(request)
             assertEqual(request.method, Request.Method.delete)
         } catch {
@@ -72,8 +73,8 @@ class DecodeRequestTests: TestCase {
 
     func testVersion() {
         do {
-            let bytes = ASCII("GET /test HTTP/1.1\r\n\r\n")
-            let request = try Request(from: bytes)
+            let stream = InputByteStream("GET /test HTTP/1.1\r\n\r\n")
+            let request = try Request(from: stream)
             assertNotNil(request)
             assertEqual(request.version, Version.oneOne)
         } catch {
@@ -83,8 +84,8 @@ class DecodeRequestTests: TestCase {
 
     func testUrl() {
         do {
-            let bytes = ASCII("GET /test?key=value#fragment HTTP/1.1\r\n\r\n")
-            let request = try Request(from: bytes)
+            let stream = InputByteStream("GET /test?key=value#fragment HTTP/1.1\r\n\r\n")
+            let request = try Request(from: stream)
             assertNotNil(request)
             assertNotNil(request.url)
             assertEqual(request.url.path, "/test")
@@ -96,57 +97,57 @@ class DecodeRequestTests: TestCase {
     }
 
     func testInvalidRequest() {
-        let bytes = ASCII("GET\r\n\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        let stream = InputByteStream("GET\r\n\r\n")
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidStartLine)
         }
     }
 
     func testInvalidRequest2() {
-        let bytes = ASCII("GET \r\n\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        let stream = InputByteStream("GET \r\n\r\n")
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidStartLine)
         }
     }
 
     func testInvalidMethod() {
-        let bytes = ASCII("BAD /test HTTP/1.1\r\n\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        let stream = InputByteStream("BAD /test HTTP/1.1\r\n\r\n")
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidMethod)
         }
     }
 
     func testInvalidVersion() {
-        let bytes = ASCII("GET /test HTTP/0.1\r\n\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        let stream = InputByteStream("GET /test HTTP/0.1\r\n\r\n")
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidVersion)
         }
     }
 
     func testInvalidVersion2() {
-        let bytes = ASCII("GET /test HTTP/1.1WUT\r\n\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        let stream = InputByteStream("GET /test HTTP/1.1WUT\r\n\r\n")
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidRequest)
         }
     }
 
     func testInvalidVersion3() {
-        let bytes = ASCII("GET /test HTTP/1.")
-        assertThrowsError(try Request(from: bytes)) { error in
+        let stream = InputByteStream("GET /test HTTP/1.")
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .unexpectedEnd)
         }
     }
 
     func testInvalidVersion4() {
-        let bytes = ASCII("GET /test HTPP/1.1\r\n\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        let stream = InputByteStream("GET /test HTPP/1.1\r\n\r\n")
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidVersion)
         }
     }
 
     func testInvalidEnd() {
-        let bytes = ASCII("GET /test HTTP/1.1\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        let stream = InputByteStream("GET /test HTTP/1.1\r\n")
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .unexpectedEnd)
         }
     }
@@ -155,11 +156,11 @@ class DecodeRequestTests: TestCase {
 
     func testHostHeader() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Host: 0.0.0.0:5000\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.host)
             if let host = request.host {
                 assertEqual(host, URL.Host(address: "0.0.0.0", port: 5000))
@@ -171,11 +172,11 @@ class DecodeRequestTests: TestCase {
 
     func testHostDomainHeader() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Host: domain.com:5000\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.host)
             if let host = request.host {
                 assertEqual(host, URL.Host(address: "domain.com", port: 5000))
@@ -187,11 +188,11 @@ class DecodeRequestTests: TestCase {
 
     func testHostEncodedHeader() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Host: xn--d1acufc.xn--p1ai:5000\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.host)
             if let host = request.host {
                 assertEqual(host, URL.Host(address: "домен.рф", port: 5000))
@@ -203,11 +204,11 @@ class DecodeRequestTests: TestCase {
 
     func testUserAgentHeader() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "User-Agent: Mozilla/5.0\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.userAgent)
             if let userAgent = request.userAgent {
                 assertEqual(userAgent, "Mozilla/5.0")
@@ -219,11 +220,11 @@ class DecodeRequestTests: TestCase {
 
     func testAcceptHeader() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Accept: text/html,application/xml;q=0.9,*/*;q=0.8\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.accept)
             if let accept = request.accept {
                 assertEqual(accept, [
@@ -239,11 +240,11 @@ class DecodeRequestTests: TestCase {
 
     func testAcceptLanguageHeader() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Accept-Language: en-US,en;q=0.5\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.acceptLanguage)
             if let acceptLanguage = request.acceptLanguage {
                 assertEqual(acceptLanguage, [
@@ -258,11 +259,11 @@ class DecodeRequestTests: TestCase {
 
     func testAcceptEncodingHeader() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Accept-Encoding: gzip, deflate\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.acceptEncoding)
             if let acceptEncoding = request.acceptEncoding {
                 assertEqual(acceptEncoding, [.gzip, .deflate])
@@ -274,11 +275,11 @@ class DecodeRequestTests: TestCase {
 
     func testAcceptCharset() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Accept-Charset: ISO-8859-1,utf-7,utf-8;q=0.7,*;q=0.7\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             let expectedAcceptCharset = [
                 Request.AcceptCharset(.isoLatin1),
                 Request.AcceptCharset(.custom("utf-7")),
@@ -296,11 +297,11 @@ class DecodeRequestTests: TestCase {
 
     func testAcceptCharsetSpaceSeparator() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Accept-Charset: ISO-8859-1, utf-8\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             let expectedAcceptCharset = [
                 Request.AcceptCharset(.isoLatin1),
                 Request.AcceptCharset(.utf8)
@@ -316,11 +317,11 @@ class DecodeRequestTests: TestCase {
 
     func testAuthorization() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             let expected: Request.Authorization = .basic(
                 credentials: "QWxhZGRpbjpvcGVuIHNlc2FtZQ==")
             assertNotNil(request.authorization)
@@ -334,11 +335,11 @@ class DecodeRequestTests: TestCase {
 
     func testCustomHeader() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "User: guest\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertEqual(request.headers["User"], "guest")
         } catch {
             fail(String(describing: error))
@@ -347,12 +348,12 @@ class DecodeRequestTests: TestCase {
 
     func testTwoHeaders() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Host: 0.0.0.0:5000\r\n" +
                 "User-Agent: Mozilla/5.0\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.host)
             assertNotNil(request.userAgent)
             if let userAgent = request.userAgent, let host = request.host {
@@ -366,12 +367,12 @@ class DecodeRequestTests: TestCase {
 
     func testTwoHeadersOptionalSpaces() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Host:0.0.0.0:5000\r\n" +
                 "User-Agent: Mozilla/5.0 \r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.host)
             assertNotNil(request.userAgent)
             if let userAgent = request.userAgent, let host = request.host {
@@ -384,30 +385,30 @@ class DecodeRequestTests: TestCase {
     }
 
     func testInvalidHeaderColon() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "User-Agent; Mozilla/5.0\r\n" +
             "\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidHeaderName)
         }
     }
 
     func testInvalidHeaderEnd() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "User-Agent: Mozilla/5.0\n\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .unexpectedEnd)
         }
     }
 
     func testInvalidHeaderName() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "See-🙈-Evil: No\r\n" +
             "\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidHeaderName)
         }
     }
@@ -419,21 +420,21 @@ class DecodeRequestTests: TestCase {
     }
 
     func testUnexpectedEnd() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "Header: Value\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .unexpectedEnd)
         }
     }
 
     func testContentType() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Content-Type: application/x-www-form-urlencoded\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.contentType)
             assertEqual(
                 request.contentType,
@@ -446,11 +447,11 @@ class DecodeRequestTests: TestCase {
 
     func testContentTypeCharset() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Content-Type: text/plain; charset=utf-8\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.contentType)
             assertEqual(
                 request.contentType,
@@ -462,24 +463,24 @@ class DecodeRequestTests: TestCase {
     }
 
     func testContentTypeEmptyCharset() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "Content-Type: text/plain;\r\n" +
             "Content-Length: 0\r\n" +
             "\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual((error as! ParseError), .invalidContentTypeHeader)
         }
     }
 
     func testContentTypeBoundary() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Content-Type: multipart/form-data; boundary=---\r\n" +
                 "\r\n" +
                 "Hello")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.contentType)
             assertEqual(
                 request.contentType,
@@ -493,24 +494,24 @@ class DecodeRequestTests: TestCase {
     }
 
     func testContentTypeEmptyBoundary() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "Content-Type: multipart/form-data;\r\n" +
             "Content-Length: 0\r\n" +
             "\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual((error as! ParseError), .invalidBoundary)
         }
     }
 
     func testContentLength() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Content-Length: 5\r\n" +
                 "\r\n" +
                 "Hello")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertNotNil(request.contentLength)
             if let contentLength = request.contentLength {
                 assertEqual(contentLength, 5)
@@ -522,11 +523,11 @@ class DecodeRequestTests: TestCase {
 
     func testZeroContentLength() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Content-Length: 0\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             guard let contentLength = request.contentLength else {
                 fail("contentLength in nil")
                 return
@@ -540,11 +541,11 @@ class DecodeRequestTests: TestCase {
 
     func testKeepAliveFalse() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Connection: Close\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertFalse(request.shouldKeepAlive)
         } catch {
             fail(String(describing: error))
@@ -553,12 +554,12 @@ class DecodeRequestTests: TestCase {
 
     func testKeepAliveTrue() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Connection: Keep-Alive\r\n" +
                 "Keep-Alive: 300\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertTrue(request.shouldKeepAlive)
             assertEqual(request.keepAlive, 300)
         } catch {
@@ -568,12 +569,12 @@ class DecodeRequestTests: TestCase {
 
     func testTransferEncodingChunked() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Transfer-Encoding: chunked\r\n" +
                 "\r\n" +
                 "0\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertEqual(request.transferEncoding ?? [], [.chunked])
         } catch {
             fail(String(describing: error))
@@ -584,13 +585,13 @@ class DecodeRequestTests: TestCase {
 
     func testChunkedBody() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Transfer-Encoding: chunked\r\n" +
                 "\r\n" +
                 "5\r\nHello\r\n" +
                 "0\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertEqual(request.body, "Hello")
         } catch {
             fail(String(describing: error))
@@ -598,48 +599,48 @@ class DecodeRequestTests: TestCase {
     }
 
     func testChunkedBodyInvalidSizeSeparator() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "Transfer-Encoding: chunked\r\n" +
             "\r\n" +
             "5\rHello\r\n" +
             "0\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidRequest)
         }
     }
 
     func testChunkedBodyNoSizeSeparator() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "Transfer-Encoding: chunked\r\n" +
             "\r\n" +
             "5 Hello\r\n" +
             "0\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidRequest)
         }
     }
 
     func testChunkedInvalidBody() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "Transfer-Encoding: chunked\r\n" +
             "\r\n" +
             "5\r\nHello")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .unexpectedEnd)
         }
     }
 
     func testCookies() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Cookie: username=tony\r\n" +
                 "Cookie: lang=aurebesh\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertEqual(request.cookies, [
                 Cookie(name: "username", value: "tony"),
                 Cookie(name: "lang", value: "aurebesh")
@@ -651,11 +652,11 @@ class DecodeRequestTests: TestCase {
 
     func testCookiesJoined() {
         do {
-            let bytes = ASCII(
+            let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Cookie: username=tony; lang=aurebesh\r\n" +
                 "\r\n")
-            let request = try Request(from: bytes)
+            let request = try Request(from: stream)
             assertEqual(request.cookies, [
                 Cookie(name: "username", value: "tony"),
                 Cookie(name: "lang", value: "aurebesh")
@@ -666,21 +667,21 @@ class DecodeRequestTests: TestCase {
     }
 
     func testCookiesNoSpace() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "Cookie: username=tony;lang=aurebesh\r\n" +
             "\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidRequest)
         }
     }
 
     func testCookiesTrailingSemicolon() {
-        let bytes = ASCII(
+        let stream = InputByteStream(
             "GET / HTTP/1.1\r\n" +
             "Cookie: username=tony;\r\n" +
             "\r\n")
-        assertThrowsError(try Request(from: bytes)) { error in
+        assertThrowsError(try Request(from: stream)) { error in
             assertEqual(error as? ParseError, .invalidRequest)
         }
     }
@@ -691,8 +692,8 @@ class DecodeRequestTests: TestCase {
                 "?%D0%BA%D0%BB%D1%8E%D1%87" +
                 "=%D0%B7%D0%BD%D0%B0%D1%87%D0%B5%D0%BD%D0%B8%D0%B5" +
                 "#%D1%84%D1%80%D0%B0%D0%B3%D0%BC%D0%B5%D0%BD%D1%82"
-            let bytes = ASCII("GET \(escapedUrl) HTTP/1.1\r\n\r\n")
-            let request = try Request(from: bytes)
+            let stream = InputByteStream("GET \(escapedUrl) HTTP/1.1\r\n\r\n")
+            let request = try Request(from: stream)
             assertEqual(request.url, try URL("/путь?ключ=значение"))
             assertEqual(request.url.fragment, "фрагмент")
         } catch {
