@@ -12,7 +12,7 @@ import Test
 import Stream
 @testable import HTTP
 
-class RequestContextTests: TestCase {
+class RequestDecodeBodyTests: TestCase {
     func testContentLength() {
         do {
             let stream = InputByteStream(

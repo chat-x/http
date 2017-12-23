@@ -17,15 +17,19 @@ import XCTest
 
 XCTMain([
     // HTTPTests
-    testCase(DecodeRequestTests.allTests),
-    testCase(DecodeResponseTests.allTests),
-    testCase(EncodeRequestTests.allTests),
-    testCase(EncodeResponseTests.allTests),
     testCase(HeaderNameTests.allTests),
     testCase(HeadersAuthorizationTests.allTests),
     testCase(NginxTests.allTests),
     testCase(PunycodeTests.allTests),
+    testCase(RequestDecodeBodyTests.allTests),
+    testCase(RequestDecodeTests.allTests),
+    testCase(RequestEncodeBodyTests.allTests),
+    testCase(RequestEncodeTests.allTests),
     testCase(RequestTests.allTests),
+    testCase(ResponseDecodeBodyTests.allTests),
+    testCase(ResponseDecodeTests.allTests),
+    testCase(ResponseEncodeBodyTests.allTests),
+    testCase(ResponseEncodeTests.allTests),
     testCase(ResponseTests.allTests),
     testCase(URLTests.allTests),
     testCase(UtilsTests.allTests),

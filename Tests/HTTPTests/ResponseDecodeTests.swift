@@ -138,7 +138,7 @@ class ResponseDecodeTests: TestCase {
                 "Content-Encoding: gzip, deflate\r\n" +
                 "\r\n")
             let response = try Response(from: stream)
-            assertEqual(response.contentEncoding ?? [], [.gzip, .deflate])
+            assertEqual(response.contentEncoding, [.gzip, .deflate])
         } catch {
             fail(String(describing: error))
         }
@@ -152,7 +152,7 @@ class ResponseDecodeTests: TestCase {
                 "Transfer-Encoding: gzip, chunked\r\n" +
                 "\r\n")
             let response = try Response(from: stream)
-            assertEqual(response.transferEncoding ?? [], [.gzip, .chunked])
+            assertEqual(response.transferEncoding, [.gzip, .chunked])
         } catch {
             fail(String(describing: error))
         }
@@ -332,7 +332,6 @@ class ResponseDecodeTests: TestCase {
                         Response.SetCookie(
                             Cookie(name: "date", value: ""),
                             expires: Date(timeIntervalSince1970: 1536237674.0)))
-
         } catch {
             fail(String(describing: error))
         }
