@@ -109,7 +109,7 @@ class ResponseEncodeBodyTests: TestCase {
             "message=Hello,%20World!"
         guard let response = try? Response(
             body: ["message" : "Hello, World!"],
-            contentType: .urlFormEncoded),
+            contentType: .formURLEncoded),
             let rawBody = response.rawBody,
             let body = response.body else {
                 fail("body shouldn't be nil")
@@ -117,7 +117,7 @@ class ResponseEncodeBodyTests: TestCase {
         }
         assertEqual(body, "message=Hello,%20World!")
         assertEqual(rawBody, ASCII("message=Hello,%20World!"))
-        assertEqual(response.contentType, .urlFormEncoded)
+        assertEqual(response.contentType, .formURLEncoded)
         assertEqual(response.contentLength, 23)
         assertEqual(Encoder.encode(response), expected)
     }
