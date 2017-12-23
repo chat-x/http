@@ -168,13 +168,13 @@ class RouterTests: TestCase {
             let response = router.handleRequest(request)
             assertEqual(response.status, .ok)
 
-            let urlEncodedRequest = try Request(
+            let urlFormEncodedRequest = try Request(
                 method: .post,
                 url: "/",
                 body: model,
-                contentType: .urlEncoded)
-            let urlEncodedResponse = router.handleRequest(urlEncodedRequest)
-            assertEqual(urlEncodedResponse.status, .ok)
+                contentType: .urlFormEncoded)
+            let urlFormEncodedResponse = router.handleRequest(urlFormEncodedRequest)
+            assertEqual(urlFormEncodedResponse.status, .ok)
         } catch {
             fail(String(describing: error))
         }
@@ -236,13 +236,13 @@ class RouterTests: TestCase {
             let response = router.handleRequest(request)
             assertEqual(response.status, .ok)
 
-            let urlEncodedRequest = try Request(
+            let urlFormEncodedRequest = try Request(
                 method: .post,
                 url: "/news/2",
                 body: model,
-                contentType: .urlEncoded)
-            let urlEncodedResponse = router.handleRequest(urlEncodedRequest)
-            assertEqual(urlEncodedResponse.status, .ok)
+                contentType: .urlFormEncoded)
+            let formResponse = router.handleRequest(urlFormEncodedRequest)
+            assertEqual(formResponse.status, .ok)
         } catch {
             fail(String(describing: error))
         }
@@ -341,13 +341,13 @@ class RouterTests: TestCase {
             let response = router.handleRequest(request)
             assertEqual(response.status, .ok)
 
-            let urlEncodedRequest = try Request(
+            let urlFormEncodedRequest = try Request(
                 method: .post,
                 url: "/",
                 body: model,
-                contentType: .urlEncoded)
-            let urlEncodedResponse = router.handleRequest(urlEncodedRequest)
-            assertEqual(urlEncodedResponse.status, .ok)
+                contentType: .urlFormEncoded)
+            let formResponse = router.handleRequest(urlFormEncodedRequest)
+            assertEqual(formResponse.status, .ok)
         } catch {
             fail(String(describing: error))
         }
@@ -416,13 +416,13 @@ class RouterTests: TestCase {
             let response = router.handleRequest(request)
             assertEqual(response.status, .ok)
 
-            let urlEncodedRequest = try Request(
+            let urlFormEncodedRequest = try Request(
                 method: .post,
                 url: "/news/2",
                 body: model,
-                contentType: .urlEncoded)
-            let urlEncodedResponse = router.handleRequest(urlEncodedRequest)
-            assertEqual(urlEncodedResponse.status, .ok)
+                contentType: .urlFormEncoded)
+            let formResponse = router.handleRequest(urlFormEncodedRequest)
+            assertEqual(formResponse.status, .ok)
         } catch {
             fail(String(describing: error))
         }
