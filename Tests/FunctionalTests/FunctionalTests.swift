@@ -207,7 +207,7 @@ class FunctionalTests: TestCase {
                 struct Model: Codable {
                     var message: String
                 }
-                server.route(post: "/") { (model: Model) in
+                server.route(post: "/") { (model: Model) -> Model in
                     assertEqual(model.message, "Hello, Server!")
                     return Model(message: "Hello, Client!")
                 }
@@ -228,7 +228,7 @@ class FunctionalTests: TestCase {
                 struct Model: Decodable {
                     var message: String
                 }
-                server.route(post: "/") { (model: Model) in
+                server.route(post: "/") { (model: Model) -> Response in
                     assertEqual(model.message, "Hello, Server!")
                     return try Response(
                         body: ["message": "Hello, Client!"],

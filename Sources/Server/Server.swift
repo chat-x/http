@@ -22,6 +22,7 @@ public class Server {
 
     public var bufferSize = 4096
 
+    @_versioned
     var router = Router()
 
     public init(host: String, port: Int) throws {
