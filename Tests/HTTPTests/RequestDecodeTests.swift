@@ -478,8 +478,7 @@ class DecodeRequestTests: TestCase {
             let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Content-Type: multipart/form-data; boundary=---\r\n" +
-                "\r\n" +
-                "Hello")
+                "\r\n")
             let request = try Request(from: stream)
             assertNotNil(request.contentType)
             assertEqual(
@@ -508,32 +507,10 @@ class DecodeRequestTests: TestCase {
         do {
             let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
-                "Content-Length: 5\r\n" +
-                "\r\n" +
-                "Hello")
-            let request = try Request(from: stream)
-            assertNotNil(request.contentLength)
-            if let contentLength = request.contentLength {
-                assertEqual(contentLength, 5)
-            }
-        } catch {
-            fail(String(describing: error))
-        }
-    }
-
-    func testZeroContentLength() {
-        do {
-            let stream = InputByteStream(
-                "GET / HTTP/1.1\r\n" +
                 "Content-Length: 0\r\n" +
                 "\r\n")
             let request = try Request(from: stream)
-            guard let contentLength = request.contentLength else {
-                fail("contentLength in nil")
-                return
-            }
-            assertEqual(contentLength, 0)
-            assertNil(request.rawBody)
+            assertEqual(request.contentLength, 0)
         } catch {
             fail(String(describing: error))
         }
@@ -578,58 +555,6 @@ class DecodeRequestTests: TestCase {
             assertEqual(request.transferEncoding ?? [], [.chunked])
         } catch {
             fail(String(describing: error))
-        }
-    }
-
-    // MARK: Body
-
-    func testChunkedBody() {
-        do {
-            let stream = InputByteStream(
-                "GET / HTTP/1.1\r\n" +
-                "Transfer-Encoding: chunked\r\n" +
-                "\r\n" +
-                "5\r\nHello\r\n" +
-                "0\r\n")
-            let request = try Request(from: stream)
-            assertEqual(request.body, "Hello")
-        } catch {
-            fail(String(describing: error))
-        }
-    }
-
-    func testChunkedBodyInvalidSizeSeparator() {
-        let stream = InputByteStream(
-            "GET / HTTP/1.1\r\n" +
-            "Transfer-Encoding: chunked\r\n" +
-            "\r\n" +
-            "5\rHello\r\n" +
-            "0\r\n")
-        assertThrowsError(try Request(from: stream)) { error in
-            assertEqual(error as? ParseError, .invalidRequest)
-        }
-    }
-
-    func testChunkedBodyNoSizeSeparator() {
-        let stream = InputByteStream(
-            "GET / HTTP/1.1\r\n" +
-            "Transfer-Encoding: chunked\r\n" +
-            "\r\n" +
-            "5 Hello\r\n" +
-            "0\r\n")
-        assertThrowsError(try Request(from: stream)) { error in
-            assertEqual(error as? ParseError, .invalidRequest)
-        }
-    }
-
-    func testChunkedInvalidBody() {
-        let stream = InputByteStream(
-            "GET / HTTP/1.1\r\n" +
-            "Transfer-Encoding: chunked\r\n" +
-            "\r\n" +
-            "5\r\nHello")
-        assertThrowsError(try Request(from: stream)) { error in
-            assertEqual(error as? ParseError, .unexpectedEnd)
         }
     }
 
@@ -742,14 +667,9 @@ class DecodeRequestTests: TestCase {
         ("testContentTypeBoundary", testContentTypeBoundary),
         ("testContentTypeEmptyBoundary", testContentTypeEmptyBoundary),
         ("testContentLength", testContentLength),
-        ("testZeroContentLength", testZeroContentLength),
         ("testKeepAliveFalse", testKeepAliveFalse),
         ("testKeepAliveTrue", testKeepAliveTrue),
         ("testTransferEncodingChunked", testTransferEncodingChunked),
-        ("testChunkedBody", testChunkedBody),
-        ("testChunkedBodyInvalidSizeSeparator", testChunkedBodyInvalidSizeSeparator),
-        ("testChunkedBodyNoSizeSeparator", testChunkedBodyNoSizeSeparator),
-        ("testChunkedInvalidBody", testChunkedInvalidBody),
         ("testCookies", testCookies),
         ("testCookiesJoined", testCookiesJoined),
         ("testCookiesNoSpace", testCookiesNoSpace),
