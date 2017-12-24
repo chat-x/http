@@ -65,7 +65,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Host: 0.0.0.0:5000\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.host = URL.Host(address: "0.0.0.0", port: 5000)
         assertEqual(Encoder.encode(request), expected)
     }
@@ -86,7 +86,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Host: xn--d1acufc.xn--p1ai:5000\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.host = URL.Host(address: "домен.рф", port: 5000)
         assertEqual(Encoder.encode(request), expected)
     }
@@ -95,7 +95,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "User-Agent: Mozilla/5.0\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.userAgent = "Mozilla/5.0"
         assertEqual(Encoder.encode(request), expected)
     }
@@ -104,7 +104,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Accept: */*\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.accept = [
             Request.Accept(.any, priority: 1.0)
         ]
@@ -115,7 +115,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Accept-Language: en-US,en;q=0.5\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.acceptLanguage = [
             Request.AcceptLanguage(.enUS, priority: 1.0),
             Request.AcceptLanguage(.en, priority: 0.5)
@@ -127,7 +127,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Accept-Encoding: gzip, deflate\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.acceptEncoding = [.gzip, .deflate]
         assertEqual(Encoder.encode(request), expected)
     }
@@ -136,7 +136,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Accept-Charset: ISO-8859-1,utf-7,utf-8;q=0.7,*;q=0.7\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.acceptCharset = [
             Request.AcceptCharset(.isoLatin1),
             Request.AcceptCharset(.custom("utf-7")),
@@ -151,7 +151,7 @@ class RequestEncodeTests: TestCase {
             "Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\r\n" +
             "\r\n"
 
-        var request = Request()
+        let request = Request()
         request.authorization = .basic(
             credentials: "QWxhZGRpbjpvcGVuIHNlc2FtZQ==")
         assertEqual(Encoder.encode(request), expected)
@@ -161,7 +161,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Keep-Alive: 300\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.keepAlive = 300
         assertEqual(Encoder.encode(request), expected)
     }
@@ -170,7 +170,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Connection: close\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.connection = .close
         assertEqual(Encoder.encode(request), expected)
     }
@@ -179,7 +179,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Content-Type: text/plain\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.contentType = ContentType(mediaType: .text(.plain))
         assertEqual(Encoder.encode(request), expected)
     }
@@ -188,7 +188,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Content-Length: 0\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.contentLength = 0
         assertEqual(Encoder.encode(request), expected)
     }
@@ -197,7 +197,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "Transfer-Encoding: chunked\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.transferEncoding = [.chunked]
         assertEqual(Encoder.encode(request), expected)
     }
@@ -206,7 +206,7 @@ class RequestEncodeTests: TestCase {
         let expected = "GET / HTTP/1.1\r\n" +
             "User: guest\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.headers["User"] = "guest"
         assertEqual(Encoder.encode(request), expected)
     }
@@ -216,7 +216,7 @@ class RequestEncodeTests: TestCase {
             "Cookie: username=tony\r\n" +
             "Cookie: lang=aurebesh\r\n" +
             "\r\n"
-        var request = Request()
+        let request = Request()
         request.cookies = [
             Cookie(name: "username", value: "tony"),
             Cookie(name: "lang", value: "aurebesh")
