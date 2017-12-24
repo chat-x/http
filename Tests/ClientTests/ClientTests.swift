@@ -87,7 +87,7 @@ class ClientTests: TestCase {
                 let response = try client.makeRequest(request)
 
                 assertEqual(response.status, .ok)
-                assertNil(response.body)
+                assertNil(response.string)
 
             } catch {
                 fail(String(describing: error))
