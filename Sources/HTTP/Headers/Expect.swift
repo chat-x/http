@@ -8,14 +8,6 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-extension Response {
-    public enum Status {
-        case ok
-        case moved
-        case `continue`
-        case badRequest
-        case unauthorized
-        case notFound
-        case internalServerError
-    }
+public enum Expect {
+    case `continue`
 }

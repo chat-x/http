@@ -28,6 +28,7 @@ extension HeaderName {
     static let acceptCharset = HeaderName("Accept-Charset")
     static let authorization = HeaderName("Authorization")
     static let cookie = HeaderName("Cookie")
+    static let expect = HeaderName("expect")
 
     // Response headers
     static let setCookie = HeaderName("Set-Cookie")

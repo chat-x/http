@@ -35,5 +35,6 @@ public enum ParseError: Error {
     case unsupportedContentType
     case unsupportedAcceptCharset
     case unsupportedAuthorization
+    case unsupportedExpect
     case unexpectedEnd
 }

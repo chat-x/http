@@ -588,6 +588,19 @@ class RequestDecodeTests: TestCase {
         }
     }
 
+    func testExpect() {
+        do {
+            let stream = InputByteStream(
+                "PUT / HTTP/1.1\r\n" +
+                "Expect: 100-continue\r\n" +
+                "\r\n")
+            let request = try Request(from: stream)
+            assertEqual(request.expect, .continue)
+        } catch {
+            fail(String(describing: error))
+        }
+    }
+
 
     static var allTests = [
         ("testGet", testGet),
@@ -636,6 +649,7 @@ class RequestDecodeTests: TestCase {
         ("testCookiesJoined", testCookiesJoined),
         ("testCookiesNoSpace", testCookiesNoSpace),
         ("testCookiesTrailingSemicolon", testCookiesTrailingSemicolon),
-        ("testEscaped", testEscaped)
+        ("testEscaped", testEscaped),
+        ("testExpect", testExpect)
     ]
 }
