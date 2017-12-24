@@ -29,7 +29,7 @@ class MiddlewareTests: TestCase {
                 for handler: @escaping RequestHandler
             ) -> RequestHandler {
                 return { request in
-                    var response = try handler(request)
+                    let response = try handler(request)
                     response.status = .ok
                     response.headers["Custom-Header"] = "Middleware"
                     return response
@@ -92,7 +92,7 @@ class MiddlewareTests: TestCase {
                 for handler: @escaping RequestHandler
             ) -> RequestHandler {
                 return { request in
-                    var response = try handler(request)
+                    let response = try handler(request)
                     response.headers["Middleware"] = "first"
                     response.headers["FirstMiddleware"] = "true"
                     return response
@@ -105,7 +105,7 @@ class MiddlewareTests: TestCase {
                 for handler: @escaping RequestHandler
             ) -> RequestHandler {
                 return { request in
-                    var response = try handler(request)
+                    let response = try handler(request)
                     response.headers["Middleware"] = "second"
                     response.headers["SecondMiddleware"] = "true"
                     return response

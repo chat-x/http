@@ -82,7 +82,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Type: text/plain\r\n" +
             "Content-Length: 0\r\n" +
             "\r\n"
-        var response = Response()
+        let response = Response()
         response.contentType = ContentType(mediaType: .text(.plain))
         assertEqual(response.contentLength, 0)
         assertEqual(Encoder.encode(response), expected)
@@ -102,7 +102,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "Connection: close\r\n" +
             "\r\n"
-        var response = Response(status: .ok)
+        let response = Response(status: .ok)
         response.connection = .close
         assertEqual(Encoder.encode(response), expected)
     }
@@ -112,7 +112,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "Content-Encoding: gzip, deflate\r\n" +
             "\r\n"
-        var response = Response(status: .ok)
+        let response = Response(status: .ok)
         response.contentEncoding = [.gzip, .deflate]
         assertEqual(Encoder.encode(response), expected)
     }
@@ -122,7 +122,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "Transfer-Encoding: chunked\r\n" +
             "\r\n"
-        var response = Response(status: .ok)
+        let response = Response(status: .ok)
         response.transferEncoding = [.chunked]
         assertEqual(Encoder.encode(response), expected)
     }
@@ -132,7 +132,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "User: guest\r\n" +
             "\r\n"
-        var response = Response(status: .ok)
+        let response = Response(status: .ok)
         response.headers["User"] = "guest"
         assertEqual(Encoder.encode(response), expected)
     }
@@ -142,7 +142,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "Set-Cookie: username=tony\r\n" +
             "\r\n"
-        var response = Response()
+        let response = Response()
         response.setCookie = [
             Response.SetCookie(Cookie(name: "username", value: "tony"))
         ]
@@ -155,7 +155,7 @@ class ResponseEncodeTests: TestCase {
             "Set-Cookie: username=tony; " +
                 "Expires=Wed, 21 Oct 2015 07:28:00 GMT\r\n" +
             "\r\n"
-        var response = Response()
+        let response = Response()
         response.setCookie = [
             Response.SetCookie(
                 Cookie(name: "username", value: "tony"),
@@ -169,7 +169,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "Set-Cookie: username=tony; Max-Age=42\r\n" +
             "\r\n"
-        var response = Response()
+        let response = Response()
         response.setCookie = [
             Response.SetCookie(
                 Cookie(name: "username", value: "tony"),
@@ -183,7 +183,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "Set-Cookie: username=tony; HttpOnly\r\n" +
             "\r\n"
-        var response = Response()
+        let response = Response()
         response.setCookie = [
             Response.SetCookie(
                 Cookie(name: "username", value: "tony"),
@@ -197,7 +197,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "Set-Cookie: username=tony; Secure\r\n" +
             "\r\n"
-        var response = Response()
+        let response = Response()
         response.setCookie = [
             Response.SetCookie(
                 Cookie(name: "username", value: "tony"),
@@ -211,7 +211,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "Set-Cookie: username=tony; Domain=somedomain.com\r\n" +
             "\r\n"
-        var response = Response()
+        let response = Response()
         response.setCookie = [
             Response.SetCookie(
                 Cookie(name: "username", value: "tony"),
@@ -225,7 +225,7 @@ class ResponseEncodeTests: TestCase {
             "Content-Length: 0\r\n" +
             "Set-Cookie: username=tony; Path=/\r\n" +
             "\r\n"
-        var response = Response()
+        let response = Response()
         response.setCookie = [
             Response.SetCookie(
                 Cookie(name: "username", value: "tony"),
@@ -240,7 +240,7 @@ class ResponseEncodeTests: TestCase {
             "Set-Cookie: user=tony; Secure; HttpOnly\r\n" +
             "Set-Cookie: token=1234; Max-Age=42; Secure\r\n" +
             "\r\n"
-        var response = Response()
+        let response = Response()
         response.setCookie = [
             Response.SetCookie(
                 Cookie(name: "user", value: "tony"),
