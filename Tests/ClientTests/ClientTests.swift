@@ -127,16 +127,16 @@ class ClientTests: TestCase {
 
                 // GZip
 
-                var response = Response(status: .ok)
+                let response = Response(status: .ok)
                 response.contentType = ContentType(mediaType: .text(.plain))
                 response.contentEncoding = [.gzip]
-                response.rawBody = gzipBody
+                response.bytes = gzipBody
                 _ = try client.send(bytes: response.encode())
 
                 // Deflate
 
                 response.contentEncoding = [.deflate]
-                response.rawBody = deflateBody
+                response.bytes = deflateBody
                 _ = try client.send(bytes: response.encode())
 
             } catch {
@@ -156,11 +156,11 @@ class ClientTests: TestCase {
 
                 var response = try client.makeRequest(request)
                 assertEqual(response.contentEncoding, [.gzip])
-                assertEqual(response.body, "Hello, World!")
+                assertEqual(response.string, "Hello, World!")
 
                 response = try client.makeRequest(request)
                 assertEqual(response.contentEncoding, [.deflate])
-                assertEqual(response.body, "Hello, World!")
+                assertEqual(response.string, "Hello, World!")
             } catch {
                 fail(String(describing: error))
             }

@@ -30,13 +30,8 @@ class ResponseEncodeBodyTests: TestCase {
             "\r\n" +
             "Hello"
         let response = Response(string: "Hello")
-        guard let rawBody = response.rawBody,
-            let body = response.body else {
-                fail("body shouldn't be nil")
-                return
-        }
-        assertEqual(body, "Hello")
-        assertEqual(rawBody, ASCII("Hello"))
+        assertEqual(response.string, "Hello")
+        assertEqual(response.bytes, ASCII("Hello"))
         assertEqual(
             response.contentType,
             ContentType(mediaType: .text(.plain))
@@ -52,13 +47,8 @@ class ResponseEncodeBodyTests: TestCase {
             "\r\n" +
             "<html></html>"
         let response = Response(html: "<html></html>")
-        guard let rawBody = response.rawBody,
-            let body = response.body else {
-                fail("body shouldn't be nil")
-                return
-        }
-        assertEqual(body, "<html></html>")
-        assertEqual(rawBody, ASCII("<html></html>"))
+        assertEqual(response.string, "<html></html>")
+        assertEqual(response.bytes, ASCII("<html></html>"))
         assertEqual(response.contentType, .html)
         assertEqual(response.contentLength, 13)
         assertEqual(Encoder.encode(response), expected)
@@ -71,11 +61,7 @@ class ResponseEncodeBodyTests: TestCase {
             "\r\n") + [1,2,3]
         let data: [UInt8] = [1,2,3]
         let response = Response(bytes: data)
-        guard let rawBody = response.rawBody else {
-            fail("body shouldn't be nil")
-            return
-        }
-        assertEqual(rawBody, data)
+        assertEqual(response.bytes, data)
         assertEqual(response.contentType, .stream)
         assertEqual(response.contentLength, 3)
         assertEqual(ASCII(Encoder.encode(response) ?? ""), expected)
@@ -88,14 +74,12 @@ class ResponseEncodeBodyTests: TestCase {
             "\r\n" +
             "{\"message\":\"Hello, World!\"}"
         guard let response = try? Response(
-            body: ["message" : "Hello, World!"]),
-            let rawBody = response.rawBody,
-            let body = response.body else {
-                fail("body shouldn't be nil")
+            body: ["message" : "Hello, World!"]) else {
+                fail()
                 return
         }
-        assertEqual(body, "{\"message\":\"Hello, World!\"}")
-        assertEqual(rawBody, ASCII("{\"message\":\"Hello, World!\"}"))
+        assertEqual(response.string, "{\"message\":\"Hello, World!\"}")
+        assertEqual(response.bytes, ASCII("{\"message\":\"Hello, World!\"}"))
         assertEqual(response.contentType, .json)
         assertEqual(response.contentLength, 27)
         assertEqual(Encoder.encode(response), expected)
@@ -109,14 +93,12 @@ class ResponseEncodeBodyTests: TestCase {
             "message=Hello,%20World!"
         guard let response = try? Response(
             body: ["message" : "Hello, World!"],
-            contentType: .formURLEncoded),
-            let rawBody = response.rawBody,
-            let body = response.body else {
-                fail("body shouldn't be nil")
+            contentType: .formURLEncoded) else {
+                fail()
                 return
         }
-        assertEqual(body, "message=Hello,%20World!")
-        assertEqual(rawBody, ASCII("message=Hello,%20World!"))
+        assertEqual(response.string, "message=Hello,%20World!")
+        assertEqual(response.bytes, ASCII("message=Hello,%20World!"))
         assertEqual(response.contentType, .formURLEncoded)
         assertEqual(response.contentLength, 23)
         assertEqual(Encoder.encode(response), expected)
