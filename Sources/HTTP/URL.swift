@@ -16,7 +16,7 @@ public struct URL {
         case https
     }
 
-    public struct Query {
+    public struct Query: Equatable {
         public var values: [String : String]
 
         public init(values: [String : String]) {
@@ -24,7 +24,7 @@ public struct URL {
         }
     }
 
-    public struct Host {
+    public struct Host: Equatable {
         public let address: String
         public let port: Int?
 
@@ -75,7 +75,11 @@ extension URL.Query {
 
 extension URL: Equatable {
     public static func ==(lhs: URL, rhs: URL) -> Bool {
-        return lhs.path == rhs.path && lhs.query == rhs.query
+        // all but fragment
+        return lhs.scheme == rhs.scheme
+            && lhs.host == rhs.host
+            && lhs.path == rhs.path
+            && lhs.query == rhs.query
     }
 
     public static func ==(lhs: URL, rhs: String) -> Bool {
@@ -83,19 +87,6 @@ extension URL: Equatable {
             return false
         }
         return lhs == rhs
-    }
-}
-
-extension URL.Query: Equatable {
-    public static func ==(lhs: URL.Query, rhs: URL.Query) -> Bool {
-        return lhs.values == rhs.values
-    }
-}
-
-extension URL.Host: Equatable {
-    public static func ==(lhs: URL.Host, rhs: URL.Host) -> Bool {
-        return lhs.address == rhs.address &&
-            lhs.port == rhs.port
     }
 }
 

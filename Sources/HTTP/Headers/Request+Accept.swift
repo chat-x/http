@@ -9,7 +9,7 @@
  */
 
 extension Request {
-    public struct Accept {
+    public struct Accept: Equatable {
         public let mediaType: MediaType
         public let priority: Double
 
@@ -17,12 +17,5 @@ extension Request {
             self.mediaType = mediaType
             self.priority = priority
         }
-    }
-}
-
-extension Request.Accept: Equatable {
-    public static func ==(lhs: Request.Accept, rhs: Request.Accept) -> Bool {
-        return lhs.mediaType == rhs.mediaType &&
-            lhs.priority == rhs.priority
     }
 }
