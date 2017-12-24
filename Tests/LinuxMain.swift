@@ -17,6 +17,7 @@ import XCTest
 
 XCTMain([
     // HTTPTests
+    testCase(ChunkedStreamTests.allTests),
     testCase(HeaderNameTests.allTests),
     testCase(HeadersAuthorizationTests.allTests),
     testCase(NginxTests.allTests),
