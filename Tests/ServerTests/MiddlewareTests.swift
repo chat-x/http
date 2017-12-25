@@ -10,7 +10,6 @@
 
 import Test
 import Stream
-import Foundation
 
 @testable import HTTP
 
@@ -109,7 +108,7 @@ class MiddlewareTests: TestCase {
 
         let response = String(decoding: outputStream.bytes, as: UTF8.self)
 
-        let lines = response.components(separatedBy: "\r\n")
+        let lines = response.split(separator: "\r\n")
 
         let firstMiddleware = lines.first(where: {
             return $0.hasPrefix("FirstMiddleware")
