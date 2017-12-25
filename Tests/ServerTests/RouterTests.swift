@@ -9,7 +9,7 @@
  */
 
 import Test
-@testable import Server
+@testable import HTTP
 
 class RouterTests: TestCase {
     func testGetVoid() {

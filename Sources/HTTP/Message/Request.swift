@@ -10,7 +10,6 @@
 
 import JSON
 import Stream
-import KeyValueCodable
 
 public final class Request {
     public var method: Method

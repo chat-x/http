@@ -9,14 +9,15 @@
  */
 
 import XCTest
-@testable import HTTPTests
-@testable import ServerTests
+
 @testable import ClientTests
 @testable import FunctionalTests
 @testable import KeyValueCodableTests
+@testable import MessageTests
+@testable import ServerTests
 
 XCTMain([
-    // HTTPTests
+    // MessageTests
     testCase(ChunkedStreamTests.allTests),
     testCase(HeaderNameTests.allTests),
     testCase(HeadersAuthorizationTests.allTests),

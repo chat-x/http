@@ -8,8 +8,6 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-import KeyValueCodable
-
 struct FormURLEncoded {
     static func encode<T: Encodable>(
         _ object: T

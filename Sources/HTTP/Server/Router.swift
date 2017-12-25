@@ -10,7 +10,6 @@
 
 import Log
 import JSON
-import KeyValueCodable
 
 public typealias RequestHandler = (Request) throws -> Response
 
