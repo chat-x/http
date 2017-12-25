@@ -9,8 +9,7 @@
  */
 
 import Test
-import Server
-import Client
+import HTTP
 import Dispatch
 import AsyncDispatch
 

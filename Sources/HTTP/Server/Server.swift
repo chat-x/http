@@ -14,8 +14,6 @@ import Network
 import Platform
 import Stream
 
-@_exported import HTTP
-
 public class Server {
     public var bufferSize: Int
 
