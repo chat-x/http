@@ -35,7 +35,7 @@ class ChunkedStreamTests: TestCase {
     func testOutputStream() {
         do {
             let byteStream = OutputByteStream()
-            let chunkedStream = ChunkedOutputStream(baseStream: byteStream)
+            let chunkedStream = ChunkedStreamWriter(baseStream: byteStream)
             try chunkedStream.write("Hello, World!")
             assertEqual(byteStream.string, "d\r\nHello, World!\r\n")
             try chunkedStream.close()
@@ -49,7 +49,7 @@ class ChunkedStreamTests: TestCase {
         do {
             let chunked = "d\r\nHello, World!\r\n0\r\n\r\n"
             let byteStream = InputByteStream(ASCII(chunked))
-            let chunkedStream = ChunkedInputStream(baseStream: byteStream)
+            let chunkedStream = ChunkedStreamReader(baseStream: byteStream)
             let string = try chunkedStream.readString()
             assertEqual(string, "Hello, World!")
         } catch {
@@ -60,7 +60,7 @@ class ChunkedStreamTests: TestCase {
     func testOutputStreamMultiline() {
         do {
             let byteStream = OutputByteStream()
-            let chunkedStream = ChunkedOutputStream(baseStream: byteStream)
+            let chunkedStream = ChunkedStreamWriter(baseStream: byteStream)
             try chunkedStream.write("This is the data in the first chunk")
             try chunkedStream.write("and this is the second one")
             try chunkedStream.write("con")
@@ -87,7 +87,7 @@ class ChunkedStreamTests: TestCase {
                 "8\r\nsequence\r\n" +
                 "0\r\n\r\n"
             let byteStream = InputByteStream(ASCII(chunked))
-            let chunkedStream = ChunkedInputStream(baseStream: byteStream)
+            let chunkedStream = ChunkedStreamReader(baseStream: byteStream)
             let string = try chunkedStream.readString()
 
             let expected = "This is the data in the first chunkand " +
