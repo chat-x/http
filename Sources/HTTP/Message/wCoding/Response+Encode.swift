@@ -69,10 +69,7 @@ extension Response {
         }
 
         // Separator
-        guard try stream.write(Constants.lineEnd) ==
-            Constants.lineEnd.count else {
-                throw StreamError.notEnoughSpace
-        }
+        try stream.write(Constants.lineEnd)
 
         // Body
         switch body {
