@@ -28,7 +28,7 @@ class MiddlewareTests: TestCase {
             }
         }
 
-        guard let server = try? Server(host: "127.0.0.1", port: 4200) else {
+        guard var server = try? Server(host: "127.0.0.1", port: 4200) else {
             fail()
             return
         }
@@ -89,7 +89,7 @@ class MiddlewareTests: TestCase {
             }
         }
 
-        guard let server = try? Server(host: "127.0.0.1", port: 4201) else {
+        guard var server = try? Server(host: "127.0.0.1", port: 4201) else {
             fail()
             return
         }
