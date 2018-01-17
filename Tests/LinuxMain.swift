@@ -36,6 +36,7 @@ XCTMain([
     testCase(URLTests.allTests),
     testCase(UtilsTests.allTests),
     // ServerTests
+    testCase(ApplicationTests.allTests),
     testCase(MiddlewareTests.allTests),
     testCase(RouterTests.allTests),
     testCase(ServerTests.allTests),
