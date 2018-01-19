@@ -10,6 +10,7 @@
 
 enum RouterError: Error {
     case invalidRoute
+    case notFound
 }
 
 public struct RouteMatcher<T> {

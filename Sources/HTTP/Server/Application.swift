@@ -26,7 +26,7 @@ public class Application: RouterProtocol {
         self.middleware = middleware
     }
 
-    public func registerRoute(
+    func registerRoute(
         path: String,
         methods: Router.MethodSet,
         middleware: [Middleware.Type],
@@ -38,6 +38,18 @@ public class Application: RouterProtocol {
             middleware: self.middleware + middleware,
             handler: handler
         ))
+    }
+
+    func findHandler(
+        path: String,
+        methods: Router.MethodSet
+    ) -> RequestHandler? {
+        guard let route = routes.first(where: { route in
+            return route.path == path && route.methods.contains(methods)
+        }) else {
+            return nil
+        }
+        return route.handler
     }
 }
 

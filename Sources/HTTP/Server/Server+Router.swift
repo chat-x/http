@@ -20,4 +20,11 @@ extension Server: RouterProtocol {
             middleware: middleware,
             handler: handler)
     }
+
+    func findHandler(
+        path: String,
+        methods: Router.MethodSet
+    ) -> RequestHandler? {
+        return router.findHandler(path: path, methods: methods)
+    }
 }
