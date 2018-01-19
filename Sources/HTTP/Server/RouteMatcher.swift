@@ -8,7 +8,7 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-enum RouterError: Error {
+enum RouterError: Swift.Error {
     case invalidRoute
     case notFound
 }

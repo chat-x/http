@@ -32,7 +32,7 @@ class ServerTests: TestCase {
             inputStream: inputStream,
             outputStream: outputStream)
 
-        server.process(stream: byteStream)
+        try? server.process(stream: byteStream)
 
         let expected = "HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"
         let response = String(decoding: outputStream.bytes, as: UTF8.self)
@@ -69,7 +69,7 @@ class ServerTests: TestCase {
             inputStream: inputStream,
             outputStream: outputStream)
 
-        server.process(stream: byteStream)
+        try? server.process(stream: byteStream)
 
         let expectedContinue =
             "HTTP/1.1 100 Continue\r\n" +

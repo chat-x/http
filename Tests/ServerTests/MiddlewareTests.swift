@@ -38,7 +38,7 @@ class MiddlewareTests: TestCase {
         }
 
         let request = Request(url: "/middleware", method: .get)
-        let response = try? router.handleRequest(request)
+        let response = router.handleRequest(request)
 
         assertEqual(response?.headers["Custom-Header"], "Middleware")
     }
@@ -80,7 +80,7 @@ class MiddlewareTests: TestCase {
         }
 
         let request = Request(url: "/middleware", method: .get)
-        let response = try? router.handleRequest(request)
+        let response = router.handleRequest(request)
 
         assertEqual(response?.headers["FirstMiddleware"], "true")
         assertEqual(response?.headers["SecondMiddleware"], "true")
