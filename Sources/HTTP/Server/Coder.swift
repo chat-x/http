@@ -12,6 +12,7 @@ import JSON
 
 // MARK: Coder
 
+@_versioned
 struct Coder {
     public enum Error: Swift.Error {
         case invalidRequest

@@ -24,7 +24,7 @@ class ApplicationTests: TestCase {
 
     func testApplication() {
         assertNoThrow {
-            var application = Application()
+            let application = Application()
 
             application.route(get: "/test") {
                 return Response(string: "test ok")
@@ -38,7 +38,7 @@ class ApplicationTests: TestCase {
 
     func testApplicationBasePath() {
         assertNoThrow {
-            var application = Application(basePath: "/v1")
+            let application = Application(basePath: "/v1")
 
             application.route(get: "/test") {
                 return Response(string: "test ok")
@@ -77,7 +77,7 @@ class ApplicationTests: TestCase {
         }
 
         assertNoThrow {
-            var application = Application(middleware: [FirstMiddleware.self])
+            let application = Application(middleware: [FirstMiddleware.self])
 
             application.route(get: "/first") {
                 return Response(string: "first ok")

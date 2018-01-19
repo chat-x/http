@@ -25,7 +25,7 @@ public class Application: RouterProtocol {
         self.middleware = middleware
     }
 
-    func registerRoute(
+    public func registerRoute(
         path: String,
         methods: Router.MethodSet,
         middleware: [Middleware.Type],
@@ -40,7 +40,7 @@ public class Application: RouterProtocol {
         ))
     }
 
-    func findHandler(
+    public func findHandler(
         path: String,
         methods: Router.MethodSet
     ) -> RequestHandler? {
@@ -54,9 +54,9 @@ public class Application: RouterProtocol {
 }
 
 extension RouterProtocol {
-    public mutating func addApplication(_ application: Application) {
+    public func addApplication(_ application: Application) {
         for route in application.routes {
-            self.route(
+            self.registerRoute(
                 path: route.path,
                 methods: route.methods,
                 middleware: [],

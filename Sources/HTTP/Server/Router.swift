@@ -8,11 +8,9 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-import Log
-
 public typealias RequestHandler = (Request) throws -> Response
 
-public struct Router: RouterProtocol {
+public class Router: RouterProtocol {
     public struct MethodSet: OptionSet {
         public let rawValue: UInt8
 
@@ -39,7 +37,7 @@ public struct Router: RouterProtocol {
 
     private var routeMatcher = RouteMatcher<Route>()
 
-    public mutating func registerRoute(
+    public func registerRoute(
         path: String,
         methods: MethodSet,
         middleware: [Middleware.Type],
