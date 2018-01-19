@@ -52,7 +52,7 @@ class ApplicationTests: TestCase {
 
             server.addApplication(application)
 
-            let request = Request(method: .get, url: "/test")
+            let request = Request(url: "/test", method: .get)
             let response = try server.process(request)
             assertEqual(response.string, "test ok")
         }
@@ -70,7 +70,7 @@ class ApplicationTests: TestCase {
 
             server.addApplication(application)
 
-            let request = Request(method: .get, url: "/v1/test")
+            let request = Request(url: "/v1/test", method: .get)
             let response = try server.process(request)
             assertEqual(response.string, "test ok")
         }
@@ -121,13 +121,13 @@ class ApplicationTests: TestCase {
 
             server.addApplication(application)
 
-            let firstRequest = Request(method: .get, url: "/first")
+            let firstRequest = Request(url: "/first", method: .get)
             let firstResponse = try server.process(firstRequest)
             assertEqual(firstResponse.string, "first ok")
             assertEqual(firstResponse.headers["Middleware"], "first")
             assertEqual(firstResponse.headers["FirstMiddleware"], "true")
 
-            let secondRequest = Request(method: .get, url: "/first-second")
+            let secondRequest = Request(url: "/first-second", method: .get)
             let secondResponse = try server.process(secondRequest)
             assertEqual(secondResponse.string, "first-second ok")
             assertEqual(secondResponse.headers["Middleware"], "first")

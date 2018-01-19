@@ -40,9 +40,9 @@ public final class Request {
 
     public var body: Body = .none
 
-    public init(method: Method = .get, url: URL = URL(path: "/")) {
-        self.method = method
+    public init(url: URL = URL(path: "/"), method: Method = .get) {
         self.url = url
+        self.method = method
         self.version = .oneOne
         self.host = url.host
 
@@ -69,8 +69,8 @@ extension Request: BodyInpuStream { }
 
 extension Request {
     public convenience init<T: Encodable>(
-        method: Method,
         url: URL,
+        method: Method,
         body: T,
         contentType type: ApplicationSubtype = .json
     ) throws {

@@ -145,7 +145,7 @@ extension Client {
         method: Request.Method,
         path: String
     ) throws -> Response {
-        return try makeRequest(Request(method: method, url: URL(path)))
+        return try makeRequest(Request(url: URL(path), method: method))
     }
 
     public func get(path: String) throws -> Response {
@@ -180,8 +180,8 @@ extension Client {
         contentType type: ApplicationSubtype = .json
     ) throws -> Response {
         let request = try Request(
-            method: .post,
             url: URL(path),
+            method: .post,
             body: object,
             contentType: type)
         return try makeRequest(request)
