@@ -15,8 +15,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         get path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping () throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping () throws -> Response
     ) {
         route(
             path: path,
@@ -28,8 +28,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         get path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request) throws -> Response
     ) {
         route(
             path: path,
@@ -41,8 +41,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         get path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Model) throws -> Response
     ) {
         route(
             path: path,
@@ -54,8 +54,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         get path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -67,8 +67,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         get path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -80,8 +80,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         get path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -94,8 +94,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         head path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping () throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping () throws -> Response
     ) {
         route(
             path: path,
@@ -107,8 +107,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         head path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request) throws -> Response
     ) {
         route(
             path: path,
@@ -120,8 +120,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         head path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Model) throws -> Response
     ) {
         route(
             path: path,
@@ -133,8 +133,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         head path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -146,8 +146,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         head path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -159,8 +159,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         head path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -173,8 +173,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         post path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping () throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping () throws -> Response
     ) {
         route(
             path: path,
@@ -186,8 +186,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         post path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request) throws -> Response
     ) {
         route(
             path: path,
@@ -199,8 +199,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         post path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Model) throws -> Response
     ) {
         route(
             path: path,
@@ -212,8 +212,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         post path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -225,8 +225,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         post path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -238,8 +238,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         post path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -252,8 +252,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         put path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping () throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping () throws -> Response
     ) {
         route(
             path: path,
@@ -265,8 +265,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         put path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request) throws -> Response
     ) {
         route(
             path: path,
@@ -278,8 +278,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         put path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Model) throws -> Response
     ) {
         route(
             path: path,
@@ -291,8 +291,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         put path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -304,8 +304,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         put path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -317,8 +317,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         put path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -331,8 +331,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         delete path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping () throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping () throws -> Response
     ) {
         route(
             path: path,
@@ -344,8 +344,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         delete path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request) throws -> Response
     ) {
         route(
             path: path,
@@ -357,8 +357,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         delete path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Model) throws -> Response
     ) {
         route(
             path: path,
@@ -370,8 +370,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         delete path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -383,8 +383,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         delete path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -396,8 +396,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         delete path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -410,8 +410,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         options path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping () throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping () throws -> Response
     ) {
         route(
             path: path,
@@ -423,8 +423,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         options path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request) throws -> Response
     ) {
         route(
             path: path,
@@ -436,8 +436,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         options path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Model) throws -> Response
     ) {
         route(
             path: path,
@@ -449,8 +449,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         options path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -462,8 +462,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         options path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -475,8 +475,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         options path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -489,8 +489,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         all path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping () throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping () throws -> Response
     ) {
         route(
             path: path,
@@ -502,8 +502,8 @@ extension RouterProtocol {
     @_inlineable
     public func route(
         all path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request) throws -> Response
     ) {
         route(
             path: path,
@@ -515,8 +515,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         all path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Model) throws -> Response
     ) {
         route(
             path: path,
@@ -528,8 +528,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<Model: Decodable>(
         all path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -541,8 +541,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         all path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,
@@ -554,8 +554,8 @@ extension RouterProtocol {
     @_inlineable
     public func route<URLMatch: Decodable, Model: Decodable>(
         all path: String,
-        middleware: [Middleware.Type] = [],
-        handler: @escaping (Request, URLMatch, Model) throws -> Response
+        through middleware: [Middleware.Type] = [],
+        to handler: @escaping (Request, URLMatch, Model) throws -> Response
     ) {
         route(
             path: path,

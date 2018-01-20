@@ -72,7 +72,7 @@ class ApplicationTests: TestCase {
 
         application.route(
             get: "/first-second",
-            middleware: [SecondMiddleware.self])
+            through: [SecondMiddleware.self])
         {
             return Response(string: "first-second ok")
         }

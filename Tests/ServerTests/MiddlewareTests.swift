@@ -32,7 +32,7 @@ class MiddlewareTests: TestCase {
 
         router.route(
             get: "/middleware",
-            middleware: [TestMiddleware.self]
+            through: [TestMiddleware.self]
         ) {
             return Response(status: .internalServerError)
         }
@@ -74,7 +74,7 @@ class MiddlewareTests: TestCase {
 
         router.route(
             get: "/middleware",
-            middleware: [FirstMiddleware.self, SecondMiddleware.self]
+            through: [FirstMiddleware.self, SecondMiddleware.self]
         ) {
             return Response(status: .ok)
         }
