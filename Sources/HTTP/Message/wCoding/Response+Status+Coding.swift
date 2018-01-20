@@ -18,6 +18,7 @@ extension Response.Status {
         static let badRequest = ASCII("400 Bad Request")
         static let unauthorized = ASCII("401 Unauthorized")
         static let notFound = ASCII("404 Not Found")
+        static let conflict = ASCII("409 Conflict")
         static let internalServerError = ASCII("500 Internal Server Error")
     }
 
@@ -30,6 +31,7 @@ extension Response.Status {
         case Bytes.badRequest.lowercasedHashValue: self = .badRequest
         case Bytes.unauthorized.lowercasedHashValue: self = .unauthorized
         case Bytes.notFound.lowercasedHashValue: self = .notFound
+        case Bytes.conflict.lowercasedHashValue: self = .conflict
         case Bytes.internalServerError.lowercasedHashValue:
             self = .internalServerError
         default: throw ParseError.invalidStatus
@@ -45,6 +47,7 @@ extension Response.Status {
         case .badRequest: bytes = Bytes.badRequest
         case .unauthorized: bytes = Bytes.unauthorized
         case .notFound: bytes = Bytes.notFound
+        case .conflict: bytes = Bytes.conflict
         case .internalServerError: bytes = Bytes.internalServerError
         }
         try stream.write(bytes)
