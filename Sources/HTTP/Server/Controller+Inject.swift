@@ -68,8 +68,35 @@ extension RouterProtocol {
     public func addController<C>(_ type: C.Type) throws
         where C: Controller & Inject
     {
-        try addController(C.self) {
+        try addController(C.self) { _ in
             return C.init()
+        }
+    }
+
+    private func check<T, C: Controller>(
+        type: T.Type,
+        for controller: C.Type) throws
+    {
+        guard T.self != Context.self else {
+            return
+        }
+        do {
+            _ = try Services.shared.resolve(T.self)
+        } catch let error as Services.Error {
+            debugPrint(controller)
+            throw error
+        }
+    }
+
+    @inline(__always)
+    private func resolveEither<T>(
+        _ type: T.Type,
+        _ context: Context) throws -> T
+    {
+        if T.self == Context.self {
+            return context as! T
+        } else {
+            return try Services.shared.resolve(T.self)
         }
     }
 
@@ -78,8 +105,8 @@ extension RouterProtocol {
     {
         try check(type: C.One.self, for: C.self)
 
-        try addController(C.self) {
-            let one = try Services.shared.resolve(C.One.self)
+        try addController(C.self) { context in
+            let one = try self.resolveEither(C.One.self, context)
             return C.init(one)
         }
     }
@@ -90,9 +117,9 @@ extension RouterProtocol {
         try check(type: C.One.self, for: C.self)
         try check(type: C.Two.self, for: C.self)
 
-        try addController(C.self) {
-            let one = try Services.shared.resolve(C.One.self)
-            let two = try Services.shared.resolve(C.Two.self)
+        try addController(C.self) { context in
+            let one = try self.resolveEither(C.One.self, context)
+            let two = try self.resolveEither(C.Two.self, context)
             return C.init(one, two)
         }
     }
@@ -104,10 +131,10 @@ extension RouterProtocol {
         try check(type: C.Two.self, for: C.self)
         try check(type: C.Three.self, for: C.self)
 
-        try addController(C.self) {
-            let one = try Services.shared.resolve(C.One.self)
-            let two = try Services.shared.resolve(C.Two.self)
-            let three = try Services.shared.resolve(C.Three.self)
+        try addController(C.self) { context in
+            let one = try self.resolveEither(C.One.self, context)
+            let two = try self.resolveEither(C.Two.self, context)
+            let three = try self.resolveEither(C.Three.self, context)
             return C.init(one, two, three)
         }
     }
@@ -120,11 +147,11 @@ extension RouterProtocol {
         try check(type: C.Three.self, for: C.self)
         try check(type: C.Four.self, for: C.self)
 
-        try addController(C.self) {
-            let one = try Services.shared.resolve(C.One.self)
-            let two = try Services.shared.resolve(C.Two.self)
-            let three = try Services.shared.resolve(C.Three.self)
-            let four = try Services.shared.resolve(C.Four.self)
+        try addController(C.self) { context in
+            let one = try self.resolveEither(C.One.self, context)
+            let two = try self.resolveEither(C.Two.self, context)
+            let three = try self.resolveEither(C.Three.self, context)
+            let four = try self.resolveEither(C.Four.self, context)
             return C.init(one, two, three, four)
         }
     }
@@ -138,12 +165,12 @@ extension RouterProtocol {
         try check(type: C.Four.self, for: C.self)
         try check(type: C.Five.self, for: C.self)
 
-        try addController(C.self) {
-            let one = try Services.shared.resolve(C.One.self)
-            let two = try Services.shared.resolve(C.Two.self)
-            let three = try Services.shared.resolve(C.Three.self)
-            let four = try Services.shared.resolve(C.Four.self)
-            let five = try Services.shared.resolve(C.Five.self)
+        try addController(C.self) { context in
+            let one = try self.resolveEither(C.One.self, context)
+            let two = try self.resolveEither(C.Two.self, context)
+            let three = try self.resolveEither(C.Three.self, context)
+            let four = try self.resolveEither(C.Four.self, context)
+            let five = try self.resolveEither(C.Five.self, context)
             return C.init(one, two, three, four, five)
         }
     }
@@ -158,13 +185,13 @@ extension RouterProtocol {
         try check(type: C.Five.self, for: C.self)
         try check(type: C.Six.self, for: C.self)
 
-        try addController(C.self) {
-            let one = try Services.shared.resolve(C.One.self)
-            let two = try Services.shared.resolve(C.Two.self)
-            let three = try Services.shared.resolve(C.Three.self)
-            let four = try Services.shared.resolve(C.Four.self)
-            let five = try Services.shared.resolve(C.Five.self)
-            let six = try Services.shared.resolve(C.Six.self)
+        try addController(C.self) { context in
+            let one = try self.resolveEither(C.One.self, context)
+            let two = try self.resolveEither(C.Two.self, context)
+            let three = try self.resolveEither(C.Three.self, context)
+            let four = try self.resolveEither(C.Four.self, context)
+            let five = try self.resolveEither(C.Five.self, context)
+            let six = try self.resolveEither(C.Six.self, context)
             return C.init(one, two, three, four, five, six)
         }
     }

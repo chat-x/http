@@ -87,9 +87,9 @@ extension RouterProtocol {
         middleware: [Middleware.Type] = [],
         handler: @escaping () throws -> Result
     ) {
-        route(path: path, methods: methods) {
+        route(path: path, methods: methods) { request in
             let result = try handler()
-            return try Coder.makeRespone(for: result)
+            return try Coder.makeRespone(for: request, encoding: result)
         }
     }
 
@@ -103,7 +103,7 @@ extension RouterProtocol {
     ) {
         route(path: path, methods: methods) { request in
             let result = try handler(request)
-            return try Coder.makeRespone(for: result)
+            return try Coder.makeRespone(for: request, encoding: result)
         }
     }
 }
@@ -153,9 +153,10 @@ extension RouterProtocol {
         middleware: [Middleware.Type] = [],
         handler: @escaping (Model) throws -> Result
     ) {
-        route(path: path, methods: methods) { (model: Model) throws -> Response in
+        route(path: path, methods: methods)
+        { (request: Request, model: Model) throws -> Response in
             let result = try handler(model)
-            return try Coder.makeRespone(for: result)
+            return try Coder.makeRespone(for: request, encoding: result)
         }
     }
 
@@ -204,7 +205,7 @@ extension RouterProtocol {
         route(path: path, methods: methods)
         { (request: Request, model: Model) throws -> Response in
             let result = try handler(request, model)
-            return try Coder.makeRespone(for: result)
+            return try Coder.makeRespone(for: request, encoding: result)
         }
     }
 
@@ -248,9 +249,10 @@ extension RouterProtocol {
         handler: @escaping (URLMatch, Model) throws -> Result
     ) {
         route(path: path, methods: methods)
-        { (match: URLMatch, model: Model) throws -> Response in
+        { (request: Request, match: URLMatch, model: Model) throws -> Response
+            in
             let result = try handler(match, model)
-            return try Coder.makeRespone(for: result)
+            return try Coder.makeRespone(for: request, encoding: result)
         }
     }
 
@@ -298,7 +300,7 @@ extension RouterProtocol {
         { (request: Request, match: URLMatch, model: Model) throws -> Response
             in
             let result = try handler(request, match, model)
-            return try Coder.makeRespone(for: result)
+            return try Coder.makeRespone(for: request, encoding: result)
         }
     }
 }
