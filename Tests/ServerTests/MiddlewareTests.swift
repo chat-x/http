@@ -9,7 +9,6 @@
  */
 
 import Test
-import Stream
 
 @testable import HTTP
 

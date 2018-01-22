@@ -9,6 +9,7 @@
  */
 
 import Test
+
 @testable import HTTP
 
 extension String: Swift.Error {}
