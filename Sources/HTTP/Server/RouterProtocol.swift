@@ -31,9 +31,9 @@ extension RouterProtocol {
         _ middleware: [Middleware.Type],
         with handler: @escaping RequestHandler
     ) -> RequestHandler {
-        var handler: RequestHandler = handler
-        for factory in middleware.reversed() {
-            handler = factory.createMiddleware(for: handler)
+        var handler = handler
+        for next in middleware.reversed() {
+            handler = next.chain(with: handler)
         }
         return handler
     }
@@ -111,6 +111,70 @@ extension RouterProtocol {
 // MARK: Decoder
 
 extension RouterProtocol {
+    @_versioned
+    @inline(__always)
+    func makeHandler<Model: Decodable>(
+        for path: String,
+        wrapping handler: @escaping (Model) throws -> Response
+    ) -> RequestHandler {
+        return makeHandler(for: path) { (_: Request, model: Model) in
+            try handler(model)
+        }
+    }
+
+    @_versioned
+    func makeHandler<Model: Decodable>(
+        for path: String,
+        wrapping handler: @escaping (Request, Model) throws -> Response
+    ) -> RequestHandler {
+        let keyValueDecoder = KeyValueDecoder()
+        let urlMatcher = URLParamMatcher(path)
+
+        if urlMatcher.params.count > 0 {
+            return { request in
+                let values = urlMatcher.match(from: request.url.path)
+                let match = try keyValueDecoder.decode(Model.self, from: values)
+                return try handler(request, match)
+            }
+        } else {
+            return { request in
+                let model = try Coder.decodeModel(Model.self, from: request)
+                return try handler(request, model)
+            }
+        }
+    }
+
+    @_versioned
+    func makeHandler<URLMatch: Decodable, Model: Decodable>(
+        for path: String,
+        wrapping handler: @escaping (URLMatch, Model) throws -> Response
+    ) -> RequestHandler {
+        return makeHandler(for: path)
+        { (_: Request, match: URLMatch, model: Model) in
+            try handler(match, model)
+        }
+    }
+
+    @_versioned
+    func makeHandler<URLMatch: Decodable, Model: Decodable>(
+        for path: String,
+        wrapping handler: @escaping (Request, URLMatch, Model) throws -> Response
+    ) -> RequestHandler {
+        let keyValueDecoder = KeyValueDecoder()
+        let urlMatcher = URLParamMatcher(path)
+
+        guard urlMatcher.params.count > 0 else {
+            fatalError("invalid url mask, more than 0 arguments were expected")
+        }
+
+        return { request in
+            let values = urlMatcher.match(from: request.url.path)
+            let match = try keyValueDecoder.decode(URLMatch.self, from: values)
+            let model = try Coder.decodeModel(Model.self, from: request)
+            return try handler(request, match, model)
+        }
+    }
+
     // MARK: model -> response
     @_inlineable
     public func route<Model: Decodable>(
@@ -119,29 +183,12 @@ extension RouterProtocol {
         middleware: [Middleware.Type] = [],
         handler: @escaping (Model) throws -> Response
     ) {
-        let keyValueDecoder = KeyValueDecoder()
-        let urlMatcher = URLParamMatcher(path)
-
-        let requestHandler: RequestHandler
-
-        if urlMatcher.params.count > 0 {
-            requestHandler = { request in
-                let values = urlMatcher.match(from: request.url.path)
-                let match = try keyValueDecoder.decode(Model.self, from: values)
-                return try handler(match)
-            }
-        } else {
-            requestHandler = { request in
-                let model = try Coder.decodeModel(Model.self, from: request)
-                return try handler(model)
-            }
-        }
-
+        let handler = makeHandler(for: path, wrapping: handler)
         registerRoute(
             path: path,
             methods: methods,
             middleware: middleware,
-            handler: requestHandler
+            handler: handler
         )
     }
 
@@ -160,7 +207,7 @@ extension RouterProtocol {
         }
     }
 
-    // MARK: rquest, model -> response
+    // MARK: request, model -> response
     @_inlineable
     public func route<Model: Decodable>(
         path: String,
@@ -168,29 +215,12 @@ extension RouterProtocol {
         middleware: [Middleware.Type] = [],
         handler: @escaping (Request, Model) throws -> Response
     ) {
-        let keyValueDecoder = KeyValueDecoder()
-        let urlMatcher = URLParamMatcher(path)
-
-        let requestHandler: RequestHandler
-
-        if urlMatcher.params.count > 0 {
-            requestHandler = { request in
-                let values = urlMatcher.match(from: request.url.path)
-                let match = try keyValueDecoder.decode(Model.self, from: values)
-                return try handler(request, match)
-            }
-        } else {
-            requestHandler = { request in
-                let model = try Coder.decodeModel(Model.self, from: request)
-                return try handler(request, model)
-            }
-        }
-
+        let handler = makeHandler(for: path, wrapping: handler)
         registerRoute(
             path: path,
             methods: methods,
             middleware: middleware,
-            handler: requestHandler
+            handler: handler
         )
     }
 
@@ -217,24 +247,12 @@ extension RouterProtocol {
         middleware: [Middleware.Type] = [],
         handler: @escaping (URLMatch, Model) throws -> Response
     ) {
-        let keyValueDecoder = KeyValueDecoder()
-        let urlMatcher = URLParamMatcher(path)
-
-        guard urlMatcher.params.count > 0 else {
-            fatalError("invalid url mask, more than 0 arguments were expected")
-        }
-
-        let requestHandler: RequestHandler = { request in
-            let values = urlMatcher.match(from: request.url.path)
-            let match = try keyValueDecoder.decode(URLMatch.self, from: values)
-            let model = try Coder.decodeModel(Model.self, from: request)
-            return try handler(match, model)
-        }
+        let handler = makeHandler(for: path, wrapping: handler)
         registerRoute(
             path: path,
             methods: methods,
             middleware: middleware,
-            handler: requestHandler
+            handler: handler
         )
     }
 
@@ -264,19 +282,7 @@ extension RouterProtocol {
         middleware: [Middleware.Type] = [],
         handler: @escaping (Request, URLMatch, Model) throws -> Response
     ) {
-        let keyValueDecoder = KeyValueDecoder()
-        let urlMatcher = URLParamMatcher(path)
-
-        guard urlMatcher.params.count > 0 else {
-            fatalError("invalid url mask, more than 0 arguments was expected")
-        }
-
-        let handler: RequestHandler = { request in
-            let values = urlMatcher.match(from: request.url.path)
-            let match = try keyValueDecoder.decode(URLMatch.self, from: values)
-            let model = try Coder.decodeModel(Model.self, from: request)
-            return try handler(request, match, model)
-        }
+        let handler = makeHandler(for: path, wrapping: handler)
         registerRoute(
             path: path,
             methods: methods,
@@ -287,10 +293,7 @@ extension RouterProtocol {
 
     // MARK: request, url match, model -> encodable
     @_inlineable
-    public func route
-    <
-        URLMatch: Decodable, Model: Decodable, Result: Encodable
-    >(
+    public func route<URLMatch: Decodable, Model: Decodable, Result: Encodable>(
         path: String,
         methods: Router.MethodSet,
         middleware: [Middleware.Type] = [],
