@@ -14,6 +14,7 @@ import XCTest
 @testable import FunctionalTests
 @testable import KeyValueCodableTests
 @testable import MessageTests
+@testable import MVCTests
 @testable import ServerTests
 
 XCTMain([
@@ -35,10 +36,12 @@ XCTMain([
     testCase(ResponseTests.allTests),
     testCase(URLTests.allTests),
     testCase(UtilsTests.allTests),
-    // ServerTests
-    testCase(ApplicationTests.allTests),
+    // MVCTests
+    testCase(AuthorizationMiddlewareTests.allTests),
     testCase(ControllerMiddlewareTests.allTests),
     testCase(ControllerTests.allTests),
+    // ServerTests
+    testCase(ApplicationTests.allTests),
     testCase(MiddlewareTests.allTests),
     testCase(RouterTests.allTests),
     testCase(ServerTests.allTests),

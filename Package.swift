@@ -47,6 +47,9 @@ let package = Package(
             name: "MessageTests",
             dependencies: ["HTTP", "Test"]),
         .testTarget(
+            name: "MVCTests",
+            dependencies: ["HTTP", "Test"]),
+        .testTarget(
             name: "ServerTests",
             dependencies: ["HTTP", "Test", "AsyncDispatch"]),
         .testTarget(
