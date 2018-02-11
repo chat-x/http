@@ -30,7 +30,7 @@ public final class Context {
     }
 }
 
-extension Context: Service {
+extension Context: Inject {
     public convenience init() {
         fatalError("Context shouldn't be created by DI")
     }
