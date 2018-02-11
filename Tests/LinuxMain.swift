@@ -40,6 +40,7 @@ XCTMain([
     testCase(AuthorizationMiddlewareTests.allTests),
     testCase(ControllerMiddlewareTests.allTests),
     testCase(ControllerTests.allTests),
+    testCase(CookiesMiddlewareTests.allTests),
     // ServerTests
     testCase(ApplicationTests.allTests),
     testCase(MiddlewareTests.allTests),
