@@ -21,8 +21,7 @@ extension Response {
                 throw ParseError.invalidStartLine
             }
 
-            let status = try stream.read(until: .cr)
-            self.status = try Status(from: status)
+            self.status = try Status(from: stream)
 
             @inline(__always)
             func readLineEnd() throws {
