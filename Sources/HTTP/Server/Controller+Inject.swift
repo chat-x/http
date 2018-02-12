@@ -9,25 +9,25 @@
  */
 
 public protocol Inject {
-    init()
+    init() throws
 }
 
 public protocol InjectService {
     associatedtype One
-    init(_ one: One)
+    init(_ one: One) throws
 }
 
 public protocol Inject2Services {
     associatedtype One
     associatedtype Two
-    init(_ one: One, _ two: Two)
+    init(_ one: One, _ two: Two) throws
 }
 
 public protocol Inject3Services {
     associatedtype One
     associatedtype Two
     associatedtype Three
-    init(_ one: One, _ two: Two, _ three: Three)
+    init(_ one: One, _ two: Two, _ three: Three) throws
 }
 
 public protocol Inject4Services {
@@ -35,7 +35,7 @@ public protocol Inject4Services {
     associatedtype Two
     associatedtype Three
     associatedtype Four
-    init(_ one: One, _ two: Two, _ three: Three, _ four: Four)
+    init(_ one: One, _ two: Two, _ three: Three, _ four: Four) throws
 }
 
 public protocol Inject5Services {
@@ -44,7 +44,13 @@ public protocol Inject5Services {
     associatedtype Three
     associatedtype Four
     associatedtype Five
-    init(_ one: One, _ two: Two, _ three: Three, _ four: Four, _ five: Five)
+    init(
+        _ one: One,
+        _ two: Two,
+        _ three: Three,
+        _ four: Four,
+        _ five: Five
+    ) throws
 }
 
 public protocol Inject6Services {
@@ -61,7 +67,7 @@ public protocol Inject6Services {
         _ four: Four,
         _ five: Five,
         _ six: Six
-    )
+    ) throws
 }
 
 extension RouterProtocol {
@@ -69,7 +75,7 @@ extension RouterProtocol {
         where C: Controller & Inject
     {
         try addController(C.self) { _ in
-            return C.init()
+            return try C.init()
         }
     }
 
@@ -107,7 +113,7 @@ extension RouterProtocol {
 
         try addController(C.self) { context in
             let one = try self.resolveEither(C.One.self, context)
-            return C.init(one)
+            return try C.init(one)
         }
     }
 
@@ -120,7 +126,7 @@ extension RouterProtocol {
         try addController(C.self) { context in
             let one = try self.resolveEither(C.One.self, context)
             let two = try self.resolveEither(C.Two.self, context)
-            return C.init(one, two)
+            return try C.init(one, two)
         }
     }
 
@@ -135,7 +141,7 @@ extension RouterProtocol {
             let one = try self.resolveEither(C.One.self, context)
             let two = try self.resolveEither(C.Two.self, context)
             let three = try self.resolveEither(C.Three.self, context)
-            return C.init(one, two, three)
+            return try C.init(one, two, three)
         }
     }
 
@@ -152,7 +158,7 @@ extension RouterProtocol {
             let two = try self.resolveEither(C.Two.self, context)
             let three = try self.resolveEither(C.Three.self, context)
             let four = try self.resolveEither(C.Four.self, context)
-            return C.init(one, two, three, four)
+            return try C.init(one, two, three, four)
         }
     }
 
@@ -171,7 +177,7 @@ extension RouterProtocol {
             let three = try self.resolveEither(C.Three.self, context)
             let four = try self.resolveEither(C.Four.self, context)
             let five = try self.resolveEither(C.Five.self, context)
-            return C.init(one, two, three, four, five)
+            return try C.init(one, two, three, four, five)
         }
     }
 
@@ -192,7 +198,7 @@ extension RouterProtocol {
             let four = try self.resolveEither(C.Four.self, context)
             let five = try self.resolveEither(C.Five.self, context)
             let six = try self.resolveEither(C.Six.self, context)
-            return C.init(one, two, three, four, five, six)
+            return try C.init(one, two, three, four, five, six)
         }
     }
 }
