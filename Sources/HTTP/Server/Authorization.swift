@@ -8,7 +8,7 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-protocol AuthorizationProtocol {
+public protocol AuthorizationProtocol {
     func authenticate(context: Context) throws
     func loginRequired(context: Context)
     func accessDenied(context: Context)
