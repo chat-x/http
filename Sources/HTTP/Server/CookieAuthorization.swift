@@ -9,6 +9,8 @@
  */
 
 public final class CookieAuthorization: AuthorizationProtocol, InjectService {
+    static var userCookieName = "tris-user"
+
     let repository: UserRepository
 
     public init(_ repository: UserRepository) {
@@ -16,7 +18,8 @@ public final class CookieAuthorization: AuthorizationProtocol, InjectService {
     }
 
     func authenticate(context: Context) throws {
-        guard let userId = context.cookies["tris-user"] else {
+        let cookieName = CookieAuthorization.userCookieName
+        guard let userId = context.cookies[cookieName] else {
             context.user = nil
             return
         }

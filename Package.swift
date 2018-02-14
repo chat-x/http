@@ -36,13 +36,18 @@ let package = Package(
             url: "https://github.com/tris-foundation/compression.git",
             .branch("master")),
         .package(
+            url: "https://github.com/tris-foundation/crypto.git",
+            .branch("master")),
+        .package(
             url: "https://github.com/tris-foundation/test.git",
             .branch("master"))
     ],
     targets: [
         .target(
             name: "HTTP",
-            dependencies: ["Log", "Network", "Stream", "JSON", "Compression"]),
+            dependencies: [
+                "Log", "Network", "Stream", "JSON", "Compression", "Crypto"
+            ]),
         .testTarget(
             name: "MessageTests",
             dependencies: ["HTTP", "Test"]),
