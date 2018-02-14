@@ -38,9 +38,14 @@ public class Router: RouterProtocol {
     private var routeMatcher = RouteMatcher<Route>()
 
     public var middleware: [Middleware.Type]
+    public var controllerMiddleware: [ControllerMiddleware.Type]
 
-    init(middleware: [Middleware.Type] = []) {
+    init(
+        middleware: [Middleware.Type] = [],
+        controllerMiddleware: [ControllerMiddleware.Type] = []
+    ) {
         self.middleware = middleware
+        self.controllerMiddleware = controllerMiddleware
     }
 
     public func registerRoute(

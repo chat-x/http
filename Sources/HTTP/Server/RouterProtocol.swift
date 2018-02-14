@@ -14,6 +14,7 @@
 
 public protocol RouterProtocol: class {
     var middleware: [Middleware.Type] { get set }
+    var controllerMiddleware: [ControllerMiddleware.Type] { get set }
 
     func registerRoute(
         path: String,
