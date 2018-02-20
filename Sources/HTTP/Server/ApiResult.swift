@@ -8,8 +8,10 @@
  * See CONTRIBUTORS.txt for the list of the project authors
  */
 
-public protocol ControllerMiddleware {
-    static func chain(
-        with middleware: @escaping (Context) throws -> Void
-    ) -> (Context) throws -> Void
+public enum ApiResult {
+    case redirect(to: String)
+    case status(Response.Status)
+    case object(Encodable)
+    case json(Encodable)
+    case string(String)
 }

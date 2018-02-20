@@ -36,12 +36,6 @@ XCTMain([
     testCase(ResponseTests.allTests),
     testCase(URLTests.allTests),
     testCase(UtilsTests.allTests),
-    // MVCTests
-    testCase(AuthorizationMiddlewareTests.allTests),
-    testCase(ControllerMiddlewareTests.allTests),
-    testCase(ControllerTests.allTests),
-    testCase(CookiesMiddlewareTests.allTests),
-    testCase(UserManagerTests.allTests),
     // ServerTests
     testCase(ApplicationTests.allTests),
     testCase(MiddlewareTests.allTests),
