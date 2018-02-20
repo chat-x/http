@@ -93,11 +93,4 @@ class NginxTests: TestCase {
             fail(String(describing: error))
         }
     }
-
-
-    static var allTests = [
-        ("testCurlGet", testCurlGet),
-        ("testFirefoxGet", testFirefoxGet),
-        ("testChankedAllYourBase", testChankedAllYourBase)
-    ]
 }

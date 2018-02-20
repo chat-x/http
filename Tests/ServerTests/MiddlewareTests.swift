@@ -85,10 +85,4 @@ class MiddlewareTests: TestCase {
         assertEqual(response?.headers["SecondMiddleware"], "true")
         assertEqual(response?.headers["Middleware"], "first")
     }
-
-
-    static var allTests = [
-        ("testMiddleware", testMiddleware),
-        ("testMiddlewareOrder", testMiddlewareOrder),
-    ]
 }

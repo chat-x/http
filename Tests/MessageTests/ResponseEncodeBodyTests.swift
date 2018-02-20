@@ -103,13 +103,4 @@ class ResponseEncodeBodyTests: TestCase {
         assertEqual(response.contentLength, 23)
         assertEqual(Encoder.encode(response), expected)
     }
-
-
-    static var allTests = [
-        ("testStringResponse", testStringResponse),
-        ("testHtmlResponse", testHtmlResponse),
-        ("testBytesResponse", testBytesResponse),
-        ("testJsonResponse", testJsonResponse),
-        ("testUrlFormEncodedResponse", testUrlFormEncodedResponse),
-    ]
 }

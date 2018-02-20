@@ -21,9 +21,4 @@ class UtilsTests: TestCase {
         assertEqual(try Double(from: InputByteStream("42")), 42)
         assertEqual(try Double(from: InputByteStream("42.")), 42)
     }
-
-
-    static var allTests = [
-        ("testDouble", testDouble)
-    ]
 }

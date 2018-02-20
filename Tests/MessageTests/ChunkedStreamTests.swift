@@ -98,12 +98,4 @@ class ChunkedStreamTests: TestCase {
             fail(String(describing: error))
         }
     }
-
-
-    static var allTests = [
-        ("testOutputStream", testOutputStream),
-        ("testInputStream", testInputStream),
-        ("testOutputStreamMultiline", testInputStreamMultiline),
-        ("testInputStreamMultiline", testInputStreamMultiline)
-    ]
 }

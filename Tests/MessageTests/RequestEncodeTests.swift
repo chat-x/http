@@ -232,29 +232,4 @@ class RequestEncodeTests: TestCase {
         let request = Request(url: try! URL("/путь?ключ=значение#фрагмент"))
         assertEqual(Encoder.encode(request), expected)
     }
-
-
-    static var allTests = [
-        ("testRequest", testRequest),
-        ("testUrl", testUrl),
-        ("testUrlQueryGet", testUrlQueryGet),
-        ("testUrlQueryPost", testUrlQueryPost),
-        ("testHost", testHost),
-        ("testHostDomain", testHostDomain),
-        ("testHostEncoded", testHostEncoded),
-        ("testUserAgent", testUserAgent),
-        ("testAccept", testAccept),
-        ("testAcceptLanguage", testAcceptLanguage),
-        ("testAcceptEncoding", testAcceptEncoding),
-        ("testAcceptCharset", testAcceptCharset),
-        ("testAuthorization", testAuthorization),
-        ("testKeepAlive", testKeepAlive),
-        ("testConnection", testConnection),
-        ("testContentType", testContentType),
-        ("testContentLength", testContentLength),
-        ("testTransferEncoding", testTransferEncoding),
-        ("testCustomHeaders", testCustomHeaders),
-        ("testCookie", testCookie),
-        ("testEscaped", testEscaped)
-    ]
 }

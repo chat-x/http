@@ -28,11 +28,4 @@ class ResponseTests: TestCase {
         let response = Response(version: .oneOne)
         assertEqual(response.version, .oneOne)
     }
-
-
-    static var allTests = [
-        ("testResponse", testResponse),
-        ("testDefaultStatus", testDefaultStatus),
-        ("testVersion", testVersion),
-    ]
 }

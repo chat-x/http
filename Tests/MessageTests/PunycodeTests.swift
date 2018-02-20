@@ -41,14 +41,4 @@ class PunycodeTests: TestCase {
         let decoded = Punycode.decode(domain: "xn--hello--upf5a1b.xn--p1ai")
         assertEqual(decoded, "hello-мир.рф")
     }
-
-
-    static var allTests = [
-        ("testEncode", testEncode),
-        ("testDecode", testDecode),
-        ("testEncodeMixedCase", testEncodeMixedCase),
-        ("testDecodeMixedCase", testDecodeMixedCase),
-        ("testEncodeMixedASCII", testEncodeMixedCase),
-        ("testDecodeMixedASCII", testEncodeMixedCase)
-    ]
 }

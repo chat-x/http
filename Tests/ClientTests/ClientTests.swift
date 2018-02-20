@@ -136,13 +136,4 @@ class ClientTests: TestCase {
             fail(String(describing: error))
         }
     }
-
-
-    static var allTests = [
-        ("testInitializer", testInitializer),
-        ("testURLInitializer", testURLInitializer),
-        ("testRequest", testRequest),
-        ("testDeflate", testDeflate),
-        ("testGZip", testGZip)
-    ]
 }

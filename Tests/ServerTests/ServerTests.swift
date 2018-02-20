@@ -109,12 +109,4 @@ class ServerTests: TestCase {
             fail(String(describing: error))
         }
     }
-
-
-    static var allTests = [
-        ("testServer", testServer),
-        ("testExpect", testExpect),
-        ("testBufferSize", testBufferSize),
-        ("testDescription", testDescription),
-    ]
 }

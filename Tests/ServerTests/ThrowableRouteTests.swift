@@ -75,9 +75,4 @@ class ThrowableRouteTests: TestCase {
         let response = server.handleRequest(request)
         assertEqual(response?.status, .notFound)
     }
-
-    static var allTests = [
-        ("testInternalServerError", testInternalServerError),
-        ("testNotFound", testNotFound),
-    ]
 }

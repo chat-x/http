@@ -253,28 +253,4 @@ class ResponseEncodeTests: TestCase {
         ]
         assertEqual(Encoder.encode(response), expected)
     }
-
-
-    static var allTests = [
-        ("testOk", testOk),
-        ("testMoved", testMoved),
-        ("testBad", testBad),
-        ("testUnauthorized", testUnauthorized),
-        ("testNotFound", testNotFound),
-        ("testInternalServerError", testInternalServerError),
-        ("testResponseHasContentLenght", testResponseHasContentLenght),
-        ("testConnection", testConnection),
-        ("testContentEncoding", testContentEncoding),
-        ("testTransferEncoding", testTransferEncoding),
-        ("testCustomHeader", testCustomHeader),
-        ("testContentType", testContentType),
-        ("testSetCookie", testSetCookie),
-        ("testSetCookieExpires", testSetCookieExpires),
-        ("testSetCookieMaxAge", testSetCookieMaxAge),
-        ("testSetCookieHttpOnly", testSetCookieHttpOnly),
-        ("testSetCookieSecure", testSetCookieSecure),
-        ("testSetCookieDomain", testSetCookieDomain),
-        ("testSetCookiePath", testSetCookiePath),
-        ("testSetCookieManyValues", testSetCookieManyValues),
-    ]
 }

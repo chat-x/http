@@ -88,17 +88,4 @@ class URLTests: TestCase {
             assertEqual(error as? URL.Error, .invalidScheme)
         }
     }
-
-
-    static var allTests = [
-        ("testPath", testPath),
-        ("testQuery", testQuery),
-        ("testHost", testHost),
-        ("testScheme", testScheme),
-        ("testFragment", testFragment),
-        ("testAbsoluteString", testAbsoluteString),
-        ("testDescription", testDescription),
-        ("testUnicode", testUnicode),
-        ("testInvalidScheme", testInvalidScheme),
-    ]
 }

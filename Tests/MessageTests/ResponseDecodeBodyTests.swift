@@ -111,12 +111,4 @@ class ResponseDecodeBodyTests: TestCase {
             fail(String(describing: error))
         }
     }
-
-
-    static var allTests = [
-        ("testStringResponse", testStringResponse),
-        ("testHtmlResponse", testHtmlResponse),
-        ("testBytesResponse", testBytesResponse),
-        ("testZeroContentLenght", testZeroContentLenght),
-    ]
 }

@@ -254,18 +254,4 @@ class FunctionalTests: TestCase {
             }
         )
     }
-
-
-    static var allTests = [
-        ("testRequest", testRequest),
-        ("testGet", testGet),
-        ("testHead", testHead),
-        ("testPost", testPost),
-        ("testPut", testPut),
-        ("testDelete", testDelete),
-        ("testOptions", testOptions),
-        ("testAll", testAll),
-        ("testJson", testJson),
-        ("testFormEncoded", testFormEncoded),
-    ]
 }

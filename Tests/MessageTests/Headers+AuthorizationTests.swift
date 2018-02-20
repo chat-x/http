@@ -43,13 +43,4 @@ class HeadersAuthorizationTests: TestCase {
         let token = try? Request.Authorization(from: stream)
         assertEqual(token, .token(credentials: "sYbe7s3c73Tt0k3n"))
     }
-
-
-    static var allTests = [
-        ("testBasic", testBasic),
-        ("testBearer", testBearer),
-        ("testToken", testToken),
-        ("testCustom", testCustom),
-        ("testLowercased", testLowercased),
-    ]
 }

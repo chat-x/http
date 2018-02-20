@@ -335,28 +335,4 @@ class ResponseDecodeTests: TestCase {
             fail(String(describing: error))
         }
     }
-
-
-    static var allTests = [
-        ("testOk", testOk),
-        ("testNotFound", testNotFound),
-        ("testMoved", testMoved),
-        ("testBad", testBad),
-        ("testUnauthorized", testUnauthorized),
-        ("testInternalServerError", testInternalServerError),
-        ("testContentLength", testContentLength),
-        ("testContentType", testContentType),
-        ("testConnection", testConnection),
-        ("testContentEncoding", testContentEncoding),
-        ("testTransferEncoding", testTransferEncoding),
-        ("testCustomHeader", testCustomHeader),
-        ("testSetCookie", testSetCookie),
-        ("testSetCookieExpires", testSetCookieExpires),
-        ("testSetCookieMaxAge", testSetCookieMaxAge),
-        ("testSetCookieHttpOnly", testSetCookieHttpOnly),
-        ("testSetCookieSecure", testSetCookieSecure),
-        ("testSetCookieDomain", testSetCookieDomain),
-        ("testSetCookiePath", testSetCookiePath),
-        ("testSetCookieManyValues", testSetCookieManyValues),
-    ]
 }

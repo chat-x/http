@@ -88,11 +88,4 @@ class ApplicationTests: TestCase {
         assertEqual(secondResponse?.headers["FirstMiddleware"], "true")
         assertEqual(secondResponse?.headers["SecondMiddleware"], "true")
     }
-
-
-    static var allTests = [
-        ("testApplication", testApplication),
-        ("testApplicationBasePath", testApplicationBasePath),
-        ("testApplicationMiddleware", testApplicationMiddleware),
-    ]
 }

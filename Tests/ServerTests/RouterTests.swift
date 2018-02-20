@@ -449,25 +449,4 @@ class RouterTests: TestCase {
         let response = router.handleRequest(request)
         assertEqual(response?.status, .ok)
     }
-
-
-    static var allTests = [
-        ("testMethodsVoid", testMethodsVoid),
-        ("testAllVoid", testAllVoid),
-        ("testGetRequest", testGetRequest),
-        ("testPostRequest", testPostRequest),
-        ("testGetURLMatch", testGetURLMatch),
-        ("testPostURLMatch", testPostURLMatch),
-        ("testGetModel", testGetModel),
-        ("testPostModel", testPostModel),
-        ("testGetURLMatchModel", testGetURLMatchModel),
-        ("testPostURLMatchModel", testPostURLMatchModel),
-        ("testGetRequestURLMatch", testGetRequestURLMatch),
-        ("testPostRequestURLMatch", testPostRequestURLMatch),
-        ("testGetRequestModel", testGetRequestModel),
-        ("testPostRequestModel", testPostRequestModel),
-        ("testGetRequestURLMatchModel", testGetRequestURLMatchModel),
-        ("testPostRequestURLMatchModel", testPostRequestURLMatchModel),
-        ("testUnicodeRoute", testUnicodeRoute),
-    ]
 }

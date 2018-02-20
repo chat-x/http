@@ -41,13 +41,4 @@ class RequestTests: TestCase {
         assertEqual(request.url.path, "/test")
         assertEqual(request.url.query, ["query" : "true"])
     }
-
-
-    static var allTests = [
-        ("testRequest", testRequest),
-        ("testDefaultRequest", testDefaultRequest),
-        ("testDefaultMethod", testDefaultMethod),
-        ("testDefaultURL", testDefaultURL),
-        ("testFromString", testFromString),
-    ]
 }

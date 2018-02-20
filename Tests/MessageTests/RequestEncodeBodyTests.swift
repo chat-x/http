@@ -48,10 +48,4 @@ class RequestEncodeBodyTests: TestCase {
             contentType: .formURLEncoded)
         assertEqual(Encoder.encode(request), expected)
     }
-
-
-    static var allTests = [
-        ("testJsonInitializer", testJsonInitializer),
-        ("testFormURLEncodedInitializer", testFormURLEncodedInitializer),
-    ]
 }

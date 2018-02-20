@@ -22,10 +22,4 @@ class HeaderNameTests: TestCase {
         let name = HeaderName("Content-Length")
         assertEqual(name.description, "Content-Length")
     }
-
-
-    static var allTests = [
-        ("testHeaderName", testHeaderName),
-        ("testHeaderNameDescription", testHeaderNameDescription)
-    ]
 }

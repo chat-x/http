@@ -109,13 +109,4 @@ class RequestDecodeBodyTests: TestCase {
             fail(String(describing: error))
         }
     }
-
-    static var allTests = [
-        ("testContentLength", testContentLength),
-        ("testChunkedBody", testChunkedBody),
-        ("testChunkedBodyInvalidSizeSeparator", testChunkedBodyInvalidSizeSeparator),
-        ("testChunkedBodyNoSizeSeparator", testChunkedBodyNoSizeSeparator),
-        ("testChunkedMissingLineEnd", testChunkedMissingLineEnd),
-        ("testChunkedInvalidBody", testChunkedInvalidBody),
-    ]
 }

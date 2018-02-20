@@ -36,10 +36,4 @@ class KeyValueDecoderTests: TestCase {
             print(String(describing: error))
         }
     }
-
-
-    static var allTests = [
-        ("testKeyedDecoder", testKeyedDecoder),
-        ("testSingleValueDecoder", testSingleValueDecoder)
-    ]
 }
