@@ -11,8 +11,7 @@
 import Foundation
 
 public struct URLParamMatcher {
-    @_versioned
-    let params: [(name: String, index: Int)]
+    public let params: [(name: String, index: Int)]
 
     public init(_ url: String) {
         let components = url.components(separatedBy: "/")

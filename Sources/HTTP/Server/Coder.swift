@@ -12,8 +12,7 @@ import JSON
 
 // MARK: Coder
 
-@_versioned
-struct Coder {
+public struct Coder {
     public enum Error: Swift.Error {
         case invalidRequest
         case invalidContentType
@@ -32,9 +31,8 @@ struct Coder {
         return response
     }
 
-    @_versioned
     @inline(__always)
-    static func updateRespone(
+    public static func updateRespone(
         _ response: Response,
         for request: Request,
         with result: ApiResult
@@ -93,9 +91,8 @@ struct Coder {
 
     // MARK: Transform route's Model from Request
 
-    @_versioned
     @inline(__always)
-    static func decodeModel<T: Decodable>(
+    public static func decodeModel<T: Decodable>(
         _ type: T.Type,
         from request: Request
     ) throws -> T {
