@@ -179,10 +179,9 @@ class ResponseDecodeTests: TestCase {
                 "Set-Cookie: username=tony\r\n" +
                 "\r\n")
             let response = try Response(from: stream)
-            assertEqual(response.setCookie, [
-                Response.SetCookie(
-                    Cookie(name: "username", value: "tony"))
-                ])
+            assertEqual(response.cookies, [
+                Cookie(name: "username", value: "tony")
+            ])
         } catch {
             fail(String(describing: error))
         }
@@ -197,9 +196,10 @@ class ResponseDecodeTests: TestCase {
                     "Expires=Wed, 21 Oct 2015 07:28:00 GMT\r\n" +
                 "\r\n")
             let response = try Response(from: stream)
-            assertEqual(response.setCookie, [
-                Response.SetCookie(
-                    Cookie(name: "username", value: "tony"),
+            assertEqual(response.cookies, [
+                Cookie(
+                    name: "username",
+                    value: "tony",
                     expires: Date(timeIntervalSinceReferenceDate: 467105280))
                 ])
         } catch {
@@ -215,11 +215,9 @@ class ResponseDecodeTests: TestCase {
                 "Set-Cookie: username=tony; Max-Age=42\r\n" +
                 "\r\n")
             let response = try Response(from: stream)
-            assertEqual(response.setCookie, [
-                Response.SetCookie(
-                    Cookie(name: "username", value: "tony"),
-                    maxAge: 42)
-                ])
+            assertEqual(response.cookies, [
+                Cookie(name: "username", value: "tony", maxAge: 42)
+            ])
         } catch {
             fail(String(describing: error))
         }
@@ -233,11 +231,9 @@ class ResponseDecodeTests: TestCase {
                 "Set-Cookie: username=tony; HttpOnly\r\n" +
                 "\r\n")
             let response = try Response(from: stream)
-            assertEqual(response.setCookie, [
-                Response.SetCookie(
-                    Cookie(name: "username", value: "tony"),
-                    httpOnly: true)
-                ])
+            assertEqual(response.cookies, [
+                Cookie(name: "username", value: "tony", httpOnly: true)
+            ])
         } catch {
             fail(String(describing: error))
         }
@@ -251,11 +247,9 @@ class ResponseDecodeTests: TestCase {
                 "Set-Cookie: username=tony; Secure\r\n" +
                 "\r\n")
             let response = try Response(from: stream)
-            assertEqual(response.setCookie, [
-                Response.SetCookie(
-                    Cookie(name: "username", value: "tony"),
-                    secure: true)
-                ])
+            assertEqual(response.cookies, [
+                Cookie(name: "username", value: "tony", secure: true)
+            ])
         } catch {
             fail(String(describing: error))
         }
@@ -269,11 +263,12 @@ class ResponseDecodeTests: TestCase {
                 "Set-Cookie: username=tony; Domain=somedomain.com\r\n" +
                 "\r\n")
             let response = try Response(from: stream)
-            assertEqual(response.setCookie, [
-                Response.SetCookie(
-                    Cookie(name: "username", value: "tony"),
+            assertEqual(response.cookies, [
+                Cookie(
+                    name: "username",
+                    value: "tony",
                     domain: "somedomain.com")
-                ])
+            ])
         } catch {
             fail(String(describing: error))
         }
@@ -287,11 +282,9 @@ class ResponseDecodeTests: TestCase {
                 "Set-Cookie: username=tony; Path=/\r\n" +
                 "\r\n")
             let response = try Response(from: stream)
-            assertEqual(response.setCookie, [
-                Response.SetCookie(
-                    Cookie(name: "username", value: "tony"),
-                    path: "/")
-                ])
+            assertEqual(response.cookies, [
+                Cookie(name: "username", value: "tony", path: "/")
+            ])
         } catch {
             fail(String(describing: error))
         }
@@ -308,28 +301,32 @@ class ResponseDecodeTests: TestCase {
                 "\r\n")
             let response = try Response(from: stream)
 
-            assertEqual(response.setCookie[0],
-                        Response.SetCookie(
-                            Cookie(name: "num", value: "0"),
+            assertEqual(response.cookies[0],
+                        Cookie(
+                            name: "num",
+                            value: "0",
                             path: "/",
                             maxAge: 42,
                             secure: true,
                             httpOnly: true))
 
-            assertEqual(response.setCookie[1],
-                        Response.SetCookie(
-                            Cookie(name: "key", value: "value"),
+            assertEqual(response.cookies[1],
+                        Cookie(
+                            name: "key",
+                            value: "value",
                             secure: true,
                             httpOnly: true))
 
-            assertEqual(response.setCookie[2],
-                        Response.SetCookie(
-                            Cookie(name: "date", value: ""),
+            assertEqual(response.cookies[2],
+                        Cookie(
+                            name: "date",
+                            value: "",
                             expires: Date(timeIntervalSince1970: 1536237674.0)))
 
-            assertEqual(response.setCookie[3],
-                        Response.SetCookie(
-                            Cookie(name: "date", value: ""),
+            assertEqual(response.cookies[3],
+                        Cookie(
+                            name: "date",
+                            value: "",
                             expires: Date(timeIntervalSince1970: 1536237674.0)))
         } catch {
             fail(String(describing: error))
