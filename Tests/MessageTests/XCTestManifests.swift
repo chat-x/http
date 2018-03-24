@@ -6,6 +6,7 @@ extension ChunkedStreamTests {
         ("testInputStreamMultiline", testInputStreamMultiline),
         ("testOutputStream", testOutputStream),
         ("testOutputStreamMultiline", testOutputStreamMultiline),
+        ("testSmallerBufferSize", testSmallerBufferSize),
     ]
 }
 
@@ -155,6 +156,7 @@ extension RequestTests {
 extension ResponseDecodeBodyTests {
     static let __allTests = [
         ("testBytesResponse", testBytesResponse),
+        ("testChunked", testChunked),
         ("testHtmlResponse", testHtmlResponse),
         ("testJsonResponse", testJsonResponse),
         ("testStringResponse", testStringResponse),
