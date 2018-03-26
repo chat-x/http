@@ -13,7 +13,7 @@ import Network
 
 extension Response {
     @_specialize(exported: true, where T == BufferedInputStream<NetworkStream>)
-    public convenience init<T: UnsafeStreamReader>(from stream: T) throws {
+    public convenience init<T: StreamReader>(from stream: T) throws {
         self.init()
         self.contentLength = nil
         do {
@@ -35,18 +35,17 @@ extension Response {
             try readLineEnd()
 
             while true {
-                guard let nextLine = try stream.peek(count: 2) else {
+                guard try stream.cache(count: 2) else {
                     throw ParseError.unexpectedEnd
                 }
-                if nextLine.elementsEqual(Constants.lineEnd) {
+                if try stream.next(is: Constants.lineEnd) {
                     try stream.consume(count: 2)
                     break
                 }
 
                 let name = try HeaderName(from: stream)
 
-                let colon = try stream.read(count: 1)
-                guard colon[0] == .colon else {
+                guard try stream.consume(.colon) else {
                     throw ParseError.invalidRequest
                 }
                 try stream.consume(while: { $0 == .whitespace })
@@ -66,8 +65,9 @@ extension Response {
                     self.cookies.append(try Cookie(responseCookieFrom: stream))
                 default:
                     // FIXME: validate
-                    let bytes = try stream.read(until: .cr)
-                    headers[name] = String(decoding: bytes, as: UTF8.self)
+                    headers[name] = try stream.read(until: .cr) { bytes in
+                        return String(decoding: bytes, as: UTF8.self)
+                    }
                 }
 
                 try readLineEnd()

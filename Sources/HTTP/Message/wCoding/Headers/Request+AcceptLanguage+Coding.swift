@@ -13,7 +13,7 @@ import Stream
 extension Array where Element == Request.AcceptLanguage {
     public typealias AcceptLanguage = Request.AcceptLanguage
 
-    init<T: UnsafeStreamReader>(from stream: T) throws {
+    init<T: StreamReader>(from stream: T) throws {
         var values = [AcceptLanguage]()
         while true {
             let value = try AcceptLanguage(from: stream)
@@ -27,7 +27,7 @@ extension Array where Element == Request.AcceptLanguage {
         self = values
     }
 
-    func encode<T: UnsafeStreamWriter>(to stream: T) throws {
+    func encode<T: StreamWriter>(to stream: T) throws {
         for i in startIndex..<endIndex {
             if i != startIndex {
                 try stream.write(.comma)
@@ -42,7 +42,7 @@ extension Request.AcceptLanguage {
         static let qEqual = ASCII("q=")
     }
 
-    init<T: UnsafeStreamReader>(from stream: T) throws {
+    init<T: StreamReader>(from stream: T) throws {
         self.language = try Language(from: stream)
 
         guard try stream.consume(.semicolon) else {
@@ -59,7 +59,7 @@ extension Request.AcceptLanguage {
         self.priority = priority
     }
 
-    func encode<T: UnsafeStreamWriter>(to stream: T) throws {
+    func encode<T: StreamWriter>(to stream: T) throws {
         try language.encode(to: stream)
 
         if priority < 1.0 {
