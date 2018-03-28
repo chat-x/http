@@ -15,9 +15,9 @@ You can find this code and more in [examples](https://github.com/tris-foundation
 ### Async
 
 ```swift
-import AsyncFiber
+import Fiber
 
-AsyncFiber().registerGlobal()
+async.use(Fiber.self)
 
 async.task {
     // server or client code
