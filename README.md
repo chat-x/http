@@ -122,7 +122,22 @@ server.route(get: "/*") { (request: Request) in
 try server.start()
 ```
 
-#### Client
+#### Application
+
+`/api/v1/test`
+
+```swift
+let api = Application(basePath: "/api" /* middleware: [] */)
+api.route(get: "/versions") { return ["v1"] }
+
+let v1 = Application(basePath: "/v1" /* middleware: [] */)
+v1.route(get: "/test") { return "ok" }
+
+api.addApplication(v1)
+server.addApplication(api)
+```
+
+### Client
 
 ```swift
 let client = try Client(url: "http://0.0.0.0:8080")
@@ -132,7 +147,7 @@ try client.get(path: "/юникод")
 try client.get(path: "/request")
 try client.get(path: "/swift/string/user")
 try client.get(path: "/swift/int/42")
-s
+
 try client.get(path: "/decode-from-url/January/1")
 try client.get(path: "/decode-json-or-form-urlencoded?name=push")
 
