@@ -166,7 +166,7 @@ class RouterTests: TestCase {
             return Response(status: .ok)
         }
 
-        do {
+        scope {
             let model = Page(name: "news", number: 2)
 
             let request = try Request(
@@ -183,8 +183,6 @@ class RouterTests: TestCase {
                 contentType: .formURLEncoded)
             let formURLEncodedResponse = router.handleRequest(formURLEncodedRequest)
             assertEqual(formURLEncodedResponse?.status, .ok)
-        } catch {
-            fail(String(describing: error))
         }
     }
 
@@ -235,7 +233,7 @@ class RouterTests: TestCase {
             return Response(status: .ok)
         }
 
-        do {
+        scope {
             let model = Params(id: 1, token: "abcdef")
             let request = try Request(
                 url: "/news/2",
@@ -251,8 +249,6 @@ class RouterTests: TestCase {
                 contentType: .formURLEncoded)
             let formResponse = router.handleRequest(formURLEncodedRequest)
             assertEqual(formResponse?.status, .ok)
-        } catch {
-            fail(String(describing: error))
         }
     }
 
@@ -340,7 +336,7 @@ class RouterTests: TestCase {
             return Response(status: .ok)
         }
 
-        do {
+        scope {
             let model = Page(name: "news", number: 2)
             let request = try Request(
                 url: "/",
@@ -356,8 +352,6 @@ class RouterTests: TestCase {
                 contentType: .formURLEncoded)
             let formResponse = router.handleRequest(formURLEncodedRequest)
             assertEqual(formResponse?.status, .ok)
-        } catch {
-            fail(String(describing: error))
         }
     }
 
@@ -415,7 +409,7 @@ class RouterTests: TestCase {
             return Response(status: .ok)
         }
 
-        do {
+        scope {
             let model = Params(id: 1, token: "abcdef")
             let request = try Request(
                 url: "/news/2",
@@ -431,8 +425,6 @@ class RouterTests: TestCase {
                 contentType: .formURLEncoded)
             let formResponse = router.handleRequest(formURLEncodedRequest)
             assertEqual(formResponse?.status, .ok)
-        } catch {
-            fail(String(describing: error))
         }
     }
 

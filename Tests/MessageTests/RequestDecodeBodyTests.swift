@@ -14,7 +14,7 @@ import Stream
 
 class RequestDecodeBodyTests: TestCase {
     func testContentLength() {
-        do {
+        scope {
             let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Content-Length: 5\r\n" +
@@ -23,13 +23,11 @@ class RequestDecodeBodyTests: TestCase {
             let request = try Request(from: stream)
             assertEqual(request.contentLength, 5)
             assertEqual(request.string, "Hello")
-        } catch {
-            fail(String(describing: error))
         }
     }
 
     func testChunkedBody() {
-        do {
+        scope {
             let stream = InputByteStream(
                 "GET / HTTP/1.1\r\n" +
                 "Transfer-Encoding: chunked\r\n" +
@@ -38,8 +36,6 @@ class RequestDecodeBodyTests: TestCase {
                 "0\r\n\r\n")
             let request = try Request(from: stream)
             assertEqual(request.string, "Hello")
-        } catch {
-            fail(String(describing: error))
         }
     }
 
@@ -50,13 +46,11 @@ class RequestDecodeBodyTests: TestCase {
             "\r\n" +
             "5\rHello\r\n" +
             "0\r\n\r\n")
-        do {
+        scope {
             let request = try Request(from: stream)
             assertThrowsError(try request.readBytes()) { error in
                 assertEqual(error as? ParseError, .invalidRequest)
             }
-        } catch {
-            fail(String(describing: error))
         }
     }
 
@@ -67,13 +61,11 @@ class RequestDecodeBodyTests: TestCase {
             "\r\n" +
             "5 Hello\r\n" +
             "0\r\n\r\n")
-        do {
+        scope {
             let request = try Request(from: stream)
             assertThrowsError(try request.readBytes()) { error in
                 assertEqual(error as? ParseError, .invalidRequest)
             }
-        } catch {
-            fail(String(describing: error))
         }
     }
 
@@ -84,13 +76,11 @@ class RequestDecodeBodyTests: TestCase {
             "\r\n" +
             "5\r\nHello\r\n" +
             "0\r\n")
-        do {
+        scope {
             let request = try Request(from: stream)
             assertThrowsError(try request.readBytes()) { error in
                 assertEqual(error as? ParseError, .unexpectedEnd)
             }
-        } catch {
-            fail(String(describing: error))
         }
     }
 
@@ -100,13 +90,11 @@ class RequestDecodeBodyTests: TestCase {
             "Transfer-Encoding: chunked\r\n" +
             "\r\n" +
             "5\r\nHello")
-        do {
+        scope {
             let request = try Request(from: stream)
             assertThrowsError(try request.readBytes()) { error in
                 assertEqual(error as? ParseError, .unexpectedEnd)
             }
-        } catch {
-            fail(String(describing: error))
         }
     }
 }
