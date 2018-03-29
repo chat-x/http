@@ -48,7 +48,7 @@ try server.start()
 >* (Decodable) with *NO* :mask present in url - decode url.query or body
 >* any combination in order - request, url-match, body
 >
-> *You can't have more than two input arguments*
+> *You can't have more than three input arguments*
 
 
 #### Simple
