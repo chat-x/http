@@ -21,13 +21,10 @@ let package = Package(
             url: "https://github.com/tris-foundation/log.git",
             .branch("master")),
         .package(
-            url: "https://github.com/tris-foundation/async.git",
+            url: "https://github.com/tris-foundation/aio.git",
             .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/stream.git",
-            .branch("master")),
-        .package(
-            url: "https://github.com/tris-foundation/network.git",
             .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/json.git",
@@ -37,6 +34,9 @@ let package = Package(
             .branch("master")),
         .package(
             url: "https://github.com/tris-foundation/test.git",
+            .branch("master")),
+        .package(
+            url: "https://github.com/tris-foundation/fiber.git",
             .branch("master"))
     ],
     targets: [
@@ -50,13 +50,13 @@ let package = Package(
             dependencies: ["HTTP", "Test"]),
         .testTarget(
             name: "ServerTests",
-            dependencies: ["HTTP", "Test", "AsyncDispatch"]),
+            dependencies: ["HTTP", "Test", "Fiber"]),
         .testTarget(
             name: "ClientTests",
-            dependencies: ["HTTP", "Test", "AsyncDispatch"]),
+            dependencies: ["HTTP", "Test", "Fiber"]),
         .testTarget(
             name: "FunctionalTests",
-            dependencies: ["HTTP", "Test", "AsyncDispatch"]),
+            dependencies: ["HTTP", "Test", "Fiber"]),
         .testTarget(
             name: "KeyValueCodableTests",
             dependencies: ["HTTP", "Test"]),
