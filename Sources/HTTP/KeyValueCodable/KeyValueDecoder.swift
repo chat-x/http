@@ -70,7 +70,7 @@ struct KeyValueKeyedDecodingContainer<K : CodingKey>
     }
 
     func decodeNil(forKey key: K) throws -> Bool {
-        fatalError()
+        return !contains(key)
     }
 
     func decode(_ type: Bool.Type, forKey key: K) throws -> Bool {
@@ -261,7 +261,7 @@ struct KeyValueSingleValueDecodingContainer: SingleValueDecodingContainer {
     }
 
     func decodeNil() -> Bool {
-        fatalError("unsupported")
+        return decoder.values.count == 0
     }
 
     func decode(_ type: Bool.Type) throws -> Bool {
