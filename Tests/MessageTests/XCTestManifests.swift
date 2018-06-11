@@ -227,9 +227,13 @@ extension ResponseEncodeTests {
 extension ResponseTests {
     static let __allTests = [
         ("testBytes", testBytes),
+        ("testContentType", testContentType),
         ("testDefaultStatus", testDefaultStatus),
+        ("testHTML", testHTML),
+        ("testJavaScript", testJavaScript),
         ("testResponse", testResponse),
-        ("testVersion", testVersion),
+        ("testString", testString),
+        ("testXML", testXML),
     ]
 }
 
