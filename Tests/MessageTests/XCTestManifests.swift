@@ -226,6 +226,7 @@ extension ResponseEncodeTests {
 
 extension ResponseTests {
     static let __allTests = [
+        ("testBytes", testBytes),
         ("testDefaultStatus", testDefaultStatus),
         ("testResponse", testResponse),
         ("testVersion", testVersion),
