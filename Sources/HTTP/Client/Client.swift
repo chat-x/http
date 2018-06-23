@@ -57,11 +57,7 @@ public class Client {
         guard !isConnected else {
             return
         }
-        let socket = try networkClient.connect()
-        let baseStream = NetworkStream(socket: socket)
-        self.stream = BufferedStream(
-            baseStream: baseStream,
-            capacity: bufferSize)
+        self.stream = try networkClient.connect()
     }
 
     public func disconnect() throws {
