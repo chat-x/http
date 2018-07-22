@@ -9,6 +9,7 @@
  *                                                                            *
  ******************************************************************************/
 
+import JSON
 import Stream
 
 public enum Body {
@@ -68,6 +69,26 @@ extension BodyInpuStream {
 }
 
 extension BodyInpuStream {
+    public var json: JSON.Value? {
+        get {
+            guard let bytes = bytes else {
+                return nil
+            }
+            let stream = InputByteStream(bytes)
+            return try? JSON.Value(from: stream)
+        }
+        set {
+            switch newValue {
+            case .none:
+                self.bytes = nil
+            case .some(let json):
+                let stream = OutputByteStream()
+                try? json.encode(to: stream)
+                self.bytes = stream.bytes
+            }
+        }
+    }
+
     public var string: String? {
         get {
             guard let bytes = bytes else {

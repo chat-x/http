@@ -3,8 +3,10 @@ import XCTest
 extension BodyTests {
     static let __allTests = [
         ("testRequestBytes", testRequestBytes),
+        ("testRequestJSON", testRequestJSON),
         ("testRequestString", testRequestString),
         ("testResponseBytes", testResponseBytes),
+        ("testResponseJSON", testResponseJSON),
         ("testResponseString", testResponseString),
     ]
 }
