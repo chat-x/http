@@ -46,17 +46,6 @@ extension PunycodeTests {
     ]
 }
 
-extension RequestDecodeBodyTests {
-    static let __allTests = [
-        ("testChunkedBody", testChunkedBody),
-        ("testChunkedBodyInvalidSizeSeparator", testChunkedBodyInvalidSizeSeparator),
-        ("testChunkedBodyNoSizeSeparator", testChunkedBodyNoSizeSeparator),
-        ("testChunkedInvalidBody", testChunkedInvalidBody),
-        ("testChunkedMissingLineEnd", testChunkedMissingLineEnd),
-        ("testContentLength", testContentLength),
-    ]
-}
-
 extension RequestDecodeTests {
     static let __allTests = [
         ("testAcceptCharset", testAcceptCharset),
@@ -65,6 +54,12 @@ extension RequestDecodeTests {
         ("testAcceptHeader", testAcceptHeader),
         ("testAcceptLanguageHeader", testAcceptLanguageHeader),
         ("testAuthorization", testAuthorization),
+        ("testBodyChunked", testBodyChunked),
+        ("testBodyChunkedInvalidBody", testBodyChunkedInvalidBody),
+        ("testBodyChunkedInvalidSizeSeparator", testBodyChunkedInvalidSizeSeparator),
+        ("testBodyChunkedMissingLineEnd", testBodyChunkedMissingLineEnd),
+        ("testBodyChunkedNoSizeSeparator", testBodyChunkedNoSizeSeparator),
+        ("testBodyContentLength", testBodyContentLength),
         ("testContentLength", testContentLength),
         ("testContentType", testContentType),
         ("testContentTypeBoundary", testContentTypeBoundary),
@@ -110,13 +105,6 @@ extension RequestDecodeTests {
     ]
 }
 
-extension RequestEncodeBodyTests {
-    static let __allTests = [
-        ("testFormURLEncodedInitializer", testFormURLEncodedInitializer),
-        ("testJsonInitializer", testJsonInitializer),
-    ]
-}
-
 extension RequestEncodeTests {
     static let __allTests = [
         ("testAccept", testAccept),
@@ -124,6 +112,8 @@ extension RequestEncodeTests {
         ("testAcceptEncoding", testAcceptEncoding),
         ("testAcceptLanguage", testAcceptLanguage),
         ("testAuthorization", testAuthorization),
+        ("testBodyFormURLEncodedInitializer", testBodyFormURLEncodedInitializer),
+        ("testBodyJsonInitializer", testBodyJsonInitializer),
         ("testConnection", testConnection),
         ("testContentLength", testContentLength),
         ("testContentType", testContentType),
@@ -153,20 +143,15 @@ extension RequestTests {
     ]
 }
 
-extension ResponseDecodeBodyTests {
-    static let __allTests = [
-        ("testBytesResponse", testBytesResponse),
-        ("testChunked", testChunked),
-        ("testHtmlResponse", testHtmlResponse),
-        ("testJsonResponse", testJsonResponse),
-        ("testStringResponse", testStringResponse),
-        ("testZeroContentLenght", testZeroContentLenght),
-    ]
-}
-
 extension ResponseDecodeTests {
     static let __allTests = [
         ("testBad", testBad),
+        ("testBodyBytesResponse", testBodyBytesResponse),
+        ("testBodyChunked", testBodyChunked),
+        ("testBodyHtmlResponse", testBodyHtmlResponse),
+        ("testBodyJsonResponse", testBodyJsonResponse),
+        ("testBodyStringResponse", testBodyStringResponse),
+        ("testBodyZeroContentLenght", testBodyZeroContentLenght),
         ("testConnection", testConnection),
         ("testContentEncoding", testContentEncoding),
         ("testContentLength", testContentLength),
@@ -189,19 +174,14 @@ extension ResponseDecodeTests {
     ]
 }
 
-extension ResponseEncodeBodyTests {
-    static let __allTests = [
-        ("testBytesResponse", testBytesResponse),
-        ("testHtmlResponse", testHtmlResponse),
-        ("testJsonResponse", testJsonResponse),
-        ("testStringResponse", testStringResponse),
-        ("testUrlFormEncodedResponse", testUrlFormEncodedResponse),
-    ]
-}
-
 extension ResponseEncodeTests {
     static let __allTests = [
         ("testBad", testBad),
+        ("testBodyBytesResponse", testBodyBytesResponse),
+        ("testBodyHtmlResponse", testBodyHtmlResponse),
+        ("testBodyJsonResponse", testBodyJsonResponse),
+        ("testBodyStringResponse", testBodyStringResponse),
+        ("testBodyUrlFormEncodedResponse", testBodyUrlFormEncodedResponse),
         ("testConnection", testConnection),
         ("testContentEncoding", testContentEncoding),
         ("testContentType", testContentType),
@@ -266,14 +246,10 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(HeadersAuthorizationTests.__allTests),
         testCase(NginxTests.__allTests),
         testCase(PunycodeTests.__allTests),
-        testCase(RequestDecodeBodyTests.__allTests),
         testCase(RequestDecodeTests.__allTests),
-        testCase(RequestEncodeBodyTests.__allTests),
         testCase(RequestEncodeTests.__allTests),
         testCase(RequestTests.__allTests),
-        testCase(ResponseDecodeBodyTests.__allTests),
         testCase(ResponseDecodeTests.__allTests),
-        testCase(ResponseEncodeBodyTests.__allTests),
         testCase(ResponseEncodeTests.__allTests),
         testCase(ResponseTests.__allTests),
         testCase(URLTests.__allTests),
