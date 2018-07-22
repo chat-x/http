@@ -1,5 +1,14 @@
 import XCTest
 
+extension BodyTests {
+    static let __allTests = [
+        ("testRequestBytes", testRequestBytes),
+        ("testRequestString", testRequestString),
+        ("testResponseBytes", testResponseBytes),
+        ("testResponseString", testResponseString),
+    ]
+}
+
 extension ChunkedStreamTests {
     static let __allTests = [
         ("testInputStream", testInputStream),
@@ -241,6 +250,7 @@ extension UtilsTests {
 #if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
+        testCase(BodyTests.__allTests),
         testCase(ChunkedStreamTests.__allTests),
         testCase(HeaderNameTests.__allTests),
         testCase(HeadersAuthorizationTests.__allTests),
