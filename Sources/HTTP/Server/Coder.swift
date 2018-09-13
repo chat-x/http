@@ -13,6 +13,14 @@ import JSON
 import Stream
 import Network
 
+public protocol DecodableMessage {
+    var contentType: ContentType? { get }
+    var body: Body { get }
+}
+
+extension Request: DecodableMessage {}
+extension Response: DecodableMessage {}
+
 // MARK: Coder
 
 public struct Coder {
@@ -27,8 +35,8 @@ public struct Coder {
     @inline(__always)
     static func makeRespone<T: Encodable>(
         for request: Request,
-        encoding object: T
-    ) throws -> Response {
+        encoding object: T) throws -> Response
+    {
         let response = Response(status: .ok)
         try Coder.updateRespone(response, for: request, with: .object(object))
         return response
@@ -38,8 +46,8 @@ public struct Coder {
     public static func updateRespone(
         _ response: Response,
         for request: Request,
-        with result: ApiResult
-    ) throws {
+        with result: ApiResult) throws
+    {
         switch result {
         case .string(let string):
             response.contentType = .text
@@ -72,8 +80,8 @@ public struct Coder {
     static func encode(
         object: Encodable,
         to response: Response,
-        contentType type: ApplicationSubtype
-    ) throws {
+        contentType type: ApplicationSubtype) throws
+    {
         switch type {
         case .json:
             // TODO: Use stream + chunked?
@@ -96,10 +104,10 @@ public struct Coder {
     // MARK: Transform route's Model from Request
 
     @inlinable
-    public static func decodeModel<T: Decodable>(
-        _ type: T.Type,
-        from request: Request
-    ) throws -> T {
+    public static func decodeModel<Model: Decodable>(
+        _ type: Model.Type,
+        from request: Request) throws -> Model
+    {
         switch request.method {
         case .get:
             let values = request.url.query?.values ?? [:]
@@ -124,11 +132,32 @@ public struct Coder {
     }
 
     @inlinable
-    public static func decodeJSON<T: Decodable>(
-        _ type: T.Type,
-        from request: Request) throws -> T
+    public static func decodeModel<Model: Decodable, Message: DecodableMessage>(
+        _ type: Model.Type,
+        from message: Message) throws -> Model
     {
-        switch request.body {
+        guard let contentType = message.contentType else {
+            throw Error.invalidRequest
+        }
+
+        switch contentType.mediaType {
+        case .application(.json):
+            return try decodeJSON(type, from: message)
+
+        case .application(.formURLEncoded):
+            return try decodeFormEncoded(type, from: message)
+
+        default:
+            throw Error.invalidContentType
+        }
+    }
+
+    @inlinable
+    public static func decodeJSON<Model: Decodable, Message: DecodableMessage>(
+        _ type: Model.Type,
+        from message: Message) throws -> Model
+    {
+        switch message.body {
         case .bytes(let bytes):
             let stream = InputByteStream(bytes)
             return try JSON.decode(type, from: stream)
@@ -140,14 +169,22 @@ public struct Coder {
     }
 
     @inlinable
-    public static func decodeFormEncoded<T: Decodable>(
-        _ type: T.Type,
-        from request: Request) throws -> T
+    public static func decodeFormEncoded<Model, Message>(
+        _ type: Model.Type,
+        from message: Message) throws -> Model
+        where Model: Decodable, Message: DecodableMessage
     {
-        // TODO: Use stream
-        guard let bytes = request.bytes else {
+        let reader: StreamReader
+
+        switch message.body {
+        case .bytes(let bytes): reader = InputByteStream(bytes)
+        case .input(let input): reader = input
+        default:
             throw Error.invalidRequest
         }
+
+        // TODO: Use stream
+        let bytes = try reader.readUntilEnd()
         let values = try URL.Query(from: bytes).values
         return try KeyValueDecoder().decode(type, from: values)
     }
