@@ -9,6 +9,8 @@
  *                                                                            *
  ******************************************************************************/
 
+import Stream
+
 extension Punycode {
     public static func encode(domain: String) -> String {
         let result: [UInt8] = encode(domain: domain)
