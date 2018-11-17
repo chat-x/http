@@ -1,6 +1,6 @@
 # HTTP
 
-Incredibly fast http modules primarily designed for cooperative multitasking. **No callbacks.**
+Asynchronous HTTP server/client using [cooperative multitasking](https://github.com/tris-foundation/fiber). **No callbacks.**
 
 ## Package.swift
 
@@ -8,150 +8,151 @@ Incredibly fast http modules primarily designed for cooperative multitasking. **
 .package(url: "https://github.com/tris-foundation/http.git", .branch("master"))
 ```
 
-## Usage
+## Quick Start [[source](https://github.com/tris-foundation/examples/tree/master/http)]
 
-You can find this code and more in [examples](https://github.com/tris-foundation/examples).
-
-### Async
+### First we need to create a root fiber and run the event loop:
 
 ```swift
+// main.swift
+
 import Fiber
 
 async.use(Fiber.self)
 
-async.task {
-    // server or client code
-    // ...
+async.main {
+    // entry point for our async code
 }
 
 async.loop.run()
 ```
 
-### Server
+### Simple server running "http://localhost:8080":
 
 ```swift
-let server = try Server(host: "0.0.0.0", port: 8080)
-
-server.route(...)
-// or
-server.addApplication(application)
-
+// async.main {}
+let server = try Server(host: "localhost", port: 8080)
+try registerRoutes(in: server)
 try server.start()
 ```
 
-### Routes
-
->NOTE: you can only use this arguments signature:
->* (Void) - none
->* (Request) - original request
->* (Decodable) with :mask present in url - url match
->* (Decodable) with *NO* :mask present in url - decode url.query or body
->* any combination in order - request, url-match, body
->
-> *You can't have more than three input arguments*
-
-
-#### Simple
+### Simple `get` route:
 
 ```swift
+// routes.swift
 
-server.route(get: "/ascii") {
-    return "hey there!"
-}
+import HTTP
 
-server.route(get: "/юникод") {
-    return "привет!"
-}
-
-server.route(get: "/request") { (request: Request) -> Response in
-    return Response(status: .ok)
+func registerRoutes(in server: Server) throws {
+    server.route(get: "/hello") {
+        return "Hey there!"
+    }
 }
 ```
 
-#### URL match
+### At this point our server is ready to be friendly:
 
-```swift
-server.route(get: "/swift/string/:string") { name: String in
-    return "name: \(name)"
-}
-
-server.route(get: "/swift/int/:integer") { id: Int in
-    return "id: \(id)"
-}
-
-struct Date: Decodable {
-    let day: Int
-    let month: String
-}
-
-server.route(get: "/decode-from-url/:month/:day") { date: Date in
-    return "date: \(date)"
-}
+```bash
+$ swift run main
+$ curl http://localhost:8080/hello
+> Hey there!
 ```
 
-#### Body
+### More advanced version:
 
 ```swift
-struct Event: Decodable {
+struct User: Decodable {
     let name: String
 }
 
-server.route(post: "/decode-json-or-form-urlencoded") { (event: Event) in
-    return "event: \(event)"
-}
-```
-
-#### URL match + Body
-
-```swift
-server.route(post: "/date/:month/:day") { (date: Date, event: Event) in
-    return """
-        date from url: \(date)
-        model from body: \(event)
-        """
-}
-```
-
-#### Wildcard
-
-```swift
-server.route(get: "/*") { (request: Request) in
-    return "wildcard: \(request.url.path)"
+func helloHandler(user: User) -> String {
+    return "Hello \(user.name)"
 }
 
-try server.start()
+let application = Application(basePath: "/v1")
+application.route(get: "/hello", to: helloHandler)
+server.addApplication(application)
 ```
 
-#### Application
-
-`/api/v1/test`
+### Most advanced version:
 
 ```swift
-let api = Application(basePath: "/api" /* middleware: [] */)
-api.route(get: "/versions") { return ["v1"] }
+struct User: Decodable {
+    let name: String
+}
 
-let v1 = Application(basePath: "/v1" /* middleware: [] */)
-v1.route(get: "/test") { return "ok" }
+struct Greeting: Encodable {
+    let message: String
+}
 
-api.addApplication(v1)
-server.addApplication(api)
+func helloHandler(user: User) -> Greeting {
+    return .init(message: "Hello, \(user.name)!")
+}
+
+struct SwiftMiddleware: Middleware {
+    static func chain(with handler: @escaping RequestHandler) -> RequestHandler {
+        return { request in
+            if request.url.query?["name"] == "swift" {
+                return Response(string: "🤘")
+            }
+            return try handler(request)
+        }
+    }
+}
+
+let application = Application(basePath: "/v2")
+
+application.route(
+    get: "/hello",
+    through: [SwiftMiddleware.self],
+    to: helloHandler)
+
+server.addApplication(application)
 ```
 
-### Client
+```bash
+$ swift run main
+$ curl http://localhost:8080/v2/hello?name=swift
+> 🤘
+```
+
+### The same route using human readable urls
 
 ```swift
-let client = try Client(url: "http://0.0.0.0:8080")
+struct User: Decodable {
+    let name: String
+}
 
-try client.get(path: "/ascii")
-try client.get(path: "/юникод")
-try client.get(path: "/request")
-try client.get(path: "/swift/string/user")
-try client.get(path: "/swift/int/42")
+struct Greeting: Encodable {
+    let message: String
+}
 
-try client.get(path: "/decode-from-url/January/1")
-try client.get(path: "/decode-json-or-form-urlencoded?name=push")
+func helloHandler(user: User) -> Greeting {
+    return .init(message: "Hello, \(user.name)!")
+}
 
-try client.post(path: "/date/January/1", object: Event(name: "push"))
+struct SwiftMiddleware: Middleware {
+    static func chain(with handler: @escaping RequestHandler) -> RequestHandler {
+        return { request in
+            if request.url.path.split(separator: "/").last == "swift" {
+                return Response(string: "🤘")
+            }
+            return try handler(request)
+        }
+    }
+}
 
-try client.get(path: "/whatdoesmarcelluswallacelooklike")
+let application = Application(basePath: "/v3")
+
+application.route(
+    get: "/hello/:name",
+    through: [SwiftMiddleware.self],
+    to: helloHandler)
+
+server.addApplication(application)
+```
+
+```bash
+$ swift run main
+$ curl http://localhost:8080/v3/hello/swift
+> 🤘
 ```
