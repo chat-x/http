@@ -1,14 +1,3 @@
-/******************************************************************************
- *                                                                            *
- * Tris Foundation disclaims copyright to this source code.                   *
- * In place of a legal notice, here is a blessing:                            *
- *                                                                            *
- *     May you do good and not evil.                                          *
- *     May you find forgiveness for yourself and forgive others.              *
- *     May you share freely, never taking more than you give.                 *
- *                                                                            *
- ******************************************************************************/
-
 import Stream
 
 extension Array where Element == Request.Accept {
@@ -16,7 +5,7 @@ extension Array where Element == Request.Accept {
 
     init<T: StreamReader>(from stream: T) throws {
         var values = [Accept]()
-        
+
         while true {
             let value = try Accept(from: stream)
             values.append(value)
