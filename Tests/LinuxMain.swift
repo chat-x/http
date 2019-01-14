@@ -1,16 +1,16 @@
 import XCTest
 
-import ServerTests
-import MessageTests
 import ClientTests
 import FunctionalTests
 import KeyValueCodableTests
+import MessageTests
+import ServerTests
 
 var tests = [XCTestCaseEntry]()
-tests += ServerTests.__allTests()
-tests += MessageTests.__allTests()
 tests += ClientTests.__allTests()
 tests += FunctionalTests.__allTests()
 tests += KeyValueCodableTests.__allTests()
+tests += MessageTests.__allTests()
+tests += ServerTests.__allTests()
 
 XCTMain(tests)
