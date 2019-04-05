@@ -1,14 +1,14 @@
 # HTTP
 
-Asynchronous HTTP server/client using [cooperative multitasking](https://github.com/tris-foundation/fiber). **No callbacks.**
+Asynchronous HTTP server/client using [cooperative multitasking](https://github.com/tris-code/fiber). **No callbacks.**
 
 ## Package.swift
 
 ```swift
-.package(url: "https://github.com/tris-foundation/http.git", .branch("master"))
+.package(url: "https://github.com/tris-code/http.git", .branch("master"))
 ```
 
-## Quick Start [[source](https://github.com/tris-foundation/examples/tree/master/http)]
+## Quick Start [[source](https://github.com/tris-code/examples/tree/master/http)]
 
 ### First we need to create a root fiber and run the event loop:
 

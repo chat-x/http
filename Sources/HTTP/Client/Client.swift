@@ -24,7 +24,7 @@ public class Client {
     }
 
     public var compression: [Compression] = [.gzip, .deflate]
-    public var userAgent: String? = "tris-foundation/http"
+    public var userAgent: String? = "tris-code/http"
 
     public init(host: String, port: Int? = nil) {
         let port = port ?? 80

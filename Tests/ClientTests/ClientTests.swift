@@ -37,7 +37,7 @@ class ClientTests: TestCase {
             let requestString =
                 "GET / HTTP/1.1\r\n" +
                 "Host: 127.0.0.1:8080\r\n" +
-                "User-Agent: tris-foundation/http\r\n" +
+                "User-Agent: tris-code/http\r\n" +
                 "Accept-Encoding: gzip, deflate\r\n" +
                 "\r\n"
 
@@ -61,7 +61,7 @@ class ClientTests: TestCase {
             let requestString =
                 "GET / HTTP/1.1\r\n" +
                 "Host: 127.0.0.1:8080\r\n" +
-                "User-Agent: tris-foundation/http\r\n" +
+                "User-Agent: tris-code/http\r\n" +
                 "Accept-Encoding: gzip, deflate\r\n" +
                 "\r\n"
 
@@ -95,7 +95,7 @@ class ClientTests: TestCase {
             let requestString =
                 "GET / HTTP/1.1\r\n" +
                 "Host: 127.0.0.1:8080\r\n" +
-                "User-Agent: tris-foundation/http\r\n" +
+                "User-Agent: tris-code/http\r\n" +
                 "Accept-Encoding: gzip, deflate\r\n" +
                 "\r\n"
 
