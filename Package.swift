@@ -7,27 +7,13 @@ let package = Package(
         .library(name: "HTTP", targets: ["HTTP"]),
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/tris-code/log.git",
-            .branch("master")),
-        .package(
-            url: "https://github.com/tris-code/aio.git",
-            .branch("master")),
-        .package(
-            url: "https://github.com/tris-code/stream.git",
-            .branch("master")),
-        .package(
-            url: "https://github.com/tris-code/json.git",
-            .branch("master")),
-        .package(
-            url: "https://github.com/tris-code/compression.git",
-            .branch("master")),
-        .package(
-            url: "https://github.com/tris-code/test.git",
-            .branch("master")),
-        .package(
-            url: "https://github.com/tris-code/fiber.git",
-            .branch("master"))
+        .package(path: "../Log"),
+        .package(path: "../AIO"),
+        .package(path: "../Stream"),
+        .package(path: "../JSON"),
+        .package(path: "../Compression"),
+        .package(path: "../Test"),
+        .package(path: "../Fiber")
     ],
     targets: [
         .target(
