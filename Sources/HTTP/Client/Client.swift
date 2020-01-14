@@ -23,7 +23,14 @@ public class Client {
         case deflate
     }
 
-    public var compression: [Compression] = [.gzip, .deflate]
+    public var compression: [Compression] = {
+        #if os(Linux)
+        return [.gzip, .deflate]
+        #else
+        return []
+        #endif
+    }()
+
     public var userAgent: String? = "tris-code/http"
 
     public init(host: String, port: Int? = nil) {
@@ -93,6 +100,7 @@ public class Client {
     }
 
     private func updateAcceptEncoding(_ request: inout Request) {
+        #if os(Linux)
         guard !compression.isEmpty else {
             return
         }
@@ -106,9 +114,11 @@ public class Client {
                 acceptEncoding.append(.deflate)
         }
         request.acceptEncoding = acceptEncoding
+        #endif
     }
 
     private func decode(_ response: inout Response) throws {
+        #if os(Linux)
         guard let bytes = response.bytes,
             let contentEncoding = response.contentEncoding else {
                 return
@@ -119,6 +129,7 @@ public class Client {
         } else if contentEncoding.contains(.deflate) {
             response.bytes = try Deflate.decode(from: stream)
         }
+        #endif
     }
 }
 

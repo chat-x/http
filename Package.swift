@@ -11,16 +11,13 @@ let package = Package(
         .package(path: "../AIO"),
         .package(path: "../Stream"),
         .package(path: "../JSON"),
-        .package(path: "../Compression"),
         .package(path: "../Test"),
         .package(path: "../Fiber")
     ],
     targets: [
         .target(
             name: "HTTP",
-            dependencies: [
-                "Log", "Network", "Stream", "JSON", "Compression"
-            ]),
+            dependencies: ["Log", "Network", "Stream", "JSON"]),
         .testTarget(
             name: "MessageTests",
             dependencies: ["HTTP", "Test"]),
@@ -38,3 +35,8 @@ let package = Package(
             dependencies: ["HTTP", "Test"]),
     ]
 )
+
+#if os(Linux)
+package.dependencies.append(.package(path: "../Compression"))
+package.targets[0].dependencies.append("Compression")
+#endif
