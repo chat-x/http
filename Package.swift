@@ -7,12 +7,12 @@ let package = Package(
         .library(name: "HTTP", targets: ["HTTP"]),
     ],
     dependencies: [
-        .package(path: "../Log"),
-        .package(path: "../AIO"),
-        .package(path: "../Stream"),
-        .package(path: "../JSON"),
-        .package(path: "../Test"),
-        .package(path: "../Fiber")
+        .package(path: "../log"),
+        .package(path: "../aio"),
+        .package(path: "../stream"),
+        .package(path: "../json"),
+        .package(path: "../test"),
+        .package(path: "../fiber")
     ],
     targets: [
         .target(
@@ -37,6 +37,6 @@ let package = Package(
 )
 
 #if os(Linux)
-package.dependencies.append(.package(path: "../Compression"))
+package.dependencies.append(.package(path: "../compression"))
 package.targets[0].dependencies.append("Compression")
 #endif
